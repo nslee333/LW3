@@ -1,4 +1,4 @@
-// SPDX-licence-identifier: MIT
+// SPDX-license-identifier: MIT
 pragma solidity ^0.8.1;
 
 contract MoodDiary{
