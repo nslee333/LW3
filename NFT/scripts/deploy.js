@@ -1,9 +1,13 @@
 
 const { ethers } = require("hardhat");
 
-// This is using Hardhat as a library, 
 
-async function main() {
+
+// 
+
+async function main() { 
+
+
     const nftContract = await ethers.getContractFactory("NateNFT");
 
     // Assigning variable name to contract factory (ethers) for 'NateNFT'
@@ -15,7 +19,7 @@ async function main() {
     console.log("NFT Contract Address:", deployedNFTContract.address);
 
     // Log contract address.
-    
+
 }
 
 main()
