@@ -4,9 +4,27 @@ Code Walkthrough of the hardhat.config.js file in this NFT project.
 
 --------------------------------------------------------------------
 
+For this project we installed the 'dotenv' file with NPM.
 
+require("@nomiclabs/hardhat-waffle");
 
+- This is importing a library that allows us to use the 'ethers'
+    on our deploy.js script.
 
+require("dotenv").config({ path: ".env"});
+    - This is importing the 'dotenv' file, then configuring the file.
+
+const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
+    - This is an extra step for this, but it makes it look cleaner on the module export
+        code.
+    - This is assigning a variable to this process.
+    - This process is saying - go to .env file, then get this value. 
+    - When we put this variable into the module export code, we're telling this process
+        to execute and get this value in the .env file.
+        
+        
+const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
+    - This is the same process as explained above.
 
 
 What we're trying to do:
@@ -28,6 +46,3 @@ Rinkeby: {
             - This is the url for the node provider that will be your link to the 
                 Rinkeby test network.
         - Account to be used for deployment.
-
-
-
