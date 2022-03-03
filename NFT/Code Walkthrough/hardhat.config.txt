@@ -1,0 +1,33 @@
+--------------------------------------------------------------------
+
+Code Walkthrough of the hardhat.config.js file in this NFT project.
+
+--------------------------------------------------------------------
+
+
+
+
+
+
+What we're trying to do:
+1. Define which network we're deploying to.
+2. Define which account to use for deployment.
+
+module.exports = {}
+    - This is the hardhat configuration for what we're exporting.
+solidity:...
+    - Solidity version.
+networks: {}
+    - Defining which network to export to.
+Rinkeby: {
+    url: ALCHEMY_API_KEY_URL,
+    accounts: [RINKEBY_PRIVATE_KEY]
+}   
+    - Defining which network to use, and the input parameters for:
+        - Alchemy Key url.
+            - This is the url for the node provider that will be your link to the 
+                Rinkeby test network.
+        - Account to be used for deployment.
+
+
+

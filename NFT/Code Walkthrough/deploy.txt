@@ -40,10 +40,29 @@ console.log("NFT Contract Address:", deployedNFTContract.address);
     3. Print the address of the deployed contract, so we can inspect it on Etherscan.
 
 
+main()
+.then(() => process.exit(0))
+
+// If issue then exit?
+.catch((error) => {
+    
+    // If catch issue, log issue then exit.
+    
+    console.error(error);
+    
+    // Log error report.
+    
+    process.exit(1);
+    
+    // Exit process.
+});
+
+// This is how to handle async errors.
 
 
 
 
+    
 
 
 
