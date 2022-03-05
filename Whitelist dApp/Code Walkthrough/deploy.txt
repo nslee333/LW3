@@ -1,0 +1,59 @@
+--------------------------------------------------------------------
+
+Code walkthrough of the deploy.js script in this Whitelist project.
+
+--------------------------------------------------------------------
+
+const { ethers } = require("hardhat");
+
+    - importing ethers from hardhat library.
+    - '{ ethers }' is a ethers wrapped by Hardhat.
+const whitelistContract = await ethers.getContractFactory("Whitelist");
+    - This line is telling ethers where to get the contract, to create an instance
+        of the contract and assign that instance under the variable name
+        'whitelistContract'.
+    'ethers.getContractFactory("Whitelist);' is telling ethers where to get the 
+        contract.
+
+
+
+
+const deployed = await whitelistContract.deploy(10);
+    - This line is saying to deploy the instance of the contract, 
+        giving it the parameter value '10' which is the maximum amount of
+        whitelisted addresses, and assigning this deployed contract under the variable
+        'deployed'.
+
+
+
+
+await deployedWhitelistContract.deployed();
+    - This line says to wait until the contract is deployed.
+
+console.log("Whitelist Contract Address", deployedWhitelistContract.address);
+    - This is printing the address of the deployed contract.
+
+-------------------------------------------------
+
+    main()
+    .then(() => process.exit(0))
+    .catch(error => {
+        console.error(error)
+        process.exit(1)
+    });
+
+-----------------------------------------------
+
+main()
+// Calling the main function.
+    .then(() => process.exit(0))
+    // If the function completes sucessfully, then exit the process.
+    .catch(error => {
+    // If the function throws an error,
+        console.error(error)
+        // Print the error.
+        process.exit(1)
+        // Then exit the process with condition code '1' telling the OS that an 
+            error occured. 
+    });
+

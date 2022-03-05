@@ -57,10 +57,3 @@ whitelistedAddresses[msg.sender] = true;
     - Adding the msg.sender address to the mapping and setting it to true.
 numAddressesWhitelisted += 1;
     - Adding to the current count of whitelisted addresses.
-    
-
-
-
-
-
-
