@@ -29,16 +29,37 @@ mapping(address => bool) public whitelistedAddresses;
             index the mapping directly, going to the value directly instead, saving 
             time.
 
-
-
-
-
-
 constructor(uint8 _maxWhitelistedAddresses) {
     maxWhitelistedAddresses = _maxWhitelistedAddresses;
 }
     - constructor function that is setting the maximum number of whitelisted
         addresses.
+
+function addAddressToWhitelist() public {
+    require(!whitelistedAddresses[msg.sender], "You are already in Whitelist.")
+}
+
+    - Here we have a function for adding addresses to the whitelist.
+    - the '!whitelistedAddresses[msg.sender]' is a false statement,
+    - basically we're requiring that the user is not in the whitelist
+        before proceeding.
+        - This way we don't have one user taking more whitelist spots than
+            necessary.
+    - If its true (msg.sender is not in the whitelist), then the function can 
+        proceed.
+    - If its false, then throw an error stating that the user is already in the
+        whitelist.
+
+require(numAddressesWhitelisted < maxWhitelistedAddresses, "The Maximum Whitelisted Users has been Reached");
+    - This is requiring that the number of whitelisted addresses cannot surpas the
+        set maximum whitelisted addresses.
+whitelistedAddresses[msg.sender] = true;
+    - Adding the msg.sender address to the mapping and setting it to true.
+numAddressesWhitelisted += 1;
+    - Adding to the current count of whitelisted addresses.
+    
+
+
 
 
 
