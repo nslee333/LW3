@@ -40,23 +40,28 @@ console.log("NFT Contract Address:", deployedNFTContract.address);
     3. Print the address of the deployed contract, so we can inspect it on Etherscan.
 
 
+-------------------------------------------------
+
 main()
 .then(() => process.exit(0))
-
-// If issue then exit?
-.catch((error) => {
-    
-    // If catch issue, log issue then exit.
-    
-    console.error(error);
-    
-    // Log error report.
-    
-    process.exit(1);
-    
-    // Exit process.
+.catch(error => {
+    console.error(error)
+    process.exit(1)
 });
 
-// This is how to handle async errors.
+-----------------------------------------------
 
+main()
+// Calling the main function.
+    .then(() => process.exit(0))
+    // If the function completes sucessfully, then exit the process with 
+    a '0' condition code, which means that the process completed with no errors.
+    .catch(error => {
+    // If the function throws an error,
+        console.error(error)
+        // Print the error.
+        process.exit(1)
+        // Then exit the process with condition code '1' telling the OS that an 
+            error occured. 
+    });
 

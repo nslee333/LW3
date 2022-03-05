@@ -47,7 +47,8 @@ console.log("Whitelist Contract Address", deployedWhitelistContract.address);
 main()
 // Calling the main function.
     .then(() => process.exit(0))
-    // If the function completes sucessfully, then exit the process.
+    // If the function completes sucessfully, then exit the process with 
+    a '0' condition code, which means that the process completed with no errors.
     .catch(error => {
     // If the function throws an error,
         console.error(error)
