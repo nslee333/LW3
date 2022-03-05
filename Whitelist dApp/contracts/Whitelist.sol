@@ -11,7 +11,8 @@ contract Whitelist {
     // Current number of addresses whitelisted.
     uint8 public numAddressesWhitelisted;
 
-    // Mappping of addresses whitelisted.
+    // Mappping of addresses, and if they've been whitelisted.
+
     mapping(address => bool) public whitelistedAddresses;
 
 

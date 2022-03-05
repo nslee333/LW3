@@ -1,4 +1,89 @@
 body {
-    background-color: blueviolet;
-    font-family: helvetica;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+    color:white;
+
+
+    background-image: url('https://d.ibtimes.co.uk/en/full/1505008/eth.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover ;
+    background-image: opac;
+    
+
+}
+
+.border{
+    border: 10px solid grey;
+    border-style: double;
+    width: auto;
+    height: auto;
+    position: absolute;
+    right: 100;
+    left: 100;
+    top: 10;
+    bottom: 10;
+}
+.UI {
+
+
+
+    border: 10px solid green;
+
+    text-align: center;
+
+    width: 50%;
+    height: 50%;
+    
+
+    /* display: flex; */
+   
+    
+
+    /* align-items: center;
+    justify-content: center; */
+
+    position: absolute;
+    right: 25%;
+    left: 25%;
+    top: 25%;
+    bottom: 25%;
+    padding: 50px;
+    
+    
+}
+
+
+
+
+.button1 {
+    width: 100px;
+    height: 25px;
+    margin: em;
+    color: black;
+}
+
+.button2 {
+    width: 100px;
+    height: 25px;
+    margin: em;
+}
+
+
+
+
+
+.input {
+    background-color: white;
+    opacity: ;
+    color: solid grey;
+    width: 125px;
+
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    margin: 25px;
+}
+
+.mood {
+    padding: 50px;
+    margin: 25px;
 }

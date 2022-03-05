@@ -18,8 +18,16 @@ uint8 public numAddressesWhitelisted;
     - 
 
 mapping(address => bool) public whitelistedAddresses;
-    - Key value data structure mapping to keep track of whitelisted addresses.
-
+    - Key value data structure tracking: address and if its whitelisted or not.
+    - Mappings are faster than arrays, and they have O1 time complexity.
+    - Where an array's time complexity is O(n).
+        - O(n) means that the time it takes to read every entry is purportional to
+            the number of items stored in the data structure.
+        - The issue is that with an array, you need to loop through the array to get
+            the value that you want, which is why it has a O(n) complexity.
+        - Comparitively, when trying to get a value from a mapping, you can
+            index the mapping directly, going to the value directly instead, saving 
+            time.
 
 
 
