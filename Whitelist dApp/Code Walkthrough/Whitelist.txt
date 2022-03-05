@@ -1,0 +1,37 @@
+--------------------------------------------------------------------
+
+Code Walkthrough of the Whitelist contract in this Whitelist project.
+
+--------------------------------------------------------------------
+
+
+uint8 public maxWhitelistedAddresses;
+    - State variable for the maximum number of addresses that can
+        be whitelisted.
+    - uint8 is used to reduce storage amount which reduces contract deployment cost 
+        since the number dosen't need to be huge.
+    - uint8 in solidity's initial value is zero so it dosen't need to be initialized.
+  
+
+uint8 public numAddressesWhitelisted;
+    - Current number of addresses whitelisted.
+    - 
+
+mapping(address => bool) public whitelistedAddresses;
+    - Key value data structure mapping to keep track of whitelisted addresses.
+
+
+
+
+
+
+
+constructor(uint8 _maxWhitelistedAddresses) {
+    maxWhitelistedAddresses = _maxWhitelistedAddresses;
+}
+    - constructor function that is setting the maximum number of whitelisted
+        addresses.
+
+
+
+
