@@ -1,4 +1,4 @@
-// SPDX-license-Idenitifer: MIT
+// SPDX-License-Idenitifer: MIT
 
 pragma solidity ^0.8.0;
 
@@ -23,7 +23,7 @@ contract Whitelist {
 
     function addAddressToWhitelist() public {
         // msg.sender is the address of the user who called this function.
-        require(!whitelistedAddresses[msg.sender], "You are already in Whitelist.")
+        require(!whitelistedAddresses[msg.sender], "You are already in Whitelist.");
         require(numAddressesWhitelisted < maxWhitelistedAddresses, "The Maximum Whitelisted Users has been Reached");
         whitelistedAddresses[msg.sender] = true;
         numAddressesWhitelisted += 1;
