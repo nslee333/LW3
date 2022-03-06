@@ -4,7 +4,7 @@ async function main() {
 
     const whitelistContract = await ethers.getContractFactory("Whitelist");
 
-    const deployed = await whitelistContract.deploy(10);
+    const deployedWhitelistContract = await whitelistContract.deploy(10);
 
     await deployedWhitelistContract.deployed();
 
