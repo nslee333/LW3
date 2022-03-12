@@ -38,8 +38,9 @@ import styles from "../styles/Home.module.css";
             an integer, and it is the value that is retained in the stateful value
             for the 'useState' react component. 
         - the function that is used to update the value is the 'setNumOfWhitelisted'.
-        
-
+    - The 'useState(0)' is initializing the value of this component.
+        - Initializing in programming is the assignment of an initial value for a 
+            data object or variable.
 'export default function Home() {'
     - The export statement is used when creating JS modules to export objects, 
         functions, variables from the module so they can be used by other programs
