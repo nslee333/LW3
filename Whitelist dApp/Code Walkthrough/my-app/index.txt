@@ -1,6 +1,26 @@
 --------------------------------------------------------------------
 
-Code walkthrough of the deploy.js script in this Whitelist project.
+Code walkthrough of the index.js script in this Whitelist Dapp - 
+Application side. 
 
 --------------------------------------------------------------------
+
+In this page we're going to use the React.js library and React Hooks in this page.
+
+React Hooks is one of the main things we'll be using in this file.
+
+'import Head from "next/head";
+import Image from 'next/image'
+import styles from "../styles/Home.module.css";
+'
+- These are all import statements for specific depenedencies that we're going to be 
+    using.
+'import Head from next/head;'
+    - This is importing the Head component from the next.js library.
+    - the Head is a component that allows us to append elements to the head of the 
+        page.
+'import Image from'next/image''
+    - This is importing the Image component from Next.js.
+    - The Image component is an extenstion of the HTML <img> element, 
+        which includes some optimizations to help achieve good Core Web Vitals.
 
