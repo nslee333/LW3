@@ -23,4 +23,32 @@ import styles from "../styles/Home.module.css";
     - This is importing the Image component from Next.js.
     - The Image component is an extenstion of the HTML <img> element, 
         which includes some optimizations to help achieve good Core Web Vitals.
+            - 'Web Vitals' is a Google initiative to provide unified guidance
+                and metrics to measure end-user page experience on the web.
+            - 'Core Web Vitals' is a subset of Google's 'Web Vitals' and it
+                consists of three metrics that measure loading, interactivity and
+                visual stability.
+'import styles from "../styles/Home.module.css";'
+    - This is importing the CSS styling from this file.
 
+- const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
+    - This is setting the value of 
+    - useState retains a stateful value and it retains a function to update the value.
+        - So in this case 'numOfWhitelisted' is a variable that is assigned to 
+            an integer, and it is the value that is retained in the stateful value
+            for the 'useState' react component. 
+        - the function that is used to update the value is the 'setNumOfWhitelisted'.
+        
+
+'export default function Home() {'
+    - The export statement is used when creating JS modules to export objects, 
+        functions, variables from the module so they can be used by other programs
+        with the help of import statements.
+    - There are two types of exports, Named Exports and Default Exports.
+        - Named Exports are useful to export several values.
+            - During import it is mandatory to use the same name of the 
+                corresponding object.
+        - Default Export are useful to export only a single object, function
+            variable. During the import we can use any name to import.
+    - In this case we're only exporting a single function, so its a default export 
+        in this instance.   
