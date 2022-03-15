@@ -53,3 +53,29 @@ import styles from "../styles/Home.module.css";
             variable. During the import we can use any name to import.
     - In this case we're only exporting a single function, so its a default export 
         in this instance.   
+
+------------------------------------------------------------------------------------
+        
+
+const web3ModalRef = useRef();
+
+useEffect(() => {
+    if (!walletConnected) {{
+        web3ModalRef.current = new web3Modal({
+            network: "rinkeby",
+            providerOptions: {},
+            disabledInjectedProvider: false,
+        });
+        connectWallet();
+    }}
+}) [walletConnected]
+
+------------------------------------------------------------------------------------    
+
+
+ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+
+
+'useEffect(() => {'
+
+    - useEffect
