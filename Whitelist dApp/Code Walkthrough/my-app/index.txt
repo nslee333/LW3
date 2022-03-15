@@ -32,7 +32,7 @@ import styles from "../styles/Home.module.css";
     - This is importing the CSS styling from this file.
 
 - const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
-    - This is setting the value of 
+    - This is setting the value of the state to 0.
     - useState retains a stateful value and it retains a function to update the value.
         - So in this case 'numOfWhitelisted' is a variable that is assigned to 
             an integer, and it is the value that is retained in the stateful value
@@ -56,6 +56,7 @@ import styles from "../styles/Home.module.css";
 
 ------------------------------------------------------------------------------------
         
+const [walletConnected, setWalletConnected] = useState(false);
 
 const web3ModalRef = useRef();
 
@@ -75,7 +76,36 @@ useEffect(() => {
 
 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 
+'const [walletConnected, setWalletConnected] = useState(false);'
+    - This line is initializing the state of the page.
+        - Initializing meaning setting the initial state.
+    - 'walletConnected, setWalletConnected' are variables that you can set.
+        - 'walletConnected' is the variable assigned to the value.
+        - 'setWalletConnected' is the function that is used to update the value.
+    -'useState(false)' 
+        - This is setting the state of the variable to a boolean value of 'false'.
+All of this is important for understanding the code below.
+    This code means: is the wallet connected? true or false. Initial state is false. 
 
 'useEffect(() => {'
 
-    - useEffect
+    - useEffect is a react.js hook that allows you to set side effects in your components
+        - Like fetching data, updating a dom etc.
+    - useEffect takes two arguments: useEffect(<function> <dependency>).
+        useEffect runs on every render unless you:
+            1. write an empty array "[]" (dependency), which is effectively telling
+                useEffect that it can only run once.
+                    - Everytime the dependency changes, it will run, but since  
+                        there is an empty array, the logic says that it will only run once and
+                        never run again.
+            2. write a dependency that has to change in order for it to run again.
+                - For example: if a function is called, then useEffect runs again.
+                    or if a variable assigned to a numerical value changes, the useEffect hook
+                        runs once for every value change.
+        - So in this case, useEffect will only run for everytime the value of 'walletConnected'
+            changes. 
+                - So if it changes from false to true, than the useEffect hook will run.
+
+'if (!walletConnected) {{'
+    - if 
+        
