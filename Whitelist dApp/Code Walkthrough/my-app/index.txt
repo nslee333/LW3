@@ -9,17 +9,17 @@ In this page we're going to use the React.js library and React Hooks in this pag
 
 React Hooks is one of the main things we'll be using in this file.
 
-'import Head from "next/head";
-import Image from 'next/image'
+import Head from "next/head";
+import Image from 'next/image
 import styles from "../styles/Home.module.css";
 '
 - These are all import statements for specific depenedencies that we're going to be 
     using.
-'import Head from next/head;'
+import Head from next/head;
     - This is importing the Head component from the next.js library.
     - the Head is a component that allows us to append elements to the head of the 
         page.
-'import Image from'next/image''
+import Image from'next/image'
     - This is importing the Image component from Next.js.
     - The Image component is an extenstion of the HTML <img> element, 
         which includes some optimizations to help achieve good Core Web Vitals.
@@ -31,7 +31,7 @@ import styles from "../styles/Home.module.css";
 'import styles from "../styles/Home.module.css";'
     - This is importing the CSS styling from this file.
 
-- const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
+const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     - This is setting the value of the state to 0.
     - useState retains a stateful value and it retains a function to update the value.
         - So in this case 'numOfWhitelisted' is a variable that is assigned to 
@@ -41,7 +41,7 @@ import styles from "../styles/Home.module.css";
     - The 'useState(0)' is initializing the value of this component.
         - Initializing in programming is the assignment of an initial value for a 
             data object or variable.
-'export default function Home() {'
+export default function Home() {
     - The export statement is used when creating JS modules to export objects, 
         functions, variables from the module so they can be used by other programs
         with the help of import statements.
@@ -56,27 +56,46 @@ import styles from "../styles/Home.module.css";
 
 ------------------------------------------------------------------------------------
         
-const [walletConnected, setWalletConnected] = useState(false);
+const [walletConnected, setWalletConnected] = useState(false); // 1
 
-const web3ModalRef = useRef();
+const web3ModalRef = useRef(); // 2
 
-useEffect(() => {
-    if (!walletConnected) {{
-        web3ModalRef.current = new web3Modal({
-            network: "rinkeby",
-            providerOptions: {},
-            disabledInjectedProvider: false,
+useEffect(() => { // 3
+    if (!walletConnected) {{ // 4
+        web3ModalRef.current = new web3Modal({ // 5
+            network: "rinkeby", // 6
+            providerOptions: {}, // 7
+            disabledInjectedProvider: false, // 8
         });
-        connectWallet();
+        connectWallet(); // 9
     }}
-}) [walletConnected]
+}) [walletConnected] // 3
 
 ------------------------------------------------------------------------------------    
 
+Overview:
 
-ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
+    // 1 initial value of walletConnect set to false.
 
-'const [walletConnected, setWalletConnected] = useState(false);'
+    // 2 variable name assigning - connect to the wallet once, and stay connected 
+        (once for every page initialization.)
+
+    // 3 Run everytime a new wallet is connected.
+
+    // 4 If a wallet is connected, run this code.
+
+    // 5 Assigning a variable name to a new instance of the web3Modal.
+
+    // 6 Set the network of the instance to rinkeby.
+
+    // 7 Input any provider options (left blank).
+
+    // 8 Allow injected providers (wallets).
+
+    // 9 Call connectWallet function.
+
+
+const [walletConnected, setWalletConnected] = useState(false);
     - This line is initializing the state of the page.
         - Initializing meaning setting the initial state.
     - 'walletConnected, setWalletConnected' are variables that you can set.
@@ -87,7 +106,7 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
 All of this is important for understanding the code below.
     This code means: is the wallet connected? true or false. Initial state is false. 
 
-'useEffect(() => {'
+useEffect(() => {
 
     - useEffect is a react.js hook that allows you to set side effects in your components
         - Like fetching data, updating a dom etc.
@@ -106,6 +125,191 @@ All of this is important for understanding the code below.
             changes. 
                 - So if it changes from false to true, than the useEffect hook will run.
 
-'if (!walletConnected) {{'
-    - if 
+if (!walletConnected) {{
+    - if the wallet is not connected, run this code.
+    const web3ModalRef = useRef();
+    - This is assigning the variable web3ModalRef to the react hook useRef.
+        - useRef with react is used to persist values between renders.
+        - This is essentially commanding it to only render once and keep the data.
+                - Similar to keeping mutable values persistant in an instance of a class.
+            - Which in this case is the MetaMask wallet being connected, it will persist 
+                between page renders.
+                    - We'll only connect once during the component intialization (page rendering).
+    web3ModalRef.current = new web3Modal({  
+    - Web3 Modal is an easy to use library for connecting to multiple wallets.
+        - With this variable declaration, we're saying that the web3ModalRef.current's value
+            is a new instance of the web3Modal.
+    network: "rinkeby",
+        - Initialization value for web3Modal instance, set to Rinkeby network.
+    providerOptions: {},
+        - Initializiation value for providerOptions, left blank.
+    disabledInjectedProvider: false,
+        - Initialization value for disabledInjectedProvider, set to false.
+            - False value for this is enabling injected providers (wallets.)
+------------------------------------------------------------------------------------------
+MAIN FUNCTION:
+----------------
+const connectWallet = async() => { // 1
+    try { // 2
+        await getProviderOrSigner(); // 3
+        setWalletConnected(true) // 4
+        checkIfAddressIsWhitelisted(); // 5
+        getNumberOfWhitelisted(); // 6
+    } catch(err) { // 7
+        console.error(err) // 8
+    }
+}
+---------------------------------------------------------------------------------------------
+ 
+Function overview:
+
+1. async function declaration.
+2. Try this code (This is a part of JS's Try catch finally statements).
+3. Function call: call the getProviderOrSigner function (Wallet) and wait for it to complete before
+    moving on.
+4. Function Call: change the boolean value of setWalletConnected from false to true. 
+    (not connected to connected.)
+5. Function Call: Check if the address associated with the wallet is on the whitelist.
+6. Function call: Get the value of addresses whitelisted.
+7. Catch/log any errors.
+
+---------
+
+try... catch.
+    - The try/catch are statements from JS's Try Catch Finally statements.
+        - Basically it means try the following code, if there is an error, it will catch 
+            the error and print the error.
+await getProviderOrSigner
+    - This is calling the function getProviderOrSigner.
+        - Which is:
+            1. Creating a new provider instance. (connecting with metamask.)
+            2. Wrapping a provider in a Web3Provider class (from Web3Modal)
+                - Which gives us a function '.getNetwork' that allows us to get the 
+                    network id.
+            3. Getting the network ID from the provider.
+            4. Checking to see if its on Rinkeby.
+                - If the network is not connected to Rinkeby
+                    - Throw an error prompting the user to change the network.
+            5. If the transaction needs a signer, get the signer from the provider.
+            6. Return signer.
+            7. Return web3Provider.
+            8. Catch/log any errors.
+
+setWalletConnected
+    - This is the modify value function from the above code 
+        const [walletConnected, setWalletConnected] = useState(false);
+        - When this connectWallet function is called, it will attempt to change the value of this   
+        useState hook, if it is sucessful, it will set the value to True
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        checkIfAddressIsWhitelisted();
+    - ZZZZZZZZZZZZ
+
+
+
+
+
+    // Personal guess. 
+    What do I need this to do?
+    I need it to check and see if the current wallet's address is in the whitelist.
+
+
+
+
+getNumberOfWhitelisted();
+    - ZZZZZZZZZZZZ
+
+
+-------------------------------------------------------------------------------------------
+
+
+const getProviderOrSigner = async(needSigner = false) // 6 => { // 1
+    try {
+        const provider = await web3ModalRef.current.connect(); // 2
+        // This current.connect from web3Modal returns the provider.
+        const web3Provider = new providers.Web3Provider(provider); // 3
+
+        const {chainId} = await web3Provider.getNetwork(); // 4
+        if(chainId !== 4) { // 5
+            window.alert("Change the network to Rinkeby"); // 5
+            throw new Error("Change the network to Rinkeby"); // 5 
+        }
+        if(needSigner) { // 6
+            const signer = web3Provider.getSigner(); // 6
+            return signer; // 7
+        }
+        return web3Provider; // 8
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+
+    Function overview:
+        1. Async function declaration.
+            - Note 6 next to the parameter of signer = false, 
+                - This parameter gives the caller the ability to get the signer from
+                    the provider if the transaction needs a signer.
+        2. Creating a new provider instance. (connecting with metamask.)
+        3. Wrapping a provider in a Web3Provider class (from Web3Modal)
+            - Which gives us a multiple functions, one of which is:
+                - '.getNetwork' that allows us to get the 
+                        network id.
+        4. Getting the network ID from the provider.
+        5. Checking to see if its on Rinkeby.
+            - If the network is not connected to Rinkeby
+                - Throw an error prompting the user to change the network.
+        6. If the transaction needs a signer, (if the caller sets the needSigner value to true.) 
+            get the signer from the provider. 
+        7. Return signer.
+        8. Return web3Provider.
+        9. Catch/log any errors.
+
+---------
+
+Notes on this function:
+    - Providers are for read-only transactions, which don't cost anything.
+    - Signers are required for writing to the state transactions, which do cost Eth.
+
         
