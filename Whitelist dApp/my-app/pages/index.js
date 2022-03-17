@@ -4,14 +4,14 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState, useRef } from "react";
 import Web3Modal from "web3modal"; 
 import { Contract, providers } from "ethers";
-import { WHITELIST_CONTRACT_ADDRESS, abi } from '../constants/index.js'
+import { WHITELIST_CONTRACT_ADDRESS } from "../constants";
 
 export default function Home() {
     const [walletConnected, setWalletConnected] = useState(false);
     const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     //  This is linking up the numOfWhitelisted to the react state. 
     const web3ModalRef = useRef();
-    
+    const [_joinedWhitelist, setJoinedWhitelist] = setState(false);
     
     
     const getProviderOrSigner = async(needSigner = false) => {
@@ -43,11 +43,16 @@ export default function Home() {
 
             const signer = getProviderOrSigner(true);
             // This is returning the signer instead of the provider.
-            const whitelistContract = new Contract {
+            const whitelistContract = new Contract (
                 WHITELIST_CONTRACT_ADDRESS,
                 abi,
-                signer,
-            }
+                signer
+            );
+            const address = await signer.getAddress();
+            const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
+                address
+            );
+            setJointedWhitelist(_joinedWhitelist);
 
                 
         } catch(err) {

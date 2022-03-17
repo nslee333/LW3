@@ -243,7 +243,7 @@ setWalletConnected
 
 
 const checkIfAddressIsWhitelisted = async() => {
-    
+
 }
     -
 
@@ -315,4 +315,50 @@ Notes on this function:
     - Providers are for read-only transactions, which don't cost anything.
     - Signers are required for writing to the state transactions, which do cost Eth.
 
-        
+       
+-----------------------------------------------------------------------------------------
+
+const checkIfAddressIsWhitelisted = async() => { // 1 
+    try { // 2
+
+        const signer = getProviderOrSigner(true); // 3
+        // This is returning the signer instead of the provider. 
+        const whitelistContract = new Contract ( // 4 
+            WHITELIST_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const address = await signer.getAddress(); // 5
+        const _joinedWhitelist = await whitelistContract.whitelistedAddresses( // 6
+            address
+        );
+        setJoinedWhitelist(_joinedWhitelist);
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+-----------------------------------------------------------------------------------------
+
+Overview:
+
+1. Async function declaration.
+2. Try the code in this block.
+3. Assigning the variable signer to the value returned by 'getProviderOrSigner' function
+    call with the (true) parameter.
+        - This will return the address of the signer.
+4. Declaring a new variable 'whitelistContract' and assigning it to a new Contract
+    instance from ethers.
+        - With the new instance from ethers, we're inputing the
+            contract address,
+            contract abi,
+            and the signer,
+5. Assigning 'address' to the signer address.
+6. This is assigning a local variable assigned to a boolean value.
+    - whitelistedAddresses is a public mapping on the whitelist contract. 
+    - Whenever you call the whitelistedAddresses mapping and input the 
+        address it returns a boolean value if the contract is in the mapping or not.
+7.
+
+
