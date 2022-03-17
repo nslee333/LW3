@@ -3,7 +3,8 @@ import Image from 'next/image';
 import styles from "../styles/Home.module.css";
 import { useEffect, useState, useRef } from "react";
 import Web3Modal from "web3modal"; 
-import { providers } from "ethers";
+import { Contract, providers } from "ethers";
+import { WHITELIST_CONTRACT_ADDRESS, abi } from '../constants/index.js'
 
 export default function Home() {
     const [walletConnected, setWalletConnected] = useState(false);
@@ -41,7 +42,12 @@ export default function Home() {
         try {
 
             const signer = getProviderOrSigner(true);
-            // This is returning the signer instead of the provider
+            // This is returning the signer instead of the provider.
+            const whitelistContract = new Contract {
+                WHITELIST_CONTRACT_ADDRESS,
+                abi,
+                signer,
+            }
 
                 
         } catch(err) {

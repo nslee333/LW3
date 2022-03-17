@@ -1,0 +1,42 @@
+---------------------------------------------------------------------------------------------
+
+This is my code walkthrough for the constants/index.js file.
+
+---------------------------------------------------------------------------------------------
+
+In the pages folder under index.js, in order to interact and get values from a contract we 
+need to create a new instance of that contract.
+
+Since this is a NFT whitelist Dapp, our index.js page needs to be able to interact with the
+Whitelist.sol contract.
+
+This is an example of a function using the constants for the index.js folder.
+
+
+const checkIfAddressIsWhitelisted = async() => {
+    try {
+
+        const signer = getProviderOrSigner(true);
+        // This is returning the signer instead of the provider.
+        const whitelistContract = new Contract {
+            WHITELIST_CONTRACT_ADDRESS,
+            abi,
+            signer,
+        }
+
+            
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+
+In order to create an instance of the contract we need three inputs.
+    - The contract interface (abi).
+    - The contract's address.
+
+In this constants/index.js folder we have assigned variables to our ABI and our address that 
+way we can just input the variables in our new contract instaniation without including the whole ABI in
+our function.
+
+
