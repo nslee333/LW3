@@ -242,8 +242,11 @@ setWalletConnected
 
 
 
-        checkIfAddressIsWhitelisted();
-    - ZZZZZZZZZZZZ
+const checkIfAddressIsWhitelisted = async() => {
+    
+}
+    -
+
 
 
 

@@ -37,12 +37,30 @@ export default function Home() {
 
 
 
-    const checkIfAddressIsWhitelisted = async ZZZZ
+    const checkIfAddressIsWhitelisted = async() => {
+        try {
+
+            const signer = getProviderOrSigner(true);
+            // This is returning the signer instead of the provider.
+            
+
+                
+        } catch(err) {
+            console.error(err);
+        }
+    }
+
+
+    const getNumberOfWhitelisted = async() => {
+        try {
 
 
 
 
-    const getNumberOfWhitelisted = async zzzzzz
+        } catch(err) {
+            console.error(err);
+        }
+    }
     
 
 
