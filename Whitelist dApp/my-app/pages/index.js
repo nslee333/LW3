@@ -41,8 +41,7 @@ export default function Home() {
         try {
 
             const signer = getProviderOrSigner(true);
-            // This is returning the signer instead of the provider.
-            
+            // This is returning the signer instead of the provider
 
                 
         } catch(err) {
