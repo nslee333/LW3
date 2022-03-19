@@ -289,7 +289,7 @@ const getProviderOrSigner = async(needSigner = false) // 6 => { // 1
 
 -----------------------------------------------------------------------------------------------
 
-    Function overview:
+    getProviderOrSigner Function overview:
         1. Async function declaration.
             - Note 6 next to the parameter of signer = false, 
                 - This parameter gives the caller the ability to get the signer from
@@ -314,6 +314,8 @@ const getProviderOrSigner = async(needSigner = false) // 6 => { // 1
 Notes on this function:
     - Providers are for read-only transactions, which don't cost anything.
     - Signers are required for writing to the state transactions, which do cost Eth.
+    - It will return the provider if you don't input any parameters.
+    - If you set the parameter to true it will return the signer.
 
        
 -----------------------------------------------------------------------------------------
@@ -332,7 +334,7 @@ const checkIfAddressIsWhitelisted = async() => { // 1
         const _joinedWhitelist = await whitelistContract.whitelistedAddresses( // 6
             address
         );
-        setJoinedWhitelist(_joinedWhitelist);
+        setJoinedWhitelist(_joinedWhitelist); // 7
 
     } catch(err) {
         console.error(err);
@@ -359,6 +361,59 @@ Overview:
     - whitelistedAddresses is a public mapping on the whitelist contract. 
     - Whenever you call the whitelistedAddresses mapping and input the 
         address it returns a boolean value if the contract is in the mapping or not.
-7.
+7. This is calling the react hook below:
+    - const [_joinedWhitelist, setJoinedWhitelist] = setState(false);
+    It's calling the hook with the boolean value if the address is in the whitelistedAddresses
+        mapping, and it is entering that value.
+
+         A little confused about the logic of this. 
+            
+         const [_joinedWhitelist, setJoinedWhitelist] = setState(false); // 2
+
+         
+         const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
+            address // 1
+        );
+         
+
+        So if we input the address in 1, and it returns false, then when we input it to the state,
+        how can we ever change the boolean value of the _joinedWhitelist
 
 
+--------------------------------------------------------------------------------
+
+const getNumberOfWhitelisted = async() => { 
+    try {
+
+        const provider = await getProviderOrSigner(); // 1
+
+
+        const whitelistContract = new Contract ( // 2
+            WHITELIST_CONTRACT_ADDRESS,
+            abi,
+            provider
+        );
+
+        const _numberOfWhitelisted = await whitelistContract.numOfWhitelisted(); // 3
+        setNumOfWhitelisted(_numberOfWhitelisted); // 4
+
+
+    } catch(err) {
+        console.error(err);
+    }
+}
+
+--------------------------------------------------------------------------------
+
+Overview of getNumberOfWhitelisted function:
+
+1. Assigning a variable to the provider for creating an instance of the contract in step 2.
+2. Creating an instance of the contract, and inputing a provider instead of a signer,
+    - inputing a provider is telling ethers that it will be a read-only transaction.
+3. Assigning a local variable to the value returned from the contract about how many 
+    addresses are whitelisted.
+4. This is calling the function below.
+    const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
+    - This will set and hold the value of whitelisted addresses in the state of the page.
+
+--------------------------------------------------------------------------------

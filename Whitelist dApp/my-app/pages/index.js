@@ -12,6 +12,7 @@ export default function Home() {
     //  This is linking up the numOfWhitelisted to the react state. 
     const web3ModalRef = useRef();
     const [_joinedWhitelist, setJoinedWhitelist] = setState(false);
+    const [loading, setLoading] = useState(false);
     
     
     const getProviderOrSigner = async(needSigner = false) => {
@@ -35,12 +36,34 @@ export default function Home() {
         }
     }
 
+const addAddressToWhitelist = async () => {
+    try {
+        const signer = await getProviderOrSigner(true);
+        
+        const whitelistContract = new Contract (
+            WHITELIST_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
 
+        const tx = await whitelistContract.addAddressToWhitelist();
+
+        setLoading(true);
+        await tx.wait();
+        setLoading(false);
+        await getNumberOfWhitelisted();
+        setJoinedWhitelist(true);
+        
+
+
+    } catch(err) {
+        console.error(err)
+    }
+}
 
 
     const checkIfAddressIsWhitelisted = async() => {
         try {
-
             const signer = getProviderOrSigner(true);
             // This is returning the signer instead of the provider.
             const whitelistContract = new Contract (
@@ -52,9 +75,8 @@ export default function Home() {
             const _joinedWhitelist = await whitelistContract.whitelistedAddresses(
                 address
             );
-            setJointedWhitelist(_joinedWhitelist);
+            setJoinedWhitelist(_joinedWhitelist);
 
-                
         } catch(err) {
             console.error(err);
         }
@@ -63,18 +85,54 @@ export default function Home() {
 
     const getNumberOfWhitelisted = async() => {
         try {
+            const provider = await getProviderOrSigner();
 
-
-
+            const whitelistContract = new Contract (
+                WHITELIST_CONTRACT_ADDRESS,
+                abi,
+                provider
+            );
+            const _numberOfWhitelisted = await whitelistContract.numOfWhitelisted();
+            setNumOfWhitelisted(_numberOfWhitelisted);
 
         } catch(err) {
             console.error(err);
         }
     }
-    
+
+    const renderButton = () => {
+        if(walletConnected) {
+            if(joinedWhitelist) {
+                return (
+                    <div>
+                        Thanks for joining the whitelist. 
+                    </div>
+                )
+            } else if(loading) {
+                return <button className = {styles.button}>
+                    Loading...
+                </button>
+            } else {
+                return (
+                    <button onClick={addAddressToWhitelist} className = {styles.button}>
+                        Join the Whitelist
+                    </button>
+                );
+            }
+        } else {
+            <button onClick={connectWallet} className = {styles.button}>
+                Connect your Wallet
+            </button>
+        }
+    }
 
 
-    
+
+
+
+
+
+
     const connectWallet = async() => {
         try {
             await getProviderOrSigner();
@@ -113,6 +171,7 @@ export default function Home() {
                             <div className={styles.description}>
                             {numOfWhitelisted} have already joined the Whitelist.
                             </div>
+                            {renderButton()}
                         <div>
                             <img className={styles.image} src="./crypto-devs.svg" />
                         </div>
