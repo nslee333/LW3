@@ -4,14 +4,14 @@ import styles from "../styles/Home.module.css";
 import { useEffect, useState, useRef } from "react";
 import Web3Modal from "web3modal"; 
 import { Contract, providers } from "ethers";
-import { WHITELIST_CONTRACT_ADDRESS } from "../constants";
+import { WHITELIST_CONTRACT_ADDRESS, abi } from "../constants";
 
 export default function Home() {
     const [walletConnected, setWalletConnected] = useState(false);
     const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     //  This is linking up the numOfWhitelisted to the react state. 
     const web3ModalRef = useRef();
-    const [_joinedWhitelist, setJoinedWhitelist] = useState(false);
+    const [joinedWhitelist, setJoinedWhitelist] = useState(false);
     const [loading, setLoading] = useState(false);
     
     
@@ -21,7 +21,7 @@ export default function Home() {
             const web3Provider = new providers.Web3Provider(provider);
             // This current.connect from web3Modal returns the provider.
 
-            const {chainId} = await web3Provider.getNetwork();
+            const { chainId } = await web3Provider.getNetwork();
             if(chainId !== 4) {
                 window.alert("Change the network to Rinkeby");
                 throw new Error("Change the network to Rinkeby");
@@ -77,6 +77,10 @@ const addAddressToWhitelist = async () => {
             );
             setJoinedWhitelist(_joinedWhitelist);
 
+            // if (_joinedWhitelist = true) {
+            //     window.alert("You are already on the whitelist.")
+            // };
+
         } catch(err) {
             console.error(err);
         }
@@ -92,7 +96,7 @@ const addAddressToWhitelist = async () => {
                 abi,
                 provider
             );
-            const _numberOfWhitelisted = await whitelistContract.numOfWhitelisted();
+            const _numberOfWhitelisted = await whitelistContract.numAddressesWhitelisted();
             setNumOfWhitelisted(_numberOfWhitelisted);
 
         } catch(err) {
@@ -102,16 +106,14 @@ const addAddressToWhitelist = async () => {
 
     const renderButton = () => {
         if(walletConnected) {
-            if(_joinedWhitelist) {
+            if (joinedWhitelist) {
                 return (
-                    <div>
+                    <div className={styles.description}>
                         Thanks for joining the whitelist. 
                     </div>
-                )
-            } else if(loading) {
-                return <button className = {styles.button}>
-                    Loading...
-                </button>
+                );
+            } else if (loading) {
+                return <button className = {styles.button}>Loading...</button>;
             } else {
                 return (
                     <button onClick={addAddressToWhitelist} className = {styles.button}>
@@ -120,9 +122,11 @@ const addAddressToWhitelist = async () => {
                 );
             }
         } else {
+            return (
             <button onClick={connectWallet} className = {styles.button}>
                 Connect your Wallet
             </button>
+            );
         }
     }
 
@@ -164,12 +168,10 @@ const addAddressToWhitelist = async () => {
                     </Head>
                     <div className={styles.main}>
                     
-                        <h1 className={styles.title}>
-                        Welcome to Crypto Devs!
-                        </h1>
+                        <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
                         
                             <div className={styles.description}>
-                            {numOfWhitelisted} have already joined the Whitelist.
+                                {numOfWhitelisted} have already joined the Whitelist.
                             </div>
                             {renderButton()}
                         <div>
