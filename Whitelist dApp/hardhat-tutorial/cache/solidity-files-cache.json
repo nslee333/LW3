@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "C:\\Users\\nslee\\Programming\\LW3\\Whitelist dApp\\contracts\\Whitelist.sol": {
+    "C:\\Users\\nslee\\Programming\\LW3\\Whitelist dApp\\hardhat-tutorial\\contracts\\Whitelist.sol": {
       "lastModificationDate": 1646550593744,
       "contentHash": "1a84cd73bc5ca867134f1afbf5e58fea",
       "sourceName": "contracts/Whitelist.sol",

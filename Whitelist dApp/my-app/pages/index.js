@@ -11,7 +11,7 @@ export default function Home() {
     const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     //  This is linking up the numOfWhitelisted to the react state. 
     const web3ModalRef = useRef();
-    const [_joinedWhitelist, setJoinedWhitelist] = setState(false);
+    const [_joinedWhitelist, setJoinedWhitelist] = useState(false);
     const [loading, setLoading] = useState(false);
     
     
@@ -102,7 +102,7 @@ const addAddressToWhitelist = async () => {
 
     const renderButton = () => {
         if(walletConnected) {
-            if(joinedWhitelist) {
+            if(_joinedWhitelist) {
                 return (
                     <div>
                         Thanks for joining the whitelist. 
@@ -147,14 +147,14 @@ const addAddressToWhitelist = async () => {
 
     useEffect(() => {
         if (!walletConnected) {{
-            web3ModalRef.current = new web3Modal({
+            web3ModalRef.current = new Web3Modal({
                 network: "rinkeby",
                 providerOptions: {},
                 disabledInjectedProvider: false,
             });
             connectWallet();
         }}
-    }) [walletConnected]
+    }, [walletConnected]);
 
     return (
             <div>
