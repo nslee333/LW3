@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from 'next/image';
 import styles from "../styles/Home.module.css";
 import { useEffect, useState, useRef } from "react";
 import Web3Modal from "web3modal"; 
@@ -14,6 +13,7 @@ export default function Home() {
     const [joinedWhitelist, setJoinedWhitelist] = useState(false);
     const [loading, setLoading] = useState(false);
     
+    // @param {*} needSigner
     
     const getProviderOrSigner = async(needSigner = false) => {
         try {
@@ -129,14 +129,6 @@ const addAddressToWhitelist = async () => {
             );
         }
     }
-
-
-
-
-
-
-
-
     const connectWallet = async() => {
         try {
             await getProviderOrSigner();
