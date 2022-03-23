@@ -64,7 +64,7 @@ const addAddressToWhitelist = async () => {
 
     const checkIfAddressIsWhitelisted = async() => {
         try {
-            const signer =  getProviderOrSigner(true);
+            const signer = await getProviderOrSigner(true);
             // This is returning the signer instead of the provider.
             const whitelistContract = new Contract (
                 WHITELIST_CONTRACT_ADDRESS,
