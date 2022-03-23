@@ -181,4 +181,3 @@ const addAddressToWhitelist = async () => {
             </div>
     )
 }
-console.trace();
