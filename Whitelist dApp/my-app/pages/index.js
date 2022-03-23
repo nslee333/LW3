@@ -153,23 +153,27 @@ const addAddressToWhitelist = async () => {
     }, [walletConnected]);
 
     return (
-            <div>
-                    <Head>
-                        <title> Whitelist dApp </title>
-                            <meta name="description" content="Whitelist-Dapp" />
-                    </Head>
-                    <div className={styles.main}>
-                    
-                        <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
-                        
-                            <div className={styles.description}>
-                                {numOfWhitelisted} have already joined the Whitelist.
-                            </div>
-                            {renderButton()}
-                        <div>
-                            <img className={styles.image} src="./crypto-devs.svg" />
-                        </div>
-                    </div>
+        <div>
+        <Head>
+          <title>Whitelist Dapp</title>
+          <meta name="description" content="Whitelist-Dapp" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={styles.main}>
+          <div>
+            <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
+            <div className={styles.description}>
+              Its an NFT collection for developers in Crypto.
+            </div>
+            <div className={styles.description}>
+              {numOfWhitelisted} have already joined the Whitelist
+            </div>
+            {renderButton()}
+          </div>
+          <div>
+            <img className={styles.image} src="./crypto-devs.svg" />
+          </div>
+        </div>
 
                     <footer className={styles.footer}>
                         Made With &#10084; by Nathan Lee 
