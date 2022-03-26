@@ -230,48 +230,42 @@ Notes on this function:
 -----------------------------------------------------------------------------------------------
    
  addAddressToWhitelist function overview:
-    1. Naming of the async function 'addAddressToWhitelist'
-    2. Try this code in the block.
-    3. Assigning a name to zzzzzzzzzzzzzzz
-    4. Create a new instance of the whitelistContract.
-        - Pass in the Contract address, contract ABI, and the signer as arguments.
-    5. Wait for the transaction to process (mine).
-    6. 
-        While transaction is processing:
-            6.1 - set the state of the loading hook to true. 
-                - This will then tell the render button to display 'loading...' on the button on the
-                    dApp.
-            6.2 - Wait for the transaction to mine.
-            6.3 - wait for getNumberOfWhitelisted
-                    - getNumberOfWhitelisted will get the updated number of people whitelisted.
-            6.4 - Update the joinedWhitelist react hook from false to true.
-    7. If there is an error in above code:
-        - catch the error, and print the error in the console.
+
+1. Naming of the async function 'addAddressToWhitelist'
+2. Try this code in the block.
+3. Assigning a name to the returned signer object.
+4. Create a new instance of the whitelistContract.
+    - Pass in the Contract address, contract ABI, and the signer as arguments.
+5. Wait for the transaction to process (mine).
+6. 
+    While transaction is processing:
+        6.1 - set the state of the loading hook to true. 
+            - This will then tell the render button to display 'loading...' on the button on the
+                dApp.
+        6.2 - Wait for the transaction to mine.
+        6.3 - wait for getNumberOfWhitelisted
+                - getNumberOfWhitelisted will get the updated number of people whitelisted.
+        6.4 - Update the joinedWhitelist react hook from false to true.
+7. If there is an error in above code:
+    - catch the error, and print the error in the console.
 
 -----------------------------------------------------------------------------------------------
 
-    
+Notes on this function:
+    - at 3. in Ethers.js signer returns an object which is a wrapper around the
+        ethereum API signer is an extenstion of provider where it includes the APIs required
+            to sign transactions with a private key, whereas provider is only for reading
+            from the blockchain not writing to it.
+        - An Object in Object-oriented programming (OOP), is an abstract data type created by
+            a developer.
+                - It can include multiple properties and methods and may even contain other
+                    objects.
+                - In most programming languages objects are defined as classes.
+        - So in this instance, when we are assigning the variable 'signer' to an
+            ethers object that wraps an ethereum API with the extenstion of a provider called 'signer'
+            so that it can read and write.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+-----------------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
 
@@ -377,22 +371,48 @@ Overview of getNumberOfWhitelisted function:
 --------------------------------------------------------------------------------
 
 
+const renderButton = () => {  1
+    if(walletConnected) {  2
+        if (joinedWhitelist) {  3
+            return (
+                <div className={styles.description}>
+                    Thanks for joining the whitelist. 
+                </div>
+            );
+        } else if (loading) { 4
+            return <button className = {styles.button}>Loading...</button>;
+        } else { 5
+            return (
+                <button onClick={addAddressToWhitelist} className = {styles.button}>
+                    Join the Whitelist
+                </button>
+            );
+        }
+    } else { 6
+        return (
+        <button onClick={connectWallet} className = {styles.button}>
+            Connect your Wallet
+        </button>
+        );
+    }
+}
 
+--------------------------------------------------------------------------------
 
+Logic overview:
 
-
-Overview of renderButton 
-
-zzzzzzzzzzzzzzz
-
-
-
-
-
-
-
-
-
+1. Function declaration.
+    2. If walletConnected (If the wallet is connected.)
+        3. if msg.sender (address of the user) is already in the whitelist:
+            - display 'Thanks for joining the whitelist' on the dApp page.
+        4. else if  (if the wallet is connected, but not in the whitelist, 
+            and the user approved the transaction do this: )
+                - the transaction is processing, 
+                    display 'Loading...' on the button.
+        5. else: (revert to this if the none of the above are true.)
+            display 'Join The Whitelist' on the button.
+    6. else (revert to this if the wallet isn't connected.)
+        display 'connect your wallet' on the button.
 
 
 ------------------------------------------------------------------------------------------
@@ -454,14 +474,6 @@ setWalletConnected
 -------------------------------------------------------------------------------------------
 
 
-
-
-
-
-
-
-
-
 ------------------------------------------------------------------------------------
         
 const [walletConnected, setWalletConnected] = useState(false); // 1
@@ -483,24 +495,24 @@ useEffect(() => { // 3
 
 Overview:
 
-    // 1 initial value of walletConnect set to false.
+1. initial value of walletConnect set to false.
 
-    // 2 variable name assigning - connect to the wallet once, and stay connected 
-        (once for every page initialization.)
+2. variable name assigning - connect to the wallet once, and stay connected 
+    - (once for every page initialization.)
 
-    // 3 Run everytime a new wallet is connected.
+3. Run everytime a new wallet is connected.
 
-    // 4 If a wallet is connected, run this code.
+4. If a wallet is connected, run this code.
 
-    // 5 Assigning a variable name to a new instance of the web3Modal.
+5. Assigning a variable name to a new instance of the web3Modal.
 
-    // 6 Set the network of the instance to rinkeby.
+6. Set the network of the instance to rinkeby.
 
-    // 7 Input any provider options (left blank).
+7. Input any provider options (left blank).
 
-    // 8 Allow injected providers (wallets).
+8. Allow injected providers (wallets).
 
-    // 9 Call connectWallet function.
+9. Call connectWallet function.
 
 
 const [walletConnected, setWalletConnected] = useState(false);
