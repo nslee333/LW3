@@ -140,7 +140,7 @@ const addAddressToWhitelist = async () => {
         }
     }
 
-
+// done
     useEffect(() => {
         if (!walletConnected) {{
             web3ModalRef.current = new Web3Modal({

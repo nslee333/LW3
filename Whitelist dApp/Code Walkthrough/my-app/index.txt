@@ -31,6 +31,28 @@ import Image from'next/image'
 'import styles from "../styles/Home.module.css";'
     - This is importing the CSS styling from this file.
 
+import { useEffect, useState, useRef} from "react"; 
+    - This is deconstructing react and importing just these three hooks for our use.
+        - useEffect allows us to perform side effects in yourt components.
+            - Examples include, fetching data, directly updating the DOM, and timers.
+            - useEffect takes two arguments, the second is optional.
+        - useState allows us to track state in a function component.
+            - State generally refers to the data or properities that need to be tracking in
+            an application.
+        - useRef - this hook allows us to persist values between renders.
+            - It can also be used to store a mutable value that does not cause a re-render
+                when updated.
+            - It can be used to access a DOM element directly.
+import Web3Modal from "web3modal"; 
+    - This is importing web3modal which is a library that is a single Web3 / Ethereum provider 
+        solution for all Wallets.
+            - Web3Modal is a library to help developers add support for multiple providers
+                in their apps in a single customizable configuration.
+
+
+
+
+
 const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     - This is setting the value of the state to 0.
     - useState retains a stateful value and it retains a function to update the value.
@@ -41,6 +63,8 @@ const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     - The 'useState(0)' is initializing the value of this component.
         - Initializing in programming is the assignment of an initial value for a 
             data object or variable.
+
+
 export default function Home() {
     - The export statement is used when creating JS modules to export objects, 
         functions, variables from the module so they can be used by other programs
@@ -200,67 +224,6 @@ setWalletConnected
         const [walletConnected, setWalletConnected] = useState(false);
         - When this connectWallet function is called, it will attempt to change the value of this   
         useState hook, if it is sucessful, it will set the value to True
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const checkIfAddressIsWhitelisted = async() => {
-
-}
-    -
-
-
-
-
-
-
-    // Personal guess. 
-    What do I need this to do?
-    I need it to check and see if the current wallet's address is in the whitelist.
-
-
-
-
-getNumberOfWhitelisted();
-    - ZZZZZZZZZZZZ
 
 
 -------------------------------------------------------------------------------------------
