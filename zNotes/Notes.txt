@@ -1,0 +1,13 @@
+import statements
+Main Home function declaration {
+    react hook initializations
+    getProviderOrSigner()
+    addAddressToWhitelist()
+    checkIfAddressIsWhitelisted()
+    getNumberOfWhitelisted()
+    renderButton()
+    connectWallet()
+    useEffect()
+        - !walletConnected
+    HTML main formatting
+}

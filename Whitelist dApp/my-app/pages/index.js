@@ -7,8 +7,7 @@ import { WHITELIST_CONTRACT_ADDRESS, abi } from "../constants";
 
 export default function Home() {
     const [walletConnected, setWalletConnected] = useState(false);
-    const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
-    //  This is linking up the numOfWhitelisted to the react state. 
+    const [numOfWhitelisted, setNumOfWhitelisted] = useState(0); 
     const web3ModalRef = useRef();
     const [joinedWhitelist, setJoinedWhitelist] = useState(false);
     const [loading, setLoading] = useState(false);

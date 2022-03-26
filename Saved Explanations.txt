@@ -1,0 +1,11 @@
+import Image from'next/image'
+   
+
+    - This is importing the Image component from Next.js.
+    - The Image component is an extenstion of the HTML <img> element, 
+        which includes some optimizations to help achieve good Core Web Vitals.
+            - 'Web Vitals' is a Google initiative to provide unified guidance
+                and metrics to measure end-user page experience on the web.
+            - 'Core Web Vitals' is a subset of Google's 'Web Vitals' and it
+                consists of three metrics that measure loading, interactivity and
+                visual stability.

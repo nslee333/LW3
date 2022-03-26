@@ -5,12 +5,39 @@ Application side.
 
 --------------------------------------------------------------------
 
+Main Structure of the index.js file:
+
+-------------------------------
+
+import statements
+Main Home function declaration {
+    react hook initializations
+    getProviderOrSigner()
+    addAddressToWhitelist()
+    checkIfAddressIsWhitelisted()
+    getNumberOfWhitelisted()
+    renderButton()
+    connectWallet()
+    useEffect()
+        - !walletConnected
+    HTML main formatting
+}
+
+
+--------------------------------------------------------------------
+
 In this page we're going to use the React.js library and React Hooks in this page.
 
 React Hooks is one of the main things we'll be using in this file.
 
+--------------------------------------------------------------------
+
+Import statements
+
+--------------------------------------------------------------------
+
 import Head from "next/head";
-import Image from 'next/image
+
 import styles from "../styles/Home.module.css";
 '
 - These are all import statements for specific depenedencies that we're going to be 
@@ -19,20 +46,8 @@ import Head from next/head;
     - This is importing the Head component from the next.js library.
     - the Head is a component that allows us to append elements to the head of the 
         page.
-import Image from'next/image'
-    - This is importing the Image component from Next.js.
-    - The Image component is an extenstion of the HTML <img> element, 
-        which includes some optimizations to help achieve good Core Web Vitals.
-            - 'Web Vitals' is a Google initiative to provide unified guidance
-                and metrics to measure end-user page experience on the web.
-            - 'Core Web Vitals' is a subset of Google's 'Web Vitals' and it
-                consists of three metrics that measure loading, interactivity and
-                visual stability.
 'import styles from "../styles/Home.module.css";'
     - This is importing the CSS styling from this file.
-
------------------------------------------------------------------------------------
-
 
 import { useEffect, useState, useRef} from "react"; 
     - This is deconstructing react and importing just these three hooks for our use.
@@ -66,6 +81,12 @@ import { WHITELIST_CONTRACT_ADDRESS, abi } from "../constants";
             - Contract address will be used as an input for contract instances.
             - abi will also be used as an argument for contract instances.
 
+-----------------------------------------------------------------------------------
+
+
+Main Exportable function and React Hooks
+
+-----------------------------------------------------------------------------------
 export default function Home() {
     - The export statement is used when creating JS modules to export objects, 
         functions, variables from the module so they can be used by other programs
@@ -78,6 +99,7 @@ export default function Home() {
             variable. During the import we can use any name to import.
     - In this case we're only exporting a single function, so its a default export 
         in this instance.   
+
 const [walletConntected, setWalletConnected] = useState(false);
     - This is a react component that helps us to track a state of a function
         component, in this instance this data is a boolean value if the wallet is connected
@@ -89,6 +111,7 @@ const [walletConntected, setWalletConnected] = useState(false);
         developer at initialization.
     - The structure of a react hook:
         const [valueVariable, valueSetFunction] = useState(value);
+
 const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     - This is a react hook that allows us to track the state (data or value) of a function component.
         - In this instance, the value is initialized at 0.
@@ -97,6 +120,7 @@ const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
     - setNumOfWhitelisted is the function that allows us to update the number of people whitelisted.
     - The initial value (initialization) is set to 0.
         - ZERO people are whitelisted.
+
 const [joinedWhitelist, setJoinedWhitelist] = useState(false);
     - This is a react hook that allows us to track the state (data or value) of a function component.
         - In this instance, a boolean value if the msg.sender (address of the dApp user) is 
@@ -106,6 +130,7 @@ const [joinedWhitelist, setJoinedWhitelist] = useState(false);
          the user has joined the whitelist.
     - The initial value (initialization) is set to false
         - The current address is not whitelisted.
+
 const [loading, setLoading] = useState(false);
     - This is a react hook that allows us to track the state (data or value) of a function component.
         - In this instance the boolean value which is initialzied to false
@@ -118,167 +143,11 @@ const [loading, setLoading] = useState(false);
             - The default state will be not loading.
 
 
-
-
-
-
-
-
-------------------------------------------------------------------------------------
-        
-const [walletConnected, setWalletConnected] = useState(false); // 1
-
-const web3ModalRef = useRef(); // 2
-
-useEffect(() => { // 3
-    if (!walletConnected) {{ // 4
-        web3ModalRef.current = new web3Modal({ // 5
-            network: "rinkeby", // 6
-            providerOptions: {}, // 7
-            disabledInjectedProvider: false, // 8
-        });
-        connectWallet(); // 9
-    }}
-}) [walletConnected] // 3
-
-------------------------------------------------------------------------------------    
-
-Overview:
-
-    // 1 initial value of walletConnect set to false.
-
-    // 2 variable name assigning - connect to the wallet once, and stay connected 
-        (once for every page initialization.)
-
-    // 3 Run everytime a new wallet is connected.
-
-    // 4 If a wallet is connected, run this code.
-
-    // 5 Assigning a variable name to a new instance of the web3Modal.
-
-    // 6 Set the network of the instance to rinkeby.
-
-    // 7 Input any provider options (left blank).
-
-    // 8 Allow injected providers (wallets).
-
-    // 9 Call connectWallet function.
-
-
-const [walletConnected, setWalletConnected] = useState(false);
-    - This line is initializing the state of the page.
-        - Initializing meaning setting the initial state.
-    - 'walletConnected, setWalletConnected' are variables that you can set.
-        - 'walletConnected' is the variable assigned to the value.
-        - 'setWalletConnected' is the function that is used to update the value.
-    -'useState(false)' 
-        - This is setting the state of the variable to a boolean value of 'false'.
-All of this is important for understanding the code below.
-    This code means: is the wallet connected? true or false. Initial state is false. 
-
-useEffect(() => {
-
-    - useEffect is a react.js hook that allows you to set side effects in your components
-        - Like fetching data, updating a dom etc.
-    - useEffect takes two arguments: useEffect(<function> <dependency>).
-        useEffect runs on every render unless you:
-            1. write an empty array "[]" (dependency), which is effectively telling
-                useEffect that it can only run once.
-                    - Everytime the dependency changes, it will run, but since  
-                        there is an empty array, the logic says that it will only run once and
-                        never run again.
-            2. write a dependency that has to change in order for it to run again.
-                - For example: if a function is called, then useEffect runs again.
-                    or if a variable assigned to a numerical value changes, the useEffect hook
-                        runs once for every value change.
-        - So in this case, useEffect will only run for everytime the value of 'walletConnected'
-            changes. 
-                - So if it changes from false to true, than the useEffect hook will run.
-
-if (!walletConnected) {{
-    - if the wallet is not connected, run this code.
-    const web3ModalRef = useRef();
-    - This is assigning the variable web3ModalRef to the react hook useRef.
-        - useRef with react is used to persist values between renders.
-        - This is essentially commanding it to only render once and keep the data.
-                - Similar to keeping mutable values persistant in an instance of a class.
-            - Which in this case is the MetaMask wallet being connected, it will persist 
-                between page renders.
-                    - We'll only connect once during the component intialization (page rendering).
-    web3ModalRef.current = new web3Modal({  
-    - Web3 Modal is an easy to use library for connecting to multiple wallets.
-        - With this variable declaration, we're saying that the web3ModalRef.current's value
-            is a new instance of the web3Modal.
-    network: "rinkeby",
-        - Initialization value for web3Modal instance, set to Rinkeby network.
-    providerOptions: {},
-        - Initializiation value for providerOptions, left blank.
-    disabledInjectedProvider: false,
-        - Initialization value for disabledInjectedProvider, set to false.
-            - False value for this is enabling injected providers (wallets.)
-
-
-
-
-
-------------------------------------------------------------------------------------------
-MAIN FUNCTION:
-----------------
-const connectWallet = async() => { // 1
-    try { // 2
-        await getProviderOrSigner(); // 3
-        setWalletConnected(true) // 4
-        checkIfAddressIsWhitelisted(); // 5
-        getNumberOfWhitelisted(); // 6
-    } catch(err) { // 7
-        console.error(err) // 8
-    }
-}
----------------------------------------------------------------------------------------------
- 
-Function overview:
-
-1. async function declaration.
-2. Try this code (This is a part of JS's Try catch finally statements).
-3. Function call: call the getProviderOrSigner function (Wallet) and wait for it to complete before
-    moving on.
-4. Function Call: change the boolean value of setWalletConnected from false to true. 
-    (not connected to connected.)
-5. Function Call: Check if the address associated with the wallet is on the whitelist.
-6. Function call: Get the value of addresses whitelisted.
-7. Catch/log any errors.
-
----------
-
-try... catch.
-    - The try/catch are statements from JS's Try Catch Finally statements.
-        - Basically it means try the following code, if there is an error, it will catch 
-            the error and print the error.
-await getProviderOrSigner
-    - This is calling the function getProviderOrSigner.
-        - Which is:
-            1. Creating a new provider instance. (connecting with metamask.)
-            2. Wrapping a provider in a Web3Provider class (from Web3Modal)
-                - Which gives us a function '.getNetwork' that allows us to get the 
-                    network id.
-            3. Getting the network ID from the provider.
-            4. Checking to see if its on Rinkeby.
-                - If the network is not connected to Rinkeby
-                    - Throw an error prompting the user to change the network.
-            5. If the transaction needs a signer, get the signer from the provider.
-            6. Return signer.
-            7. Return web3Provider.
-            8. Catch/log any errors.
-
-setWalletConnected
-    - This is the modify value function from the above code 
-        const [walletConnected, setWalletConnected] = useState(false);
-        - When this connectWallet function is called, it will attempt to change the value of this   
-        useState hook, if it is sucessful, it will set the value to True
-
-
 -------------------------------------------------------------------------------------------
 
+Functions and Main Function:
+
+-------------------------------------------------------------------------------------------
 
 const getProviderOrSigner = async(needSigner = false) // 6 => { // 1
     try {
@@ -331,7 +200,79 @@ Notes on this function:
     - It will return the provider if you don't input any parameters.
     - If you set the parameter to true it will return the signer.
 
-       
+-----------------------------------------------------------------------------------------------   
+
+    const addAddressToWhitelist = async () => { // 1
+        try { // 2
+            const signer = await getProviderOrSigner(true); // 3
+            
+            const whitelistContract = new Contract ( // 4
+                WHITELIST_CONTRACT_ADDRESS,
+                abi,
+                signer
+            );
+    
+            const tx = await whitelistContract.addAddressToWhitelist(); // 5
+    
+            setLoading(true); // 6
+            await tx.wait(); 6.1
+            setLoading(false); 6.2
+            await getNumberOfWhitelisted(); 6.3
+            setJoinedWhitelist(true); 6.4
+            
+    
+    
+        } catch(err) { // 7
+            console.error(err)
+        }
+    }
+   
+-----------------------------------------------------------------------------------------------
+   
+ addAddressToWhitelist function overview:
+    1. Naming of the async function 'addAddressToWhitelist'
+    2. Try this code in the block.
+    3. Assigning a name to zzzzzzzzzzzzzzz
+    4. Create a new instance of the whitelistContract.
+        - Pass in the Contract address, contract ABI, and the signer as arguments.
+    5. Wait for the transaction to process (mine).
+    6. 
+        While transaction is processing:
+            6.1 - set the state of the loading hook to true. 
+                - This will then tell the render button to display 'loading...' on the button on the
+                    dApp.
+            6.2 - Wait for the transaction to mine.
+            6.3 - wait for getNumberOfWhitelisted
+                    - getNumberOfWhitelisted will get the updated number of people whitelisted.
+            6.4 - Update the joinedWhitelist react hook from false to true.
+    7. If there is an error in above code:
+        - catch the error, and print the error in the console.
+
+-----------------------------------------------------------------------------------------------
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -----------------------------------------------------------------------------------------
 
 const checkIfAddressIsWhitelisted = async() => { // 1 
@@ -436,11 +377,194 @@ Overview of getNumberOfWhitelisted function:
 --------------------------------------------------------------------------------
 
 
+
+
+
+
 Overview of renderButton 
 
 zzzzzzzzzzzzzzz
 
 
-overview of addAddressToWhitelist
 
-zzzzzzzzzzzzzzz
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------
+MAIN FUNCTION:
+----------------
+const connectWallet = async() => { // 1
+    try { // 2
+        await getProviderOrSigner(); // 3
+        setWalletConnected(true) // 4
+        checkIfAddressIsWhitelisted(); // 5
+        getNumberOfWhitelisted(); // 6
+    } catch(err) { // 7
+        console.error(err) // 8
+    }
+}
+---------------------------------------------------------------------------------------------
+ 
+Function overview:
+
+1. async function declaration.
+2. Try this code (This is a part of JS's Try catch finally statements).
+3. Function call: call the getProviderOrSigner function (Wallet) and wait for it to complete before
+    moving on.
+4. Function Call: change the boolean value of setWalletConnected from false to true. 
+    (not connected to connected.)
+5. Function Call: Check if the address associated with the wallet is on the whitelist.
+6. Function call: Get the value of addresses whitelisted.
+7. Catch/log any errors.
+
+---------
+
+try... catch.
+    - The try/catch are statements from JS's Try Catch Finally statements.
+        - Basically it means try the following code, if there is an error, it will catch 
+            the error and print the error.
+await getProviderOrSigner
+    - This is calling the function getProviderOrSigner.
+        - Which is:
+            1. Creating a new provider instance. (connecting with metamask.)
+            2. Wrapping a provider in a Web3Provider class (from Web3Modal)
+                - Which gives us a function '.getNetwork' that allows us to get the 
+                    network id.
+            3. Getting the network ID from the provider.
+            4. Checking to see if its on Rinkeby.
+                - If the network is not connected to Rinkeby
+                    - Throw an error prompting the user to change the network.
+            5. If the transaction needs a signer, get the signer from the provider.
+            6. Return signer.
+            7. Return web3Provider.
+            8. Catch/log any errors.
+
+setWalletConnected
+    - This is the modify value function from the above code 
+        const [walletConnected, setWalletConnected] = useState(false);
+        - When this connectWallet function is called, it will attempt to change the value of this   
+        useState hook, if it is sucessful, it will set the value to True
+
+
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------
+        
+const [walletConnected, setWalletConnected] = useState(false); // 1
+
+const web3ModalRef = useRef(); // 2
+
+useEffect(() => { // 3
+    if (!walletConnected) {{ // 4
+        web3ModalRef.current = new web3Modal({ // 5
+            network: "rinkeby", // 6
+            providerOptions: {}, // 7
+            disabledInjectedProvider: false, // 8
+        });
+        connectWallet(); // 9
+    }}
+}) [walletConnected] // 3
+
+------------------------------------------------------------------------------------    
+
+Overview:
+
+    // 1 initial value of walletConnect set to false.
+
+    // 2 variable name assigning - connect to the wallet once, and stay connected 
+        (once for every page initialization.)
+
+    // 3 Run everytime a new wallet is connected.
+
+    // 4 If a wallet is connected, run this code.
+
+    // 5 Assigning a variable name to a new instance of the web3Modal.
+
+    // 6 Set the network of the instance to rinkeby.
+
+    // 7 Input any provider options (left blank).
+
+    // 8 Allow injected providers (wallets).
+
+    // 9 Call connectWallet function.
+
+
+const [walletConnected, setWalletConnected] = useState(false);
+    - This line is initializing the state of the page.
+        - Initializing meaning setting the initial state.
+    - 'walletConnected, setWalletConnected' are variables that you can set.
+        - 'walletConnected' is the variable assigned to the value.
+        - 'setWalletConnected' is the function that is used to update the value.
+    -'useState(false)' 
+        - This is setting the state of the variable to a boolean value of 'false'.
+All of this is important for understanding the code below.
+    This code means: is the wallet connected? true or false. Initial state is false. 
+
+useEffect(() => {
+
+    - useEffect is a react.js hook that allows you to set side effects in your components
+        - Like fetching data, updating a dom etc.
+    - useEffect takes two arguments: useEffect(<function> <dependency>).
+        useEffect runs on every render unless you:
+            1. write an empty array "[]" (dependency), which is effectively telling
+                useEffect that it can only run once.
+                    - Everytime the dependency changes, it will run, but since  
+                        there is an empty array, the logic says that it will only run once and
+                        never run again.
+            2. write a dependency that has to change in order for it to run again.
+                - For example: if a function is called, then useEffect runs again.
+                    or if a variable assigned to a numerical value changes, the useEffect hook
+                        runs once for every value change.
+        - So in this case, useEffect will only run for everytime the value of 'walletConnected'
+            changes. 
+                - So if it changes from false to true, than the useEffect hook will run, running
+                all the code in the function.
+
+if (!walletConnected) {{
+    - if the wallet is not connected, run this code.
+    const web3ModalRef = useRef();
+    - This is assigning the variable web3ModalRef to the react hook useRef.
+        - useRef with react is used to persist values between renders.
+        - This is essentially commanding it to only render once and keep the data.
+                - Similar to keeping mutable values persistant in an instance of a class.
+            - Which in this case is the MetaMask wallet being connected, it will persist 
+                between page renders.
+                    - We'll only connect once during the component intialization (page rendering).
+    web3ModalRef.current = new web3Modal({  
+    - Web3 Modal is an easy to use library for connecting to multiple wallets.
+        - With this variable declaration, we're saying that the web3ModalRef.current's value
+            is a new instance of the web3Modal.
+    network: "rinkeby",
+        - Initialization value for web3Modal instance, set to Rinkeby network.
+    providerOptions: {},
+        - Initializiation value for providerOptions, left blank.
+    disabledInjectedProvider: false,
+        - Initialization value for disabledInjectedProvider, set to false.
+            - False value for this is enabling injected providers (wallets.)
+
+    connectWallet()
+        - This is calling the main function
+            - After everytime a wallet it connected, it will create a new contract instantiation
+                then it will call this function, which goes through the main logic of the dApp.
+    [walletConnected] 
+        - This is a dependency argument for the useEffect react hook, 
+            the code under the useEffect will not run unless the state of walletConnected
+                (true or false) changes, then this code will run.
+
+------------------------------------------------------------------------------------------
+
+
