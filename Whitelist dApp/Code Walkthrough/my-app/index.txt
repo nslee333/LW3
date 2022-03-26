@@ -31,6 +31,9 @@ import Image from'next/image'
 'import styles from "../styles/Home.module.css";'
     - This is importing the CSS styling from this file.
 
+-----------------------------------------------------------------------------------
+
+
 import { useEffect, useState, useRef} from "react"; 
     - This is deconstructing react and importing just these three hooks for our use.
         - useEffect allows us to perform side effects in yourt components.
@@ -48,22 +51,20 @@ import Web3Modal from "web3modal";
         solution for all Wallets.
             - Web3Modal is a library to help developers add support for multiple providers
                 in their apps in a single customizable configuration.
-
-
-
-
-
-const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
-    - This is setting the value of the state to 0.
-    - useState retains a stateful value and it retains a function to update the value.
-        - So in this case 'numOfWhitelisted' is a variable that is assigned to 
-            an integer, and it is the value that is retained in the stateful value
-            for the 'useState' react component. 
-        - the function that is used to update the value is the 'setNumOfWhitelisted'.
-    - The 'useState(0)' is initializing the value of this component.
-        - Initializing in programming is the assignment of an initial value for a 
-            data object or variable.
-
+import { Contract, providers } from "ethers";
+    - This is deconstructing Ethers and importing these two components for use
+        - Contract functionality helps us create instances of the Contract for use
+            in our application.
+        - providers in ethers.js is a read-only abstraction to access blockchain data.
+            - This helps us read data from the blockchain without paying for gas.
+                - Such as getting the numOfAddressesWhitelisted and displaying that on the 
+                    webpage.
+import { WHITELIST_CONTRACT_ADDRESS, abi } from "../constants";
+    - This is importing the Whitelist Address and the contract ABI.
+        - These are assigned to variables in another file to make the index.js file
+            easier to read and understand.
+            - Contract address will be used as an input for contract instances.
+            - abi will also be used as an argument for contract instances.
 
 export default function Home() {
     - The export statement is used when creating JS modules to export objects, 
@@ -77,6 +78,51 @@ export default function Home() {
             variable. During the import we can use any name to import.
     - In this case we're only exporting a single function, so its a default export 
         in this instance.   
+const [walletConntected, setWalletConnected] = useState(false);
+    - This is a react component that helps us to track a state of a function
+        component, in this instance this data is a boolean value if the wallet is connected
+            or not.
+    - This is initializing the data value of walletConnected to an iniital value of 'false'
+    - walletConnected is a boolean value if the wallet is connected or not.
+    - setWalletConnected is a function that allows us to set the function.
+    - Both 'walletConntected' and 'setWalletConnected' are variables that are set by the 
+        developer at initialization.
+    - The structure of a react hook:
+        const [valueVariable, valueSetFunction] = useState(value);
+const [numOfWhitelisted, setNumOfWhitelisted] = useState(0);
+    - This is a react hook that allows us to track the state (data or value) of a function component.
+        - In this instance, the value is initialized at 0.
+            - or ZERO people are whitelisted.
+    - numOfWhitelisted is the integer value of how many addresses are whitelisted.
+    - setNumOfWhitelisted is the function that allows us to update the number of people whitelisted.
+    - The initial value (initialization) is set to 0.
+        - ZERO people are whitelisted.
+const [joinedWhitelist, setJoinedWhitelist] = useState(false);
+    - This is a react hook that allows us to track the state (data or value) of a function component.
+        - In this instance, a boolean value if the msg.sender (address of the dApp user) is 
+            whitelisted or not.
+    - joinedWhitelist - boolean value if the user is whitelisted or not.
+    - setJointedWhitelist - A function to update the value (from false to true) after
+         the user has joined the whitelist.
+    - The initial value (initialization) is set to false
+        - The current address is not whitelisted.
+const [loading, setLoading] = useState(false);
+    - This is a react hook that allows us to track the state (data or value) of a function component.
+        - In this instance the boolean value which is initialzied to false
+            - It will default to a false state
+                - It is not loading.
+        - loading - boolean value if the transaction is processing or not.
+        - setLoading - A function to update the value (from false to true) 
+            whenever the transaction is being processed (mined) which we'll call loading.
+        - The intial value (initializaton) is set to false.
+            - The default state will be not loading.
+
+
+
+
+
+
+
 
 ------------------------------------------------------------------------------------
         
@@ -170,6 +216,11 @@ if (!walletConnected) {{
     disabledInjectedProvider: false,
         - Initialization value for disabledInjectedProvider, set to false.
             - False value for this is enabling injected providers (wallets.)
+
+
+
+
+
 ------------------------------------------------------------------------------------------
 MAIN FUNCTION:
 ----------------
@@ -366,6 +417,9 @@ const getNumberOfWhitelisted = async() => {
     }
 }
 
+
+
+
 --------------------------------------------------------------------------------
 
 Overview of getNumberOfWhitelisted function:
@@ -380,3 +434,13 @@ Overview of getNumberOfWhitelisted function:
     - This will set and hold the value of whitelisted addresses in the state of the page.
 
 --------------------------------------------------------------------------------
+
+
+Overview of renderButton 
+
+zzzzzzzzzzzzzzz
+
+
+overview of addAddressToWhitelist
+
+zzzzzzzzzzzzzzz

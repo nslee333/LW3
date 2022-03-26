@@ -15,6 +15,7 @@ export default function Home() {
     
     // @param {*} needSigner
     
+    // done
     const getProviderOrSigner = async(needSigner = false) => {
         try {
             const provider = await web3ModalRef.current.connect();
@@ -61,7 +62,7 @@ const addAddressToWhitelist = async () => {
     }
 }
 
-
+// done
     const checkIfAddressIsWhitelisted = async() => {
         try {
             const signer = await getProviderOrSigner(true);
@@ -129,6 +130,8 @@ const addAddressToWhitelist = async () => {
             );
         }
     }
+
+// done
     const connectWallet = async() => {
         try {
             await getProviderOrSigner();
