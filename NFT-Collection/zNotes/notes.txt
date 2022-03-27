@@ -12,3 +12,14 @@ Notes for the NFT Collection
         - This helps us to relinquish the administrative priveledge, 
             a common pattern after an initial stage when centralized administration 
             is over.
+- ERC-721 Enumerable
+    - This is an extension of the ERC-721 standard,
+        This extension adds some more functionality.
+    - totalSupply()
+        - Returns the total amount of tokens stored by the contract.
+            - Total number of NFTs managed by the contract.
+    - tokenOfOwnerByIndex()
+        - The onwer is going to have multiple NFTs, it will return the
+        index ??????
+    - tokenByIndex
+        - 
