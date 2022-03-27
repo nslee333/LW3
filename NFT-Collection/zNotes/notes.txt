@@ -1,0 +1,14 @@
+-----------------------------------------------------------------------------------------------
+
+Notes for the NFT Collection
+
+-----------------------------------------------------------------------------------------------
+
+- Ownable.sol is an openZeppelin contract that is an extension for the ERC-721 
+    format, and it helps us to
+    - transferOwnership
+        - We can transfer the ownership from one address to a new address.
+    - renounceOwnership
+        - This helps us to relinquish the administrative priveledge, 
+            a common pattern after an initial stage when centralized administration 
+            is over.
