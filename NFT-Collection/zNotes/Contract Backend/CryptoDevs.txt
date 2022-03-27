@@ -85,6 +85,23 @@ Notes on the function:
         - For simplicity we'll use it as a base path to attach the Metadata about that NFT.
             - The metadata for this NFT token will be:
                 - TokenID, Attributes of the NFT.
+- IWhitelist(whitelistContract) 
+    - IWhitelist interface is wrapping the whitelistContract, when we do this it is creating an instance 
+        of the whitelistContract function whitelistedAddresses for our use.
+        - And we're assigning a variable (whitelist) to that instance for our use.
+
+- Interface definition: 
+    - In computing, an interface is a shared boundary across which two or more seperate components of a computer
+        system exchange information.
+            - The exchange can be between software and hardware etc.
+    - In this case, we're interfacing (a connection between) the whitelist.sol and
+        our own CryptoDevs.sol file.
+            - And we're creating an instance of the contract just with whitelistedAddresses function, 
+                so that in the presale period, we can see if the address attempting 
+                to make a transaction is in the whitelist or not.
+
+    
+
 
 
 

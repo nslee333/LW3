@@ -15,4 +15,21 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
        whitelist = IWhitelist(whitelistContract);
     }
 
+    function startPresale() public onlyOwner {
+
+    }
+
+    function presaleMint() public payable {
+
+    }
+
+
+    function mint() public payable {
+
+    }
+
+    function _baseURI() {
+        
+    }
+
 }

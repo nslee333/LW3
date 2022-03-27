@@ -6,12 +6,44 @@ contract.
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-Overview of contract functions and order
-zzzzzzzzzzzzzz
+// SPDX-Licence-Identifier: MIT 
+pragma solidity ^0.8.4;
+
+interface IWhitelist { 1
+    function whitelistedAddresses(address) external view returns (bool); 2
+}
+
+
+
+--------------------------------------------------------------
+--------------------------------------------------------------
+
+Structure of the interface:
+
+1. Interface declaration.
+2. Function definition.
+    - We're grabbing the whitelistedAddresses function from the
+        whitelist.sol contract.
+
 
 --------------------------------------------------------------
 --------------------------------------------------------------
 
 
 
+Notes on the interface:
 
+
+- Interface definition: 
+    - In computing, an interface is a shared boundary across which two or more seperate components of a computer
+        system exchange information.
+            - The exchange can be between software and hardware, 
+            - solidity files on my computer and alchemy -> rinkeby testnet etc.
+    - In this case, we're interfacing (a connection between) the whitelist.sol and
+        our own CryptoDevs.sol file.
+            - And we're creating an instance of the contract just with whitelistedAddresses function, 
+                so that in the presale period, we can see if the address attempting 
+                to make a transaction is in the whitelist or not.
+    - In an interface we need to write the definitions of the functions that we want to use.
+        -   In this instance we're only writing the definition of the function whitelistedAddresses because 
+                we're going to use that function to check if an address is in the whitelist for the presale period of the sale.
