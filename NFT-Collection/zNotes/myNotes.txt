@@ -26,3 +26,15 @@ for presale period:
      }
          
     } 
+
+
+
+
+
+
+
+
+    constructor(string memory _name, string memory _symbol) {
+      _name = name_;
+      _symbol = symbol_;
+  }

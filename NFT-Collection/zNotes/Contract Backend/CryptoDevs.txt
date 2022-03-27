@@ -5,12 +5,110 @@ This is the code walkthrough of the CryptoDevs.sol contract.
 --------------------------------------------------------------
 --------------------------------------------------------------
 
-Overview of contract functions and order
-zzzzzzzzzzzzzz
+The Structure of the contract:
 
+1. SPDX Id.
+2. Solidity version declaration.
+3. Import Statements.
+    - OZ ERC721Enumerable.sol,
+    - OZ Ownable.sol.
+    - ./IWhitelist.sol
+4. Contract declaration.
+    4.1 - State variables.
+    4.2 - constructor.
 --------------------------------------------------------------
 --------------------------------------------------------------
 
+import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
+import '@openzeppelin/contracts/access/Ownable.sol';
+import './IWhitelist.sol';
+
+- This is importing several OpenZeppelin contracts that we'll
+    be using.
+    - ERC721Enumerable.sol
+        - This will be used to numeber and track our NFTs.
+    - Ownable.sol 
+        - This file will help us renounce the ownership
+            of the NFT contract which is a common practice
+            when deploying decentralized projects.
+    - IWhitelist.sol
+        - This file will help us interface with the Whitelist
+            contract so that we can see who is in the 
+            whitelist giving him/her access to the presale
+            period.
+--------------------------------------------------------------
+
+contract CryptoDevs is ERC721Enumerable, Ownable {
+
+- This is the contract declaration, and it is inheriting
+    from the ERC721Enumerable.sol and Ownable.sol contracts.
+
+--------------------------------------------------------------
+
+string _baseTokenURI; 2
+IWhitelist whitelist; 3
+
+
+constructor(string memory _baseURI, address whitelistContract) ERC721("Crypto Devs", "CD") { 1
+    _baseTokenURI = _baseURI; 2
+    whitelist = IWhitelist(whitelistContract); 3
+ }
+
+--------------------------------------------------------------
+
+Function overview:
+
+1. constructor function.
+    - Takes two arguments.
+        - _baseURI.
+        - whitelistContract.
+    Initialization of OZs ERC721 contract. We pass in these arguments to its constructor.
+        - Name of the Token ("Crypto Devs").
+        - Symbol of the NFT ("CD").
+2. Assigning the passed in value of _baseURI to _baseTokenURI state variable.
+3. Assiging the passed in value of IWhitelist(interface with whitelistContract) to the state variable.
+
+--------------------------------------------------------------
+    
+Notes on the function:
+
+- When we first deploy this contract, we'll:
+    - pass in these arguments to the constructor and it will Assign the values to state variables 
+        and it will initialize the ERC721 contract with the passed in arguments of 'Crypto Devs' 
+        and "CD".
+- URI:
+    - URI stands for Uniform Resource Identifier.
+    - URI is used to identify abstract or physical resources on the internet.
+        - In this instance we're using the URI as essentially a URL to go and find the meta
+            data for that NFT Token.
+        - It dosen't have to be a URL, it can be used with IPFS, RV etc.
+        - For simplicity we'll use it as a base path to attach the Metadata about that NFT.
+            - The metadata for this NFT token will be:
+                - TokenID, Attributes of the NFT.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4. Contract declaration.
+    - Inherit from OZ Enumerable.sol, Ownable.sol.
 
 
 
