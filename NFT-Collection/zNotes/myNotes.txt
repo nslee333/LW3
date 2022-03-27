@@ -1,0 +1,28 @@
+-----------------------------------------------------------------------------------------------
+
+Notes for the NFT Collection
+
+-----------------------------------------------------------------------------------------------
+
+
+My guess is that that the IWhitelist contract is going 
+to be used as a requirement for the 5 minute presale period.
+
+The logic will probably go like this:
+
+for presale period:
+ require that the address is in the whitelist if in the 
+    presale period
+    - It will interface with the Whitelist contract
+    and will call whtielistedAddresses(address) returns (bool)
+    and that will be required before then can go on.
+
+    function mintToken(msg.sender) public payable {
+     if (Whitelist.whitelistedAddresses(msg.sender)) {
+
+     } else {
+        throw(err): "You are not whitelisted, please wait until presale 
+        is over to purchase your NFT(s)"
+     }
+         
+    } 

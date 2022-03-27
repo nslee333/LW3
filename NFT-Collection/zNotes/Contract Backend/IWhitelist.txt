@@ -1,6 +1,7 @@
 -------------------------------------------------------------
 
-This is the code walkthrough of the CryptoDevs.sol contract.
+This is the code walkthrough of the IWhitelist.sol interface
+contract.
 
 --------------------------------------------------------------
 --------------------------------------------------------------
