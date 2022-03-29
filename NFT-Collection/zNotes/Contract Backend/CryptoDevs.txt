@@ -63,6 +63,9 @@ constructor(string memory _baseURI, address whitelistContract) ERC721("Crypto De
 
 Function overview:
 
+The purpose of this function is to set initial values for the contract, this
+function will run once at the deployment of the contract and only once.
+
 1. constructor function.
     - Takes two arguments.
         - _baseURI.
@@ -120,6 +123,10 @@ function startPresale() public onlyOwner {
 --------------------------------------------------------------
 
 Function overview:
+
+The purpose of this function is to start the presale, only the owner of the
+    contract can use this funciton.
+
 1. Start the presale.
 2. End the presale after 5 minutes has passed.
 
@@ -156,6 +163,9 @@ function presaleMint() public payable {
 --------------------------------------------------------------
 
 Function overview:
+
+The purpose of this function is to mint tokens for the people who are on the 
+    whitelist, during the presale period.
 
 1. Require that the presale has started, and that the presale has not ended.
 2. Require that the address initiating the transaction is in the whitelist.
@@ -207,6 +217,9 @@ function mint() public payable {
 --------------------------------------------------------------
 
 Function Overview:
+
+The purpose of this function is to mint tokens for the public after the presale
+    has ended.
 
 1. Require that the Presale has started, AND that the presale has ended in order to mint.
 2. Require that the amount of tokenIds does not exceed maxTokenIds.
@@ -263,6 +276,10 @@ function withdraw() public onlyOwner { 1
 --------------------------------------------------------------
 
 Function overview:
+
+The purpose of this function is to withdraw the funds from the
+contract account and send them to the owner's address.
+
 1. Function declaration, require that only the owner can call this function.
 2. Assigning a variable (owner) to the address that deployed the contract (via ownable.sol owner()).
     - owner() function will initialize value to the address that deployed the contract.
@@ -270,9 +287,6 @@ Function overview:
 4. Withdraw the balance of the contract and send it to the owner's address.
     - See notes.
 5. Require that the Ether is sent, if not display error message.
-
-
-
 
 --------------------------------------------------------------
 
@@ -291,9 +305,50 @@ Function notes:
             bytes memory data, but in this case we've left it blank.
     - require(sent, "Failed to send ether.")
         - that the variable sent is equal to true, otherwise throw an error.
+--------------------------------------------------------------        
 
-        
+bool public _paused;
 
+function setPause(bool val) public onlyOwner { 1
+    _paused = val;2
+} 
+
+--------------------------------------------------------------
+
+Fuction overview:
+
+The purpose of this function is to  freeze the contract in case
+    there is a security issue that allows a user to exploit a vulnerable 
+    mint function, only the owner of the contract can use this function.
+    
+1. Function declaration, the argument is a boolean value.
+2. Assign state variable _paused to argument.
+
+--------------------------------------------------------------
+
+    modifier onlyWhenNotPaused { 1
+        require(!_paused, "contract currently paused"); 2
+        _; 3
+    }
+--------------------------------------------------------------   
+
+Function Modifier overview:
+
+1. Function Modifier declaration.
+2. Require that the contract is not paused before you continue with the function.
+    - Check that the contract is not paused before you continue.
+    - If it is paused, print message.
+3. Run the function.
+
+--------------------------------------------------------------
+
+Function modifier notes:
+    - _; stands for run the rest of the function.
+    - We then went on and added the modifier in the
+        1. presaleMint() function.
+        2. Mint() function.
+            That way if there is a bug that is exploitable, then
+            we can pause the contract and fix it before any loss happens.
 
 
 
