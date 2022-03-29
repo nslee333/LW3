@@ -254,7 +254,7 @@ Function notes:
 --------------------------------------------------------------
 
 function withdraw() public onlyOwner { 1
-    address owner = owner(); 2
+    address _owner = owner(); 2
     uint256 amount = address(this).balance; 3
     (bool sent, ) = _owner.call{value: amount}(""); 4
     require(sent, "Failed to send ether.") 5
@@ -264,16 +264,35 @@ function withdraw() public onlyOwner { 1
 
 Function overview:
 1. Function declaration, require that only the owner can call this function.
-2.  
-3. Assigning a variable to the balance of this contract.
-4.
+2. Assigning a variable (owner) to the address that deployed the contract (via ownable.sol owner()).
+    - owner() function will initialize value to the address that deployed the contract.
+3. Assigning a variable (amount) to the balance of this contract.
+4. Withdraw the balance of the contract and send it to the owner's address.
+    - See notes.
+5. Require that the Ether is sent, if not display error message.
 
-READ THIS!!!!! WAS IN THE MIDDLE OF FUNCTION OVERVIEW WHEN I STOPPED.
+
 
 
 --------------------------------------------------------------
 
 Function notes:
+    - onlyOwner is a function modifier that only allows the current 
+        onwer of the contract to use this function.
+    - (bool sent, ) = _owner.call{value: amount}("");
+        - This is the current and recommended method to send
+            ether. 
+        - the .call function will return a boolean value if the
+            transaction has suceeded or not.
+        - bool sent:
+            - This is a boolean variable and we're assigning it to the .call
+                function.
+        - After the boolean sent variable, it allows us to input
+            bytes memory data, but in this case we've left it blank.
+    - require(sent, "Failed to send ether.")
+        - that the variable sent is equal to true, otherwise throw an error.
+
+        
 
 
 

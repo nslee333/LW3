@@ -61,7 +61,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
 
 
     function withdraw() public onlyOwner {
-        address owner = owner();
+        address _owner = owner();
         uint256 amount = address(this).balance;
         (bool sent, ) = _owner.call{value: amount}("");
         require(sent, "Failed to send ether.")
