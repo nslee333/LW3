@@ -220,8 +220,126 @@ Function notes:
 
 
 require(presaleStarted && block.timestamp >= presaleEnded, "Presale has not ended yet"); 1
+    - Require that:
+        - presaleStarted = true AND the block.timestamp is greater than or equal to presaleEnded 
+            - presaleEnded --> block.timestamp (at time of presale start + 5 minutes).
+            - block.timestamp time has to be greater than the presaleEnded in order for mint() to work
+                after the presale has ended.
 
 
+--------------------------------------------------------------
+
+function _baseURI() internal view override returns (string memory) {
+    return _baseTokenURI; 
+}
+
+--------------------------------------------------------------
+
+
+Function notes:
+
+- This _baseURI function is a function in the OZ ERC-721 contract that
+    we'll override because it returns an empty string insted of the
+    _baseTokenURI.
+- Virtual / Override
+    These are inheritence Statements,
+        - virtual means that if a function has this keyword in
+            its declaration, it may be overridden by a child contract.
+        - Override means that if a function has this keyword in its
+            declaration, it is overriding the parent contracts function,
+                and modifying it for our own purpose.
+- OZ has designed it so that any person can modify this function so that
+    they can tailor the return variable to their needs.
+
+--------------------------------------------------------------
+
+function withdraw() public onlyOwner { 1
+    address owner = owner(); 2
+    uint256 amount = address(this).balance; 3
+    (bool sent, ) = _owner.call{value: amount}(""); 4
+    require(sent, "Failed to send ether.") 5
+}
+
+--------------------------------------------------------------
+
+Function overview:
+1. Function declaration, require that only the owner can call this function.
+2.  
+3. Assigning a variable to the balance of this contract.
+4.
+
+READ THIS!!!!! WAS IN THE MIDDLE OF FUNCTION OVERVIEW WHEN I STOPPED.
+
+
+--------------------------------------------------------------
+
+Function notes:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--------------------------------------------------------------
+
+receive() external payable {}
+
+fallback() external payable {}
+
+--------------------------------------------------------------
+
+Function overview:
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------
+
+Function notes:
+
+- You need to have both Receive and Fallback functions in
+    order to recieve any ether with your contract.
+    - receive() is called when msg.data is empty, 
+        - basically if you send ether without any message.
+    - fallback() is called when your msg.data is not
+        empty then you need this fallback function.
+        
+        
+---------------------------------------------------------------
 
 
 
