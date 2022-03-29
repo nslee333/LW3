@@ -16,6 +16,11 @@ The Structure of the contract:
 4. Contract declaration.
     4.1 - State variables.
     4.2 - constructor.
+    4.3 - startPresale().
+    4.4 - presaleMint().
+    4.5 - mint().
+    4.6 - _baseURI().
+
 --------------------------------------------------------------
 --------------------------------------------------------------
 
@@ -100,7 +105,121 @@ Notes on the function:
                 so that in the presale period, we can see if the address attempting 
                 to make a transaction is in the whitelist or not.
 
+--------------------------------------------------------------
+--------------------------------------------------------------    
+
+bool public presaleStarted; 1
+
+uint256 public presaleEnded; 2
+
+
+function startPresale() public onlyOwner { 
+    presaleStarted = true; 1
+    presaleEnded = block.timestamp + 5 minutes; 2
+}
+--------------------------------------------------------------
+
+Function overview:
+1. Start the presale.
+2. End the presale after 5 minutes has passed.
+
+--------------------------------------------------------------
+
+Function notes:
+
+- This function is pretty straight forward, it is a
+        function that only the Owner of the contract can use.
+            - onlyOwner is a function modifier that is inherited from
+                OZ's Ownable.sol contract - and it requires that the 
+                owner == msg.sender(the address that is starting the transaction).
+
+--------------------------------------------------------------
+
+uint256 public maxTokenIds = 20; 3
     
+uint256 public tokenIds; 3
+
+uint256 public _price = 0.01 ether; 4
+
+
+function presaleMint() public payable {
+    require(presaleStarted && block.timestamp < presaleEnded, "Presale ended"); 1
+    require(whitelist.whitelistedAddresses(msg.sender), "You're not in the whitelist"); 2
+    require(tokenIds < maxTokenIds, "Exceeded the limit); 3
+    require(msg.value >= _price, "Ether sent is not correct"); 4
+
+    tokenIds += 1; 5
+
+    _safeMint(msg.sender, tokenIds); 6
+}
+
+--------------------------------------------------------------
+
+Function overview:
+
+1. Require that the presale has started, and that the presale has not ended.
+2. Require that the address initiating the transaction is in the whitelist.
+3. Require that the maximum amount of NFTs haven't been minted yet.
+4. Require that the ether sent with the transaction is greater than or equal to the price of the NFT.
+5. Add 1 to the total token count.
+6. Mint an NFT.
+    - Enter the address and the token count as arguments.
+
+
+
+--------------------------------------------------------------
+
+Function notes:
+    - If this is the first NFT minted,
+        TokenIds count = 0.
+            presaleMint()
+                tokenIds += 1;
+            _safeMint(msg.sender, tokenIds(1))
+                - Because you add 1, it is assigned the tokenId of #1.
+
+require(presaleStarted && block.timestamp < presaleEnded, "Presale ended"); 1
+    
+    - && in solidity
+        - (logical AND).
+            - If both operands are non-zero, then the condition becomes true.
+            In this case:
+    
+require(presaleStarted (= true) AND Block.timestamp < (is less than) presaleEnded (start + 5 minutes) ( = true),"Presale Ended");
+    --------- TRUE (1) -----|||----------------------------------TRUE (1)----------------------
+    --------------------------------------------------TRUE(1)------------------------------------------------||||----FALSE(Send Message)
+
+
+
+
+--------------------------------------------------------------
+
+function mint() public payable {
+    require(presaleStarted && block.timestamp >= presaleEnded, "Presale has not ended yet"); 1
+    require(tokenIds < maxTokenIds, "Exceeded the limit"); 2
+    require(msg.value >= _price, "Ether sent is not correct"); 3
+
+
+    tokenIds += 1; 4
+
+    _safeMint(msg.sender, tokenIds); 5
+}
+
+--------------------------------------------------------------
+
+Function Overview:
+
+1. Require that the Presale has started, AND that the presale has ended in order to mint.
+2. Require that the amount of tokenIds does not exceed maxTokenIds.
+3. Require that the amount sent with the message is greater than or equal to the _price.
+4. Everytime a token is minted, add one to the count of tokens.
+5. Mint the token using the OZ ERC-721 _safeMint function.
+
+--------------------------------------------------------------
+
+Function notes:
+
+
+require(presaleStarted && block.timestamp >= presaleEnded, "Presale has not ended yet"); 1
 
 
 
@@ -118,14 +237,6 @@ Notes on the function:
 
 
 
-
-
-
-
-
-
-4. Contract declaration.
-    - Inherit from OZ Enumerable.sol, Ownable.sol.
 
 
 
