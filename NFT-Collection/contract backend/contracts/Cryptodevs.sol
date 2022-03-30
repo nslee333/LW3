@@ -1,5 +1,5 @@
 // SPDX-licence-Idenitifier: MIT
-pragma solidity 0.8.0;
+pragma solidity 0.8.4;
 
 import '@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol';
 import '@openzeppelin/contracts/access/Ownable.sol';
@@ -41,7 +41,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
     function presaleMint() public payable onlyWhenNotPaused {
         require(presaleStarted && block.timestamp < presaleEnded, "Presale ended");
         require(whitelist.whitelistedAddresses(msg.sender), "You're not in the whitelist");
-        require(tokenIds < maxTokenIds, "Exceeded the limit);
+        require(tokenIds < maxTokenIds, "Exceeded the limit");
         require(msg.value >= _price, "Ether sent is not correct");
 
         tokenIds += 1;
@@ -75,7 +75,7 @@ contract CryptoDevs is ERC721Enumerable, Ownable {
         address _owner = owner();
         uint256 amount = address(this).balance;
         (bool sent, ) = _owner.call{value: amount}("");
-        require(sent, "Failed to send ether.")
+        require(sent, "Failed to send ether.");
     }
 
 
