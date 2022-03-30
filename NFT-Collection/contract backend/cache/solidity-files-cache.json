@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\nslee\\Programming\\LW3\\NFT-Collection\\contract backend\\contracts\\Cryptodevs.sol": {
-      "lastModificationDate": 1648597361737,
-      "contentHash": "617e1ec418357f5d234fdd92d609708f",
+      "lastModificationDate": 1648682183123,
+      "contentHash": "e558846225fb34c8a0d4238d350a4093",
       "sourceName": "contracts/Cryptodevs.sol",
       "solcConfig": {
         "version": "0.8.4",
@@ -116,8 +116,8 @@
       ]
     },
     "C:\\Users\\nslee\\Programming\\LW3\\NFT-Collection\\contract backend\\contracts\\IWhitelist.sol": {
-      "lastModificationDate": 1648400265387,
-      "contentHash": "0ebf180393d6dc992ed2b98762f669ea",
+      "lastModificationDate": 1648681727063,
+      "contentHash": "d16443f96148e4edb560e10bd993f7cf",
       "sourceName": "contracts/IWhitelist.sol",
       "solcConfig": {
         "version": "0.8.4",
