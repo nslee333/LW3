@@ -350,39 +350,6 @@ Function modifier notes:
             That way if there is a bug that is exploitable, then
             we can pause the contract and fix it before any loss happens.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 --------------------------------------------------------------
 
 receive() external payable {}
@@ -393,12 +360,8 @@ fallback() external payable {}
 
 Function overview:
 
-
-
-
-
-
-
+The purpose of these two functions is giving the ability of this 
+contract to recieve Ether.
 
 
 ---------------------------------------------------------------
@@ -414,21 +377,3 @@ Function notes:
         
         
 ---------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
