@@ -24,7 +24,7 @@ async function main() {
 
 
     console.log(
-        "Crypto Devs Contract Address", 
+        "Crypto Devs Contract Address:", 
         deployed.cryptoDevsContract.address
     );
 
