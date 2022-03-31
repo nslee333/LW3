@@ -21,9 +21,8 @@ Notes for the NFT Collection
     - tokenOfOwnerByIndex()
         - The onwer is going to have multiple NFTs, it will return the
         index ??????
-    - tokenByIndex
-        - 
-
-        
+    - tokenByIndex 
     - Enumerable helps us keep track of all the tokenIds in the contract 
         and also the token ids held by an address for a given contract.
+
+        
