@@ -175,8 +175,6 @@ The purpose of this function is to mint tokens for the people who are on the
 6. Mint an NFT.
     - Enter the address and the token count as arguments.
 
-
-
 --------------------------------------------------------------
 
 Function notes:
