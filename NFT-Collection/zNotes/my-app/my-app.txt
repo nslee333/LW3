@@ -1,0 +1,6 @@
+------------------------------------------------------------
+
+This is the rough process of developing the my-app side of the application.
+
+------------------------------------------------------------
+
