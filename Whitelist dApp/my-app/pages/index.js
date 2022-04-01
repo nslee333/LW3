@@ -36,30 +36,30 @@ export default function Home() {
         }
     }
 
-const addAddressToWhitelist = async () => {
-    try {
-        const signer = await getProviderOrSigner(true);
-        
-        const whitelistContract = new Contract (
-            WHITELIST_CONTRACT_ADDRESS,
-            abi,
-            signer
-        );
+    const addAddressToWhitelist = async () => {
+        try {
+            const signer = await getProviderOrSigner(true);
+            
+            const whitelistContract = new Contract (
+                WHITELIST_CONTRACT_ADDRESS,
+                abi,
+                signer
+            );
 
-        const tx = await whitelistContract.addAddressToWhitelist();
+            const tx = await whitelistContract.addAddressToWhitelist();
 
-        setLoading(true);
-        await tx.wait();
-        setLoading(false);
-        await getNumberOfWhitelisted();
-        setJoinedWhitelist(true);
-        
+            setLoading(true);
+            await tx.wait();
+            setLoading(false);
+            await getNumberOfWhitelisted();
+            setJoinedWhitelist(true);
+            
 
 
-    } catch(err) {
-        console.error(err)
+        } catch(err) {
+            console.error(err)
+        }
     }
-}
 
 // done
     const checkIfAddressIsWhitelisted = async() => {

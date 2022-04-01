@@ -26,3 +26,7 @@ Notes for the NFT Collection
         and also the token ids held by an address for a given contract.
 
         
+        Error HH702: Invalid artifact path 
+        C:\Users\nslee\Programming\LW3\NFT-Collection\contract backend\artifacts\contracts\Cryptodevs.sol\CryptoDevs.json, 
+        its correct case-sensitive path
+        is C:\Users\nslee\Programming\LW3\NFT-Collection\contract backend\artifacts\contracts\CryptoDevs.sol\CryptoDevs.json
