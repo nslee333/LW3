@@ -9,3 +9,6 @@ This is the explanation of the index.js in my NFT collection.
       Connect Wallet
     </button>
   )}
+
+
+onPage

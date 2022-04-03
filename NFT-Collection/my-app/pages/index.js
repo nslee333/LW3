@@ -13,19 +13,38 @@ export default function Home() {
   const [presaleStarted, setPresaleStarted] = useState(false);
   const [presaleEnded, setPresaleEnded] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [numTokensMinted, setNumTokensMinted] = useState("");
   const [loading, setLoading] = useState(false);
   const web3ModalRef = useRef();
   
 
 
   const getNumMintedTokens = async () => {
-    
+    try {
+      const provider = await getProviderOrSigner();
+
+      const nftContract = new Contract(
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        provider
+      )
+
+      const numTokenIds = nftContract.tokenIds();
+      // This will return a BigNumber, so we're converting it to a string
+      // So that we can accept the uint256 value.
+      setNumTokensMinted(numTokenIds.toString());
+
+
+    } catch (error) {
+      console.error(error)
+    }
   }
 
 
 
 
   const presaleMint = async () => {
+    setLoading(true);
     try {
       const signer = await getProviderOrSigner(true);
 
@@ -45,11 +64,13 @@ export default function Home() {
     } catch (error) {
       console.error(error)
     }
+    setLoading(false);
   }
 
 
 
   const publicMint = async () => {
+    setLoading(true);
     try {
       const signer = await getProviderOrSigner(true);
 
@@ -69,6 +90,7 @@ export default function Home() {
     } catch (error) {
       console.error(error)
     }
+    setLoading(false);
   }
   
   const checkIfPresaleEnded = async () => {
@@ -93,7 +115,9 @@ export default function Home() {
       // (>) comparators.
       // We're going to wrap it in a math.floor to make sure its always an integer.
 
-      const hasPresaleEnded = presaleEndTime.lt(Math.floor(currentTimeInSeconds));
+      const hasPresaleEnded = presaleEndTime.lt(
+        Math.floor(currentTimeInSeconds)
+        );
       setPresaleEnded(hasPresaleEnded);
       
     } catch (error) {
@@ -131,6 +155,7 @@ export default function Home() {
 
 
   const startPresale = async () => {
+    setLoading(true);
     try {
       const signer = await getProviderOrSigner(true);
 
@@ -144,10 +169,12 @@ export default function Home() {
       await txn.wait();
 
       PresaleStarted(true);
+
       
     } catch (error) {
       console.error(error);
     }
+    setLoading(false);
   }
 
 
@@ -225,8 +252,32 @@ export default function Home() {
     await getOwner();
     const presaleStarted = await checkIfPresaleStarted();
     if (presaleStarted) {
-      await checkIfPresaleEnded();
+      await checkIfPresaleEnded(); 
     }
+    // The reason for the if statement is that all integers in solidity are given the initial value of 0.
+    // In this case presaleEnded is an integer, until the presale starts, it will have the value of 0.
+    // In our checkIfPresaleEnded function our less than number logic will always equal 
+    // True since an unsigned integer is always bigger than zero.
+
+    await getNumMintedTokens();
+          
+    // Track in real time the number of minted tokens.
+    // setInterval is a function in JS that helps us to check something
+    // everytime a time interval passes.
+    setInterval(async() =>{
+      await getNumMintedTokens();
+    }, 5 * 1000);
+    // Also keep in mind, JS time is in miliseconds, so we have to multiply
+    // 5 * 1000 to get 5 second interval time.
+
+    // Track in real time the status of the presale (started, ended)
+    setInterval(async()=>{
+      const presaleStarted = await checkIfPresaleStarted();
+      if(presaleStarted) {
+        await checkIfPresaleEnded();
+      }
+    }, 5 * 100);
+
   }
   
     useEffect(() => {
@@ -244,19 +295,17 @@ export default function Home() {
     function renderBody() {
       if (!walletConnected) {
         return (
-        <button onClick={connectWallet} className={styles.button}>
-        Connect your wallet
-        </button>
+          <button onClick={connectWallet} className={styles.button}>
+          Connect your wallet
+          </button>
         );
       }
 
 
 
 
-      if(loading) {
-        return (
-          <span className={styles.description}>Loading...</span>
-        )
+      if (loading) {
+        return <button className={styles.button}>Loading...</button>;
       }
 
 
@@ -266,8 +315,8 @@ export default function Home() {
       if(isOwner && !presaleStarted) {
         // Render a button to start the presale.
         return (
-          <button onClick={startPresale} className={styles.button}>
-          Start Presale
+          <button className={styles.button} onClick={startPresale}>
+            Start Presale!
           </button>
         );
       }
@@ -276,38 +325,38 @@ export default function Home() {
         // Just say that the presale has not started yet, come back later.
       return (
         <div>
-          <span className={styles.description}>
+          <div className={styles.description}>
             Presale has not started yet, come back later!
-          </span>
+          </div>
         </div>
       );
-      }
+    }
       
       if(presaleStarted && !presaleEnded) {
         // Allow whitelisted addresses to mint tokens.
         // Need to be in whitelist to work.
         return (
           <div>
-            <span className={styles.description}>
+            <div className={styles.description}>
               Presale has started! If your address is whitelisted, you can mint a 
-              Crypto Dev!
-            </span>
+              Crypto Dev 🥳
+            </div>
             <button className={styles.button} onClick={presaleMint}>
-              Presale Mint
+              Presale Mint 🚀
             </button>
           </div>
         );
       }
     
-      if(presaleEnded) {
+      if(presaleStarted && presaleEnded) {
         // Render a button to mint the tokens.
         return (
           <div>
-            <span className={styles.description}>
+            <div className={styles.description}>
               Presale has ended.
-              You can mint a CryptoDev in public sale, if any 
-              remain.
-            </span>
+              You can mint a CryptoDev in public sale, 
+              if any remain.
+            </div>
             <button className={styles.button} onClick={publicMint}>
               Public Mint
             </button>
@@ -327,10 +376,16 @@ export default function Home() {
       <div className={styles.main}>
         <div>
           <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
-          <span className={styles.description}>
+          <div className={styles.description}>
             CryptoDevs NFT is a collection for Developers in Web3 
-          </span>
+          </div>
+          <div className={styles.description}>
+            {getNumMintedTokens}/20 have been minted already!
+          </div>
+        <div>
         {renderBody()}
+      </div>  
+        
       </div>
         <img className={styles.image} src="/cryptodevs/0.svg"/>
       </div>
