@@ -113,9 +113,15 @@ export default function Home() {
       setPresaleStarted(isPresaleStarted);
         // Setting the value of the react hook useState with the returned value from
         // The nft contract.
+
+      return isPresaleStarted;
+      // Returning the boolean value.
       
     } catch (error) {
       console.error(error);
+      return false;
+      // If there's an error: return false 
+      // - isPresaleStarted(false);
     }
     
   
@@ -153,6 +159,20 @@ export default function Home() {
     return web3Provider; 
     };
   
+    // The reason for this function is that checkIfPresaleStarted()
+    // Is an async function, and since the useEffect is not an async function
+    // We have to create a async function that we'll call in the
+    // useEffect function.
+
+    // If we didn't do this presaleStarted wouldn't return a value.
+
+  const onPageLoad = async () => {
+    await connectWallet();
+    const presaleStarted = await checkIfPresaleStarted();
+    if (presaleStarted) {
+      await checkIfPresaleEnded();
+    }
+  }
   
     useEffect(() => {
     if(!walletConnected) { // If walletConnected = false, run this code.
@@ -161,12 +181,7 @@ export default function Home() {
         providerOptions: {},
         disableInjectedProvider: false,
       }); // This line is creating a new instance of the Web3modal library and giving it arguments to do so.
-    
-    connectWallet();
-
-    checkIfPresaleStarted();
-
-    
+      onPageLoad();
     }
   }, []) // This will run every time the page loads.
 
