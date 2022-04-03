@@ -25,10 +25,10 @@ async function main() {
 
     console.log(
         "Crypto Devs Contract Address:", 
-        deployed.cryptoDevsContract.address
+        deployedCryptoDevsContract.address
     );
 
-}
+}Z
 
 
 main()
