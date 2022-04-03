@@ -1,4 +1,3 @@
-const CRYPTODEVS_CONTRACT_ADDRESS = 
-
-const abi = zzz
+export const NFT_CONTRACT_ADDRESS = "";
+export const NFT_CONTRACT_ABI = [];
 
