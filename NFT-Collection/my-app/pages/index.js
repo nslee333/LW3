@@ -3,7 +3,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { useRef, useState, useEffect } from 'react';
 import Web3Modal from "web3modal";
-import { Contract, providers } from "ethers";
+import { Contract, providers, utils } from "ethers";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../constants'
 
 
@@ -16,6 +16,52 @@ export default function Home() {
   const [isOwner, setIsOwner] = useState(false);
   
   
+
+  const presaleMint = async () => {
+    try {
+      const signer = await getProviderOrSigner(true);
+
+      const nftContract = new Contract (
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        signer
+      );
+     
+      const txn = await nftContract.presaleMint({
+        value: utils.parseEther("0.01"),
+      });
+      await txn.wait();
+
+      window.alert("You successfully minted a CryptoDev!");
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+
+
+  const publicMint = async () => {
+    try {
+      const signer = await getProviderOrSigner(true);
+
+      const nftContract = new Contract (
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        signer
+      );
+     
+      const txn = await nftContract.mint({
+        value: utils.parseEther("0.01"),
+      });
+      await txn.wait();
+
+      window.alert("You successfully minted a CryptoDev!");
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
   
   const checkIfPresaleEnded = async () => {
     try {
@@ -61,12 +107,12 @@ export default function Home() {
       );
       // Creating a new instance of the contract using ethers.
 
-      const owner = nftContract.owner();
+      const owner = await nftContract.owner();
       // Owner of the contract.
-      const userAddress = signer.getAddress();
+      const userAddress = await signer.getAddress();
       // Address of the user who is currently connected to the dapp.
 
-      if (owner.toLowerCase() === userAddress.toLowerCase()) {
+      if (userAddress.toLowerCase() === owner.toLowerCase()) {
         setIsOwner(true);
       }
       
@@ -168,6 +214,7 @@ export default function Home() {
 
   const onPageLoad = async () => {
     await connectWallet();
+    await getOwner();
     const presaleStarted = await checkIfPresaleStarted();
     if (presaleStarted) {
       await checkIfPresaleEnded();
@@ -185,8 +232,71 @@ export default function Home() {
     }
   }, []) // This will run every time the page loads.
 
+
+  function renderBody() {
+    if (!walletConnected) {
+      return (
+      <button onClick={connectWallet} className={styles.button}>
+      Connect your wallet
+      </button>
+      );
+    }
+
+    if(isOwner && !presaleStarted) {
+      // Render a button to start the presale.
+      return (
+        <button onClick={startPresale} className={styles.button}>
+         Start Presale
+        </button>
+      )
+    }
+
+    if(!presaleStarted) {
+      // Just say that the presale has not started yet, come back later.
+     return (
+      <div>
+        <span className={styles.description}>
+          Presale has not started yet, come back later!
+        </span>
+      </div>
+     );
+    }
+    
+    if(presaleStarted && !presaleEnded) {
+      // Allow whitelisted addresses to mint tokens.
+      // Need to be in whitelist to work.
+      return (
+        <div>
+          <span className={styles.description}>
+            Presale has started! If your address is whitelisted, you can mint a 
+            Crypto Dev!
+          </span>
+          <button className={styles.button}>
+            Presale Mint
+          </button>
+        </div>
+      );
+    }
   
-  
+    if(presaleEnded) {
+      // Render a button to mint the tokens.
+      return (
+        <div>
+          <span className={styles.description}>
+            Presale has ended.
+            You can mint a CryptoDev in public sale, if any 
+            remain.
+          </span>
+          <button className={styles.button}>
+            Public Mint
+          </button>
+        </div>
+      );
+  }
+
+
+
+
   return (
     <div>
       <Head>
@@ -194,12 +304,8 @@ export default function Home() {
       </Head>
 
       <div className={styles.main}>  
-        {walletConnected ? null :  (
-          <button onClick={connectWallet} className={styles.button}>
-            Connect Wallet
-          </button>
-        )}
-
+       
+      {renderBody()}
         
       </div>
     </div>

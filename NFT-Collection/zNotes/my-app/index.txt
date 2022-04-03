@@ -4,3 +4,8 @@ This is the explanation of the index.js in my NFT collection.
 
 ------------------------------------------------------------
 
+{walletConnected ? null :  (
+    <button onClick={connectWallet} className={styles.button}>
+      Connect Wallet
+    </button>
+  )}
