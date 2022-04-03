@@ -10,12 +10,20 @@ import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../constants'
 
 export default function Home() {
   const [walletConnected, setWalletConnected ] = useState(false);
-  const web3ModalRef = useRef();
   const [presaleStarted, setPresaleStarted] = useState(false);
   const [presaleEnded, setPresaleEnded] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const web3ModalRef = useRef();
   
-  
+
+
+  const getNumMintedTokens = async () => {
+    
+  }
+
+
+
 
   const presaleMint = async () => {
     try {
@@ -233,67 +241,80 @@ export default function Home() {
   }, []) // This will run every time the page loads.
 
 
-  function renderBody() {
-    if (!walletConnected) {
-      return (
-      <button onClick={connectWallet} className={styles.button}>
-      Connect your wallet
-      </button>
-      );
-    }
-
-    if(isOwner && !presaleStarted) {
-      // Render a button to start the presale.
-      return (
-        <button onClick={startPresale} className={styles.button}>
-         Start Presale
+    function renderBody() {
+      if (!walletConnected) {
+        return (
+        <button onClick={connectWallet} className={styles.button}>
+        Connect your wallet
         </button>
-      )
-    }
+        );
+      }
 
-    if(!presaleStarted) {
-      // Just say that the presale has not started yet, come back later.
-     return (
-      <div>
-        <span className={styles.description}>
-          Presale has not started yet, come back later!
-        </span>
-      </div>
-     );
-    }
+
+
+
+      if(loading) {
+        return (
+          <span className={styles.description}>Loading...</span>
+        )
+      }
+
+
+
+
+
+      if(isOwner && !presaleStarted) {
+        // Render a button to start the presale.
+        return (
+          <button onClick={startPresale} className={styles.button}>
+          Start Presale
+          </button>
+        );
+      }
+
+      if(!presaleStarted) {
+        // Just say that the presale has not started yet, come back later.
+      return (
+        <div>
+          <span className={styles.description}>
+            Presale has not started yet, come back later!
+          </span>
+        </div>
+      );
+      }
+      
+      if(presaleStarted && !presaleEnded) {
+        // Allow whitelisted addresses to mint tokens.
+        // Need to be in whitelist to work.
+        return (
+          <div>
+            <span className={styles.description}>
+              Presale has started! If your address is whitelisted, you can mint a 
+              Crypto Dev!
+            </span>
+            <button className={styles.button} onClick={presaleMint}>
+              Presale Mint
+            </button>
+          </div>
+        );
+      }
     
-    if(presaleStarted && !presaleEnded) {
-      // Allow whitelisted addresses to mint tokens.
-      // Need to be in whitelist to work.
-      return (
-        <div>
-          <span className={styles.description}>
-            Presale has started! If your address is whitelisted, you can mint a 
-            Crypto Dev!
-          </span>
-          <button className={styles.button}>
-            Presale Mint
-          </button>
-        </div>
-      );
+      if(presaleEnded) {
+        // Render a button to mint the tokens.
+        return (
+          <div>
+            <span className={styles.description}>
+              Presale has ended.
+              You can mint a CryptoDev in public sale, if any 
+              remain.
+            </span>
+            <button className={styles.button} onClick={publicMint}>
+              Public Mint
+            </button>
+          </div>
+        );
+      }
     }
-  
-    if(presaleEnded) {
-      // Render a button to mint the tokens.
-      return (
-        <div>
-          <span className={styles.description}>
-            Presale has ended.
-            You can mint a CryptoDev in public sale, if any 
-            remain.
-          </span>
-          <button className={styles.button}>
-            Public Mint
-          </button>
-        </div>
-      );
-  }
-
 
 
 
@@ -303,11 +324,21 @@ export default function Home() {
         <title>Crypto Devs NFT</title>
       </Head>
 
-      <div className={styles.main}>  
-       
-      {renderBody()}
-        
+      <div className={styles.main}>
+        <div>
+          <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
+          <span className={styles.description}>
+            CryptoDevs NFT is a collection for Developers in Web3 
+          </span>
+        {renderBody()}
       </div>
+        <img className={styles.image} src="/cryptodevs/0.svg"/>
+      </div>
+
+
+      <footer className={styles.footer}>
+        Made with &#10084; by Nathan Lee
+      </footer>
     </div>
-  )
+  );
 }
