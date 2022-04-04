@@ -105,7 +105,7 @@ export default function Home() {
       
       // This will return a BigNumber because presaleEnded is a uint256 data type.
       // This will return a timestamp in seconds.
-      const presaleEndTime = await nftContract.presaleEnded();
+      const _presaleEnded = await nftContract.presaleEnded();
       // Date.now in JS returns the time in miliseconds, so we're going to
       // Divide this by 1000 (1000 milliseconds in a second.)
       // Also since we're dividing by 1000 it has the potential to be a float value.
@@ -115,10 +115,12 @@ export default function Home() {
       // (>) comparators.
       // We're going to wrap it in a math.floor to make sure its always an integer.
 
-      const hasPresaleEnded = presaleEndTime.lt(
+      const hasPresaleEnded = _presaleEnded.lt(
         Math.floor(currentTimeInSeconds)
         );
-      setPresaleEnded(hasPresaleEnded);
+      setPresaleEnded(_presaleEnded);
+      
+      return hasPresaleEnded;
       
     } catch (error) {
       console.error(error)
@@ -168,7 +170,7 @@ export default function Home() {
       const txn = await nftContract.startPresale();
       await txn.wait();
 
-      PresaleStarted(true);
+      presaleStarted(true);
 
       
     } catch (error) {
@@ -189,13 +191,18 @@ export default function Home() {
       );
       // Creating a new instance of the contract using ethers.
 
-      const isPresaleStarted = await nftContract.presaleStarted();
+      const _presaleStarted = await nftContract.presaleStarted();
         // Assigning variable to a boolean value returned from the nft contract.
-      setPresaleStarted(isPresaleStarted);
-        // Setting the value of the react hook useState with the returned value from
-        // The nft contract.
+      
+      if(!_presaleStarted) {
+        await getOwner();
+      }
+      
+      setPresaleStarted(_presaleStarted);
+      // Setting the value of the react hook useState with the returned value from
+      // The nft contract.
 
-      return isPresaleStarted;
+      return _presaleStarted;
       // Returning the boolean value.
       
     } catch (error) {
@@ -351,16 +358,9 @@ export default function Home() {
       if(presaleStarted && presaleEnded) {
         // Render a button to mint the tokens.
         return (
-          <div>
-            <div className={styles.description}>
-              Presale has ended.
-              You can mint a CryptoDev in public sale, 
-              if any remain.
-            </div>
             <button className={styles.button} onClick={publicMint}>
               Public Mint
             </button>
-          </div>
         );
       }
     }
@@ -368,28 +368,27 @@ export default function Home() {
 
 
   return (
-    <div>
-      <Head>
-        <title>Crypto Devs NFT</title>
-      </Head>
-
-      <div className={styles.main}>
+      <div>
+        <Head>
+          <title>Crypto Devs</title>
+          <meta name="description" content="Whitelist-Dapp" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <div className={styles.main}>
+          <div>
+            <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
+            <div className={styles.description}>
+              Its an NFT collection for Developers in Web3 
+            </div>
+            <div className={styles.description}>
+              {getNumMintedTokens}/20 have been minted already!
+            </div>
+            {renderBody()}
+        </div>  
         <div>
-          <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
-          <div className={styles.description}>
-            CryptoDevs NFT is a collection for Developers in Web3 
-          </div>
-          <div className={styles.description}>
-            {getNumMintedTokens}/20 have been minted already!
-          </div>
-        <div>
-        {renderBody()}
-      </div>  
-        
+          <img className={styles.image} src="/cryptodevs/0.svg"/>
+        </div>
       </div>
-        <img className={styles.image} src="/cryptodevs/0.svg"/>
-      </div>
-
 
       <footer className={styles.footer}>
         Made with &#10084; by Nathan Lee
