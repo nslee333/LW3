@@ -15,7 +15,7 @@ export default function Home() {
     // @param {*} needSigner
     
     // done
-    const getProviderOrSigner = async(needSigner = false) => {
+    const getProviderOrSigner = async (needSigner = false) => {
         try {
             const provider = await web3ModalRef.current.connect();
             const web3Provider = new providers.Web3Provider(provider);
@@ -26,6 +26,7 @@ export default function Home() {
                 window.alert("Change the network to Rinkeby");
                 throw new Error("Change the network to Rinkeby");
             }
+
             if(needSigner) {
                 const signer = web3Provider.getSigner();
                 return signer;
@@ -54,7 +55,7 @@ export default function Home() {
             await getNumberOfWhitelisted();
             setJoinedWhitelist(true);
             
-
+            console.log(signer);
 
         } catch(err) {
             console.error(err)
