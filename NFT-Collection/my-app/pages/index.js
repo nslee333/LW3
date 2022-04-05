@@ -13,7 +13,7 @@ export default function Home() {
   const [presaleStarted, setPresaleStarted] = useState(false);
   const [presaleEnded, setPresaleEnded] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  const [numTokensMinted, setNumTokensMinted] = useState("");
+  const [numTokensMinted, setNumTokensMinted] = useState("0");
   const [loading, setLoading] = useState(false);
   const web3ModalRef = useRef();
   
@@ -29,7 +29,7 @@ export default function Home() {
         provider
       )
 
-      const numTokenIds = nftContract.tokenIds();
+      const numTokenIds = await nftContract.tokenIds();
       // This will return a BigNumber, so we're converting it to a string
       // So that we can accept the uint256 value.
       setNumTokensMinted(numTokenIds.toString());
@@ -63,6 +63,7 @@ export default function Home() {
 
     } catch (error) {
       console.error(error)
+      window.alert(error)
     }
     setLoading(false);
   }
@@ -97,7 +98,7 @@ export default function Home() {
     try {
       const provider = await getProviderOrSigner();
 
-      nftContract = new Contract (
+      const nftContract = new Contract (
         NFT_CONTRACT_ADDRESS,
         NFT_CONTRACT_ABI,
         provider
@@ -109,7 +110,7 @@ export default function Home() {
       // Date.now in JS returns the time in miliseconds, so we're going to
       // Divide this by 1000 (1000 milliseconds in a second.)
       // Also since we're dividing by 1000 it has the potential to be a float value.
-      const currentTimeInSeconds = date.now() / 1000;
+      const currentTimeInSeconds = Date.now() / 1000;
       // We're going use bigNumber since JS can't handle numbers the size of 
       // uint256, so we have to use bigNumbers lt() function instead of JS's
       // (>) comparators.
@@ -124,6 +125,7 @@ export default function Home() {
       
     } catch (error) {
       console.error(error)
+      return false;
     }
   };
 
@@ -161,7 +163,7 @@ export default function Home() {
     try {
       const signer = await getProviderOrSigner(true);
 
-      const nftContract = new Contract (
+       const nftContract = new Contract (
         NFT_CONTRACT_ADDRESS,
         NFT_CONTRACT_ABI,
         signer,
@@ -271,14 +273,14 @@ export default function Home() {
     // Track in real time the number of minted tokens.
     // setInterval is a function in JS that helps us to check something
     // everytime a time interval passes.
-    setInterval(async() =>{
+    setInterval(async() => {
       await getNumMintedTokens();
     }, 5 * 1000);
     // Also keep in mind, JS time is in miliseconds, so we have to multiply
     // 5 * 1000 to get 5 second interval time.
 
     // Track in real time the status of the presale (started, ended)
-    setInterval(async()=>{
+    setInterval(async() => {
       const presaleStarted = await checkIfPresaleStarted();
       if(presaleStarted) {
         await checkIfPresaleEnded();
@@ -374,6 +376,7 @@ export default function Home() {
           <meta name="description" content="Whitelist-Dapp" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
+
         <div className={styles.main}>
           <div>
             <h1 className={styles.title}>Welcome to Crypto Devs!</h1>
@@ -381,7 +384,7 @@ export default function Home() {
               Its an NFT collection for Developers in Web3 
             </div>
             <div className={styles.description}>
-              {getNumMintedTokens}/20 have been minted already!
+              {numTokensMinted} / 20 have been minted already!
             </div>
             {renderBody()}
         </div>  

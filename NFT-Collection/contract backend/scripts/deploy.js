@@ -28,7 +28,7 @@ async function main() {
         deployedCryptoDevsContract.address
     );
 
-}Z
+}
 
 
 main()
