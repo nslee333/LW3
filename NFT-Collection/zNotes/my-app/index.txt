@@ -3,3 +3,34 @@
 This is the explanation of the index.js in my NFT collection.
 
 ------------------------------------------------------------
+
+import Head from 'next/head'
+import styles from '../styles/Home.module.css'
+import Web3Modal from "web3modal";
+import { useRef, useState, useEffect } from 'react';
+import { Contract, providers, utils } from "ethers";
+import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../constants'
+
+These are the import statements used in our index.js file.
+
+- Head is used for the HTML part of the index file.
+- Web3Modal is a library used for connecting with multiple wallets.
+- {useRef, useState, useEffect} are all react hooks.
+- ethers is importing three objects used for working with Ethereum.
+- constants import are used to help us simplify instantiating our contract.
+
+------------------------------------------------------------
+
+export default function Home() {
+  const [walletConnected, setWalletConnected ] = useState(false);
+  const [presaleStarted, setPresaleStarted] = useState(false);
+  const [presaleEnded, setPresaleEnded] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  const [numTokensMinted, setNumTokensMinted] = useState("0");
+  const [loading, setLoading] = useState(false);
+  const web3ModalRef = useRef();
+
+
+------------------------------------------------------------
+
+export default function is 

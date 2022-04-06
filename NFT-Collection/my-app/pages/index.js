@@ -1,11 +1,9 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { useRef, useState, useEffect } from 'react';
 import Web3Modal from "web3modal";
+import { useRef, useState, useEffect } from 'react';
 import { Contract, providers, utils } from "ethers";
 import { NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI } from '../constants'
-
 
 
 export default function Home() {
