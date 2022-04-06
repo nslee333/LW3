@@ -25,8 +25,34 @@ Notes for the NFT Collection
     - Enumerable helps us keep track of all the tokenIds in the contract 
         and also the token ids held by an address for a given contract.
 
-        
-        Error HH702: Invalid artifact path 
-        C:\Users\nslee\Programming\LW3\NFT-Collection\contract backend\artifacts\contracts\Cryptodevs.sol\CryptoDevs.json, 
-        its correct case-sensitive path
-        is C:\Users\nslee\Programming\LW3\NFT-Collection\contract backend\artifacts\contracts\CryptoDevs.sol\CryptoDevs.json
+
+-----------------------------------------------------------------------------------------------
+
+
+export default function handler(req, res) {
+    const tokenId = req.query.tokenId;
+
+    res.status(200).json({
+        tokenId: tokenId,
+    })
+}
+
+}
+
+
+export default function handler(req, res) {
+- export default function is a JS export file that allows us with this code to export this function into
+    other programs for their use (in this case, we're using it to link our tokenIds with our NFT metadata)
+    (req, res)
+        - (request, response)
+- handler is the term defining this code above, this code handles API requests and handles responses.
+
+const tokenId = req.query.tokenId;
+    - request.query.token.
+res.status(200)
+    - res.status stands for an http response status, 200 means success.
+    - .json stans for the response data format.
+        It will respond with:
+            - tokenId: tokenId.
+
+In the file 
