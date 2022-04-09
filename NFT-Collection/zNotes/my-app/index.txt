@@ -33,4 +33,13 @@ export default function Home() {
 
 ------------------------------------------------------------
 
-export default function is 
+- Export default function is used for when you want to export a block of code for
+  use in other programs.
+- These are a bunch of react hooks used for different purposes.
+- useState is used to persistantly keep stateful value. 
+  - const [variableValue, setVariableValue] = useState(initial value);
+  - const [walletConnected, setWalletConnected] = useState(initially false, since wallet is not connected yet.)
+           walletConencted? setValueOfWalletConnected: 
+- useRef is used to presist values between renders.
+  - web3ModalRef is the wallet connection of the user, we want to keep this 
+    connection between page renders (refresh).
