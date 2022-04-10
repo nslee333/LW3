@@ -11,7 +11,7 @@ export default function handler(req, res) {
     const tokenId = req.query.tokenId;
     const name = 'Crypto Dev #';
     const description = "CryptoDevs is an NFT collection for Web3 Developers."
-    const imageURL = 'https://github.com/LearnWeb3DAO/NFT-Collection/blob/main/my-app/public/cryptodevs/'
+    const imageURL = 'https://n-nft-collection-ailfad3ah-nslee333.vercel.app/api/'
 
 return res.json({
     name: name + tokenId,
