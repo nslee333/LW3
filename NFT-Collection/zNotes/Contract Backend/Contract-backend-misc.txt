@@ -1,0 +1,62 @@
+---------------------------------------------------------------------------------------------------------------------------------------
+
+This is my notes for Everything on the Contract/backend side for the NFT Collection project with LW3
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+.env file is used for defining environmental variables that contrain sensitive information.
+
+In this project we're using it for defining our:
+
+- Provider API URL.
+    - This is a private key URL that we use that provides a node connection to
+        ethereum Rinkeby for deploying the contract.
+- Rinkeby Private key.
+    - This is the private key that is used for paying for the cost 
+        of deploying the contract.
+
+This is sensitive private information, so it's cruical that we include this
+file in our .gitignore so that we don't publish this information for the whole world
+to see.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+contract backend/scripts/deploy.js
+
+This is our deployment script our project.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+const { ethers } = require("hardhat");
+require("dotenv").config({path: ".env" });
+const { WHITELIST_CONTRACT_ADDRESS, METADATA_URL } = require ('../constants');
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+

@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------------------------------------------
+
+This is my notes for Everything on the application side for the NFT Collection project with LW3
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+my-app/constants/index.js
+
+This file is used to assign variables to values that are used for instantiating
+contracts.
+
+It assigns values to 
+
+    - NFT Contract address.
+        - The deployed NFT contract address on Rinkeby Testnet.
+    - NFT contract abi.
+        - The Contract abi
+            - Application Binary Interface.
+            - In order for an application to use an ethereum contract
+                it needs to know the location, the structrue of the contract and
+                what functions there are and what settings they have.
+            - The ABI provides all of information to the web application for use.
+
+both of these are crucial for instantiating new contracts in our index.js file.
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+
+We've imported all of the images for the NFTs under public/CryptoDevs.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
+

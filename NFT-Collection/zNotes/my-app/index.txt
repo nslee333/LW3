@@ -43,3 +43,42 @@ export default function Home() {
 - useRef is used to presist values between renders.
   - web3ModalRef is the wallet connection of the user, we want to keep this 
     connection between page renders (refresh).
+
+------------------------------------------------------------
+
+
+const getNumMintedTokens = async () => {
+  try {
+    const provider = await getProviderOrSigner();
+
+    const nftContract = new Contract(
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      provider
+    )
+
+    const numTokenIds = await nftContract.tokenIds();
+    // This will return a BigNumber, so we're converting it to a string
+    // So that we can accept the uint256 value.
+    setNumTokensMinted(numTokenIds.toString());
+
+
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
