@@ -8,11 +8,10 @@ For this project we installed the 'dotenv' file with NPM.
 
 require("@nomiclabs/hardhat-waffle");
 
-- This is importing a library that allows us to use the 'ethers'
-    on our deploy.js script.
+- This is importing a library that allows us to perform tests with hardhat and waffle.
 
 require("dotenv").config({ path: ".env"});
-    - This is importing the 'dotenv' file, then configuring the file.
+    - This is importing the 'dotenv' file, then configuring the file, and declaring the path of the file.
 
 const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
     - This is an extra step for this, but it makes it look cleaner on the module export

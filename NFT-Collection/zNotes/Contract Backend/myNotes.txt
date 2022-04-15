@@ -1,0 +1,97 @@
+-----------------------------------------------------------------------------------------------
+
+Notes for the NFT Collection
+
+-----------------------------------------------------------------------------------------------
+
+
+My guess is that that the IWhitelist contract is going 
+to be used as a requirement for the 5 minute presale period.
+
+The logic will probably go like this:
+
+for presale period:
+ require that the address is in the whitelist if in the 
+    presale period
+    - It will interface with the Whitelist contract
+    and will call whtielistedAddresses(address) returns (bool)
+    and that will be required before then can go on.
+
+    function mintToken(msg.sender) public payable {
+     if (Whitelist.whitelistedAddresses(msg.sender)) {
+
+     } else {
+        throw(err): "You are not whitelisted, please wait until presale 
+        is over to purchase your NFT(s)"
+     }
+         
+    } 
+-----------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+
+    function _safeMint( 1
+      address to, 2
+      uint256 tokenId, 3
+      bytes memory _data 4
+  ) internal virtual { 5
+      _mint(to, tokenId); 6
+      require( 
+          _checkOnERC721Received(address(0), to, tokenId, _data), 7
+          "ERC721: transfer to non ERC721Receiver implementer" 8
+      );
+
+------------------------------------------------------------------------------
+Function overview:
+
+The purpose of this function is to mint a token safely.
+
+This function is from the OZ ERC721.sol file.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
+
+function _mint(address to, uint256 tokenId) internal virtual {
+   require(to != address(0), "ERC721: mint to the zero address");
+   require(!_exists(tokenId), "ERC721: token already minted");
+
+   _beforeTokenTransfer(address(0), to, tokenId);
+
+   _balances[to] += 1;
+   _owners[tokenId] = to;
+
+   emit Transfer(address(0), to, tokenId);
+
+   _afterTokenTransfer(address(0), to, tokenId);
+}
+------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

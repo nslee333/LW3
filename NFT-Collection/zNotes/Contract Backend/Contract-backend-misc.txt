@@ -4,6 +4,17 @@ This is my notes for Everything on the Contract/backend side for the NFT Collect
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
+
+
+This contains the documentation for the following files.
+
+.env file.
+scripts/deploy.js
+hardhat.config.js
+constants/index.js
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
 .env file is used for defining environmental variables that contrain sensitive information.
 
 In this project we're using it for defining our:
@@ -35,28 +46,150 @@ const { WHITELIST_CONTRACT_ADDRESS, METADATA_URL } = require ('../constants');
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
+These are import statments that bring in the code from external programs/modules for the program's use.
+
+
+const { ethers } = require("hardhat");
+    - This is importing ethers module from hardhat.
+require("dotenv").config({path: ".env" });
+    - This is importing the dotenv package.
+        .config({path:".env"});
+        - This is telling the package where to get the environmental variables in
+            the .env file.
+const { WHITELIST_CONTRACT_ADDRESS, METADATA_URL } = require ('../constants');
+    - This is importing our constant variables for our use with deployment.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+async function main() {
+
+    const whitelistContract = WHITELIST_CONTRACT_ADDRESS;
+
+    const metadataURL = METADATA_URL;
+
+- This is declaring the async function and its assigning
+    state variables to our imported constant variables for our use.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+const cryptoDevsContract = await ethers.getContractFactory("CryptoDevs");
+
+    - This is assigning a variable to our async function that gets the generated contract
+        from ethers for our use.
+
+
+const deployedCryptoDevsContract = await cryptoDevsContract.deploy(
+    metadataURL,
+    whitelistContract,
+);
+
+    - This is assigning a variable to our contract deployment code, which
+        takes the metadata url (the nft images) and the whitelist contract
+        which the CryptoDevs contract needs to reference.
 
 
 
+await deployedCryptoDevsContract.deployed();
+
+    - This line tells the program to wait for the contract to be deployed.
+
+console.log(
+    "Crypto Devs Contract Address:", 
+    deployedCryptoDevsContract.address
+);
+
+    - This logs the deployed contract address to the console after 
+        deployment.
 
 
+main() 1.
+.then(() => process.exit(0)) 2
+.catch(error => { 3
+    console.error(error) 4
+    process.exit(1) 5
+});
 
+- This code defines the flow of the contract.
+1. For the main() function:
+2. If the program runs successfully, exit the process with the 0 (success) code.
+3. If the program has an error.
+    4. log the error in the console.
+    5. Exit the process with exit code (1(failure))
 
+End of the deployment script.
+---------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------------
 
+hardhat.config.js file.
 
+This file is used for configuring the hardhat dev library in this project.
 
+require("@nomiclabs/hardhat-waffle");
+    - This is importing the Waffle testing framework for testing purposes.
 
+require("dotenv").config({ path: ".env"});
+    - This is importing the 'dotenv' package and we're configuring the direct path of the
+        environmental variables that we will use in this file.
 
+const ALCHEMY_API_KEY_URL = process.env.ALCHEMY_API_KEY_URL;
 
+const RINKEBY_PRIVATE_KEY = process.env.RINKEBY_PRIVATE_KEY;
 
-
-
-
-
-
+- This is assigning variables to the .env environmental variables for our use in our export.
+    - When the .env package is imported and configured, it goes to the .env file, and reads
+        the environmental variables and we can access them through process.env.envVariableName 
+    
+module.exports = {
+    solidity: "0.8.4",
+    networks: {
+        rinkeby: {
+        url: ALCHEMY_API_KEY_URL,
+        accounts: [RINKEBY_PRIVATE_KEY],
+        },
+    },
+    };
+    
+    - This is an export module.
+    - JS Modules help us to break up code into seperate files.
+    - This makes it easier to maintain the code-base.
+    - JS modules rely on the import and export statements.
+    - Everytime a function is used with Hardhat it goes to the hardhat.config file
+        and checks the configuration as a first step.
+    - This is defining the solidity version, the network being used and the
+        parameters for that network (The provider URL and the private key).
+    - The private key is how we pay for the contract deployment.
 
 
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
+
+
+constants/index.js
+
+
+
+
+const WHITELIST_CONTRACT_ADDRESS = "0xba85dF8B688dA830483F47FAc476249499E63ECc";
+
+const METADATA_URL = "https://n-nft-collection.vercel.app/api/";
+
+module.exports = { WHITELIST_CONTRACT_ADDRESS, METADATA_URL };
+
+
+
+
+
+This file is assigning variables for use with deploying the contract.
+
+We're assigning the whitelist contract address to a variable.
+    - This is one of the arguments that is used for deploying our NFT contract.
+We're also assigning the metadata url to a variable.
+    - This is the URL which our NFT images will reside.
+    - This is also one of the arguments that is used for deploying our NFT contract.
+
+module.exports = ....
+
+This is used for exporting the variables for use in our deployment script.
+    - we're exporting both of the above variables to our deploy.js file.
 
