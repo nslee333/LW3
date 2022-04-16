@@ -390,7 +390,94 @@ const getProviderOrSigner = async (needSigner = false) => { 1.
     - This function will open the wallet provider (e.g. metamask.), and request that the user connect their wallet to the dApp.
     - web3Modal is a simple library that allows devs to connect to multiple wallet providers.
 3. This is assigning a variable to a new web3Provider which uses the above provider object as a argument, and waits for the response before proceding.
-4. Assigning a variable to the 
+  - Assigning this variable gives us access to ethers functionality that we'll use.
+4. Assigning a variable to the provider's current network.
+5. If the network isn't connected to rinkeby (4) throw an error and a window alert telling the user to change the network.
+6. If the needSigner parameter is given the argument of 'true', then return the signer object.
+  - This is used for signing transactions.
+7. If (needSigner = false) it defaults to - Return the provider. 
+
+------------------------------------------------------------
+
+const onPageLoad = async () => {
+  await connectWallet(); 1.
+  await getOwner(); 2.
+  const presaleStarted = await checkIfPresaleStarted(); 3.
+  if (presaleStarted) { 4
+    await checkIfPresaleEnded(); 
+  }
+  // The reason for the if statement is that all integers in solidity are given the initial value of 0.
+  // In this case presaleEnded is an integer, until the presale starts, it will have the value of 0.
+  // In our checkIfPresaleEnded function our less than number logic will always equal 
+  // True since an unsigned integer is always bigger than zero.
+
+  await getNumMintedTokens(); 5.
+        
+  // Track in real time the number of minted tokens.
+  // setInterval is a function in JS that helps us to check something
+  // everytime a time interval passes.
+
+  setInterval(async() => { 6.
+    await getNumMintedTokens();
+  }, 5 * 1000);
+
+  // Also keep in mind, JS time is in milliseconds, so we have to multiply
+
+  // 5 * 1000 to get 5 second interval time.
+
+  // Track in real time the status of the presale (started, ended)
 
 
+  setInterval(async() => { 7
+    const presaleStarted = await checkIfPresaleStarted();
+    if(presaleStarted) {
+      await checkIfPresaleEnded();
+    }
+  }, 5 * 100);
+
+}
+
+------------------------------------------------------------
+
+0. When the page loads perform the following:
+1. Call the connectWallet() function.
+  - connectWallet() gets the provider/signer, and sets the walletConnected hook to true.
+2. Call the getOwner() function.
+  - getOwner gets the address of the contract owner, and the current users address and checks if its the same address, if so, it changes what is accessable to the user.
+3. Assigning a variable (presaleStarted) to checkIfPresaleStarted(), and wait for it to respond before you procede.
+  - checkIfPresaleStarted() calls the contract and asks if the presale has started, if its true, then it sets the presaleStarted hook to true (which then displays presaleMint to
+  whitelisted users.)
+4. If the presale has started, then check if presale has ended, wait for the response.
+    - checkIfPresaleEnded calls the contract for the presale End time and it checks it agains current time, then returns the value and sets the hook (which then displays public 
+    mint after the presale period has ended.)
+    - Another thing to note is why we have an If statement here: check this out \/
+        The reason for the if statement is that all integers in solidity are given the initial value of 0.
+        In this case presaleEnded is an integer, until the presale starts, it will have the value of 0.
+        In our checkIfPresaleEnded function our less than number logic will always equal 
+        True since an unsigned integer is always bigger than zero.
+          - If we didn't put this in an if statement, then the presale period would never happen because the current time will always be bigger than zero, which essentially
+          skips the persale period.
+5. Call getNumMintedTokens() function
+      - This calls the contract and asks for the number of already minted tokens, then it updates the mintedTokens hook with the contract value.
+6. Everytime 5 seconds passes, check to see how many tokens have been minted, (and update the hook to display the value on the page.)
+      - setInterval is a JS function that helps us check something everytime a period of time passes. 
+      - We also have to convert JS time (milliseconds) to seconds for our time interval.
+7. Everytime 5 seconds passes, check if presale has started, and if true, check if presale has ended.
+      - Everytime we check presaleStarted and presaleEnded we also update the react hooks that will display different functions depending on the value(presaleMint if whitelisted,
+       etc.)
+
+------------------------------------------------------------
+
+useEffect(() => { 1.
+  if(!walletConnected) { // If walletConnected = false, run this code. 2.
+    web3ModalRef.current = new Web3Modal({ 3.
+      network: "rinkeby",
+      providerOptions: {},
+      disableInjectedProvider: false,
+    }); // This line is creating a new instance of the Web3modal library and giving it arguments to do so.
+    onPageLoad(); 4.
+  }
+}, []) // This will run every time the page loads. 5.
+
+------------------------------------------------------------
 
