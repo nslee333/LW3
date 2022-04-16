@@ -10,13 +10,28 @@ import "./ICryptoDevs.sol";
 contract CryptoDevTokenis ERC20, Ownable {
 
     ICryptoDevs CryptoDevsNFT; 
-    uint256 public constant tokenPerNFT = 10 * 10**10;
-    // _mint function from the OZ Erc20 contract takes a big number.
+    uint256 public constant tokensPerNFT = 10 * 10**18;
+    // Tokens per NFT owned.
+    uint256 public constant maxTotalSupply = 10000 * 10**18;
+    // Maximum total supply.
+    uint256 public constant tokenPrice = 0.001 ether;
+
+    // _mint function from the OZ Erc20 contract takes a big number, which is the reason for '10**18'
     
     mapping(uint256 => bool) public tokenIdsClaimed;
 
     constructor(address _cryptoDevsContract) ERC20("Crypto Dev Token", "CD") { // We're inputing the cryptoDevs contract for interface.
         CryptoDevsNFT = ICryptoDevs(_cryptoDevsContract);        
+    }
+
+    function mint(uint256 amount) public payable {
+        uint256 _requiredAmount = tokenPrice * amount;
+        require(msg.value >= _requiredAmount, "Ether sent is incorrect");
+        uint256 amountWithDecimals = amount * 10**18;
+        require(
+            (totalSupply() + amountWithDecimals) <= maxTotalSupply,
+            "Exceeds the max total supply available."
+        )
     }
 
 
@@ -36,9 +51,15 @@ contract CryptoDevTokenis ERC20, Ownable {
         }
         require(amount > 0, "You have already claimed all of your tokens");
 
-        _mint(msg.sender, amount * )
+        _mint(msg.sender, amount * tokensPerNFT );
 
     }
+
+    receive() external payable {}
+    
+    fallback() external payable {}
+
+
 }
 
 
