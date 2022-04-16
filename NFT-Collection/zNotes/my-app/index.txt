@@ -470,7 +470,7 @@ const onPageLoad = async () => {
 
 useEffect(() => { 1.
   if(!walletConnected) { // If walletConnected = false, run this code. 2.
-    web3ModalRef.current = new Web3Modal({ 3.
+    web3ModalRef.current = new Web3Modal({ 
       network: "rinkeby",
       providerOptions: {},
       disableInjectedProvider: false,
@@ -481,3 +481,107 @@ useEffect(() => { 1.
 
 ------------------------------------------------------------
 
+1. useEffect hook allows us to perform side effects on our components.
+  - useEffect takes two arguments:
+    (<function>, <dependency>)
+      - useEffect runs on every render, unless you include the dependency (dependency is the value/function that has to change in order for useEffect to run, an
+      empty dependency will default to only running on the first render.)
+        - Since this is providing a connection to the wallet, we don't want the user to have to connect their wallet everytime they load the page.
+2. If the wallet is not connected, run this code.
+        - This whole line is creating a new instance of the Web3modal library and giving it the arguments to do so.
+          - providerOptions is optional, we have to leave an empty bracket though.
+          - disableInjectedProvider: false - this line gives us the option to disable injected providers (like metamask), but we set it to false since we want injected
+            providers to run for us.
+4. run the onPageLoad function.
+        - Which is checking:
+          - walletConnected.
+          - isOwner.
+          - isPresaleStarted.
+            - isPresaleEnded.
+          - getNumMintedTokens.
+          - Check getNumMintedTokens every 5 seconds.
+          - Check presaleStarted + presaleEnded every 5 seconds.
+
+------------------------------------------------------------
+
+
+function renderBody() { 
+  if (!walletConnected) {
+    return (
+      <button onClick={connectWallet} className={styles.button}>
+      Connect your wallet
+      </button>
+    );
+  }
+
+1. Function declaration, if wallet is not connected, display connectWallet to the user.
+
+
+  if (loading) {
+    return <button className={styles.button}>Loading...</button>;
+  }
+
+
+2. If the loading hook is equal to true, display 'Loading...' to the user.
+
+
+  if(isOwner && !presaleStarted) {
+    // Render a button to start the presale.
+    return (
+      <button className={styles.button} onClick={startPresale}>
+        Start Presale!
+      </button>
+    );
+  }
+
+
+3. If isOwner is true AND Presale has NOT started, display a button to the contract owner for starting the presale.
+
+
+
+  if(!presaleStarted) {
+    // Just say that the presale has not started yet, come back later.
+  return (
+    <div>
+      <div className={styles.description}>
+        Presale has not started yet, come back later!
+      </div>
+    </div>
+  );
+}
+  
+4. If presale has not started, (if the user is not the owner, then it will default to here) display 'Presale has not started yet, come back later!' to the user.
+
+
+  if(presaleStarted && !presaleEnded) {
+    // Allow whitelisted addresses to mint tokens.
+    // Need to be in whitelist to work.
+    return (
+      <div>
+        <div className={styles.description}>
+          Presale has started! If your address is whitelisted, you can mint a 
+          Crypto Dev 🥳
+        </div>
+        <button className={styles.button} onClick={presaleMint}>
+          Presale Mint 🚀
+        </button>
+      </div>
+    );
+  }
+
+5. If presale has started and the presale has not ended yet, display this message and the presale mint to the user.
+
+  if(presaleStarted && presaleEnded) {
+    // Render a button to mint the tokens.
+    return (
+        <button className={styles.button} onClick={publicMint}>
+          Public Mint
+        </button>
+    );
+  }
+}
+
+6. If presale has started and it has ended, dispaly this public mint for the public sale.
+
+
+------------------------------------------------------------
