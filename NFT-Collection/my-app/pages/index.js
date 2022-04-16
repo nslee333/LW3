@@ -183,13 +183,13 @@ export default function Home() {
   const checkIfPresaleStarted = async () => {
     try {
       const provider = await getProviderOrSigner();
-      // Getting the provider object.
+
       const nftContract = new Contract (
         NFT_CONTRACT_ADDRESS,
         NFT_CONTRACT_ABI,
         provider
       );
-      // Creating a new instance of the contract using ethers.
+
 
       const _presaleStarted = await nftContract.presaleStarted();
         // Assigning variable to a boolean value returned from the nft contract.

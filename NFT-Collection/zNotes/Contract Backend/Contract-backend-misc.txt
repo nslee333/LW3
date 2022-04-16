@@ -159,7 +159,10 @@ module.exports = {
         parameters for that network (The provider URL and the private key).
     - The private key is how we pay for the contract deployment.
 
-
+    - When npx hardhat 'process' (compile or deploy) is run in the console, the fist thing that it does is that it checks for this config file,
+    and it uses these values for deployment if needed, 
+        - For deployment, it tells HH that the solidity code is written in 0.8.4, and then: if deploying to rinkeby then use this alchemy url
+        key and this rinkeby private key for paying for the deployment.
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------

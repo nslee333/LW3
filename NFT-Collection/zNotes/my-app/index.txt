@@ -51,16 +51,16 @@ const getNumMintedTokens = async () => {
   try {
     const provider = await getProviderOrSigner();
 
-    const nftContract = new Contract(
+    const nftContract = new Contract( 1
       NFT_CONTRACT_ADDRESS,
       NFT_CONTRACT_ABI,
       provider
     )
 
-    const numTokenIds = await nftContract.tokenIds();
+    const numTokenIds = await nftContract.tokenIds(); 2
     // This will return a BigNumber, so we're converting it to a string
     // So that we can accept the uint256 value.
-    setNumTokensMinted(numTokenIds.toString());
+    setNumTokensMinted(numTokenIds.toString()); 3
 
 
   } catch (error) {
@@ -70,15 +70,327 @@ const getNumMintedTokens = async () => {
 
 ------------------------------------------------------------
 
+Notes on this function:
+
+1. This is instantiating a contract for use in the function.
+2. Assigning a variable to a contract promise, and its telling the variable to wait for that promise to return a response before going forward with the function.
+3. We're also using a react hook setter function (setNumTokensMinted) and using the number of minted tokens (response from the contract) as an argument to the setter function.
+ - Also, JS can't handle a number value as big as an uint256 data type in solidity can so we have to convert it to a string in order for JS to handle it.
+
+
+------------------------------------------------------------
+
+const presaleMint = async () => {
+    setLoading(true); 1.
+    try {
+      const signer = await getProviderOrSigner(true);
+
+      const nftContract = new Contract ( 2
+        NFT_CONTRACT_ADDRESS,
+        NFT_CONTRACT_ABI,
+        signer
+      );
+     
+      const txn = await nftContract.presaleMint({ 3
+        value: utils.parseEther("0.01"), 3.1
+      });
+      await txn.wait(); 4
+
+      window.alert("You successfully minted a CryptoDev!"); 5
+
+    } catch (error) {
+      console.error(error)
+      window.alert(error)
+    }
+    setLoading(false); 6
+  }
+
+------------------------------------------------------------
+
+1. This is setting loading (react hook) to true, which will be linked to display 'loading...' when a transaction is processing so that the user knows what's going on.
+2. instantiating a contract for use.
+3. Assigning a variable (txn) to contract mint call and telling it to wait for it to process before going forward with the function.
+  3.1. This is passing in the amount of ether for the transaction.
+    - Ethers provides some utility functions for our use, insted of writing out the amount of wei, we just name 'utils.parseEther(ether amount)' and it will convert to
+      wei automatically. 
+        - Contracts take values in wei, if we were to convert 0.01 ether we would have to convert it to '10000000000000000' in order for the contract
+          to use it. 
+        - This Ethers Utils function is very nice for eliminating this step.
+4. Wait for the transaction to process before proceding.
+5. Output a window alert to the user telling them that the transaction went through.
+6. Set the loading hook to false, which reverts back to 'presaleMint' or publc mint.
+
+------------------------------------------------------------
+
+
+const publicMint = async () => {
+  setLoading(true);
+  try {
+    const signer = await getProviderOrSigner(true);
+
+    const nftContract = new Contract (
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      signer
+    );
+   
+    const txn = await nftContract.mint({
+      value: utils.parseEther("0.01"),
+    });
+    await txn.wait();
+
+    window.alert("You successfully minted a CryptoDev!");
+
+  } catch (error) {
+    console.error(error)
+  }
+  setLoading(false);
+}
+
+------------------------------------------------------------
+
+This is the same as the explanation above, the only difference is the contract function used.
+
+
+------------------------------------------------------------
+
+const checkIfPresaleEnded = async () => {
+  try {
+    const provider = await getProviderOrSigner();
+
+    const nftContract = new Contract (
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      provider
+    );
+    
+    // This will return a BigNumber because presaleEnded is a uint256 data type.
+    // This will return a timestamp in seconds.
+
+
+    const _presaleEnded = await nftContract.presaleEnded(); 1.
+
+
+    // Date.now in JS returns the time in miliseconds, so we're going to
+    // Divide this by 1000 (1000 milliseconds in a second.)
+    // Also since we're dividing by 1000 it has the potential to be a float value.
+
+
+    const currentTimeInSeconds = Date.now() / 1000; 2.
+
+
+    // We're going use bigNumber since JS can't handle numbers the size of 
+    // uint256, so we have to use bigNumbers lt() function instead of JS's
+    // (>) comparators.
+    // We're going to wrap it in a math.floor to make sure its always an integer.
+
+
+    const hasPresaleEnded = _presaleEnded.lt( 3.
+      Math.floor(currentTimeInSeconds) 3.1
+      );
+    setPresaleEnded(_presaleEnded); 4.
+    
+
+    return hasPresaleEnded; 5.
+    
+  } catch (error) {
+    console.error(error)
+    return false; 6..
+  }
+};
+
+------------------------------------------------------------
+
+1. Assigning a variable to the nft contract function presaleEnded, and telling it to wait for the response before proceding with the contract.
+2. Assigning a variable to the current time / 1000.
+  - JS runs Epoch time in milliseconds, so since there are 1000 milliseconds in 1 second, we divide by 1000 to convert the current time from milliseconds to seconds.
+3. Assigning a variable to the 
+    (_presaleEnded) value (presaleEnded = block.timestamp(at presaleStarted) + 5 minutes)
+      - _presaleEnded is less than current time in seconds
+        - If the presaleEnded time (timestamp + 5 mins) is less than current time
+          - THEN _presaleEnded = TRUE.
+      - There is a possibility that currentTimeInSeconds returns a float (decimal point number) that JS cannot handle, so we put Math.floor to convert it to an integer which 
+      JS can handle.
+4. This is using the setter function for the presaleEnded hook, it will input the boolean value of _presaleEnded.
+5. Return the boolean value of hasPresaleEnded.
+  - If the presale has ended then it will return true.
+6. If there is an error, return false.
+
+------------------------------------------------------------
+
+const getOwner = async () => {
+  try {
+    const signer = await getProviderOrSigner(true);
+
+    const nftContract = new Contract (
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      signer
+    );
+
+
+    const owner = await nftContract.owner(); 1
+    // Owner of the contract.
+    const userAddress = await signer.getAddress(); 2
+    // Address of the user who is currently connected to the dapp.
+
+    if (userAddress.toLowerCase() === owner.toLowerCase()) { 3
+      setIsOwner(true);
+    }
+    
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+------------------------------------------------------------
+
+
+1. Assign the variable 'owner' to the returned contract owner value, wait for it to return the value before proceding.
+2. Assign the variable 'userAddress' to the signer's address. (Current user of the dApp).
+3. IF the Current user of the contract is the owner of the contract, set the isOwner react hook to true.
+  - When the isOwner hook is set to true, it will tell the page to display functions only available to the Collection administrator (owner of the contract).
+
+------------------------------------------------------------
+
+
+const startPresale = async () => {
+  setLoading(true);
+  try {
+    const signer = await getProviderOrSigner(true);
+
+     const nftContract = new Contract (
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      signer,
+    )
+
+    const txn = await nftContract.startPresale(); 1.
+    await txn.wait(); 2.
+
+    presaleStarted(true); 3.
+
+    
+  } catch (error) {
+    console.error(error);
+  }
+  setLoading(false);
+}
+
+------------------------------------------------------------
+
+1. Assign a variable to contract function call (startPresale()) and tell it to wait for the promise to resolve before proceding.
+2. Wait for the transaction to process.
+3. set the presaleStarted hook to true.
+  - This will allow people to perform a presaleMint, and it will also help us to figure out what to display at what time (e.g. presaleMint, or publicMint).
 
 
 
+------------------------------------------------------------
+  
+  
+const checkIfPresaleStarted = async () => {
+  try {
+    const provider = await getProviderOrSigner();
+
+    const nftContract = new Contract (
+      NFT_CONTRACT_ADDRESS,
+      NFT_CONTRACT_ABI,
+      provider
+    );
 
 
+    const _presaleStarted = await nftContract.presaleStarted(); 1.
+      // Assigning variable to a boolean value returned from the nft contract.
+    
+    if(!_presaleStarted) { 2.
+      await getOwner();
+    }
+    
+    setPresaleStarted(_presaleStarted); 3.
+    // Setting the value of the react hook useState with the returned value from
+    // The nft contract.
+
+    return _presaleStarted; 4.
+    // Returning the boolean value.
+    
+  } catch (error) {
+    console.error(error);
+    return false;
+    // If there's an error: return false 
+    // - isPresaleStarted(false);
+  }
 
 
+------------------------------------------------------------
 
+1. Assign a variable to the returned contract (boolean) value of presaleStarted.
+2. IF the presale is NOT started, call getOwner function.
+  - getOwner will:
+    - Check if the user is the contract owner, and if so, will return true.
+      - if True, then the webpage will display the startPresale function for the owner to start the presale period.
+3. Calling the setter function of presaleStarted, and inputing the returned contract variable.
+  - setPresaleStarted(true);
+4. Return the contract value of presaleStarted.
 
+------------------------------------------------------------
+
+const connectWallet =  async() => {
+  try {
+    await getProviderOrSigner(); 1.
+    setWalletConnected(true); 2.
+  } catch (error) {
+    console.error(error);
+  }
+
+}
+
+------------------------------------------------------------
+
+1. Call getProviderOrSigner.
+  - getProviderOrSigner will:
+  Open metamask and request for the user to connect their wallet with the dApp.
+    Returns the provider object (default, for reading the Blockchain)
+      - Assign a variable to the provider object.
+      - Make sure that it is connected to Rinkeby.
+      - Return the provider object.
+    if the signer is needed: (For transactions)
+      - Same as above but provide the signer object insted.
+2. Set the walletConnected hook to true.
+  - Setting this react hook to true will make the webpage display functions like presaleMint(if the address is in the whitelist), or Public mint.
+
+------------------------------------------------------------
+
+const getProviderOrSigner = async (needSigner = false) => { 1. 
+    
+  const provider = await web3ModalRef.current.connect(); 2.
+  // Will pop open metamask and ask the user to connect their wallet.
+  const web3Provider = new providers.Web3Provider(provider); 3.
+  // This gives us access to the functions that ethers provides
+  
+  const { chainId } = await web3Provider.getNetwork(); 4.
+
+  if (chainId !== 4) { 5.
+    window.alert("Please change your network to Rinkeby");
+    throw new Error("Incorrect Network");
+  } 
+
+  if (needSigner) { 6.
+    const signer = web3Provider.getSigner();
+    return signer;
+  }
+  return web3Provider; 7.
+  };
+
+------------------------------------------------------------
+
+1. Async function declaration - with a parameter (needSigner) that will default to false if no argument is given with function call.
+2. NOTE: This is the default route that the function will take, it will return a provider object if there is no argument given.
+  - Assigning a variable to the web3ModalRef wallet connection function, and waiting for it to return an object before proceding. 
+    - This function will open the wallet provider (e.g. metamask.), and request that the user connect their wallet to the dApp.
+    - web3Modal is a simple library that allows devs to connect to multiple wallet providers.
+3. This is assigning a variable to a new web3Provider which uses the above provider object as a argument, and waits for the response before proceding.
+4. Assigning a variable to the 
 
 
 
