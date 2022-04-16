@@ -365,7 +365,7 @@ export default function Home() {
       }
     }
 
-
+    console.log("N")
 
   return (
       <div>

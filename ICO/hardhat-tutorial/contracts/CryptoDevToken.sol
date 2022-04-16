@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "./ICryptoDevs.sol";
 
 
-contract CryptoDevTokenis ERC20, Ownable {
+contract CryptoDevToken is ERC20, Ownable {
 
     ICryptoDevs CryptoDevsNFT; 
     uint256 public constant tokensPerNFT = 10 * 10**18;
@@ -31,14 +31,13 @@ contract CryptoDevTokenis ERC20, Ownable {
         require(
             (totalSupply() + amountWithDecimals) <= maxTotalSupply,
             "Exceeds the max total supply available."
-        )
+        );
     }
-
 
     function claim() public {
         address sender = msg.sender;
         uint256 balance = CryptoDevsNFT.balanceOf(sender); 
-        require(balance > 0; "You don't own any Crypto Dev NFT's);
+        require(balance > 0, "You don't own any Crypto Dev NFT's");
         uint256 amount = 0;
 
         for(uint256 i = 0; i < balance; i++) {
@@ -58,7 +57,6 @@ contract CryptoDevTokenis ERC20, Ownable {
     receive() external payable {}
     
     fallback() external payable {}
-
 
 }
 
