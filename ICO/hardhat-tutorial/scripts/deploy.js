@@ -12,9 +12,6 @@ async function main() {
   const deployedCDTContract = await cryptoDevsContract.deploy(cryptoDevsNFTContract);
 
 
-
-  await cryptoDevsContract.deployed();
-
   console.log("Contract deployed to:", deployedCDTContract.address);
 }
 
