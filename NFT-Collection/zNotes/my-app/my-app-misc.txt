@@ -28,7 +28,63 @@ both of these are crucial for instantiating new contracts in our index.js file.
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-We've imported all of the images for the NFTs under public/CryptoDevs.
+pages/api/[tokenId].js
+
+This is the API file will allow OpenSea to display our NFT's Metadata(name, image, description, tokenId).
+
+OpenSea has metadata standards for NFTs, which you can view here:
+https://docs.opensea.io/docs/metadata-standards
+
+Basically what we're trying to accomplish here is that when OpenSea sends a request to our API we send back a
+response.
+
+We send the tokenId, the name of the NFT, the description of the nft collection, and the image url.
+
+
+export default function handler(req, res) {
+    - This is the declaration of the handler, and we have two parameters
+        - Request, and response.
+    const tokenId = req.query.tokenId;
+    - Reponse: tokenId = req.query.tokenId
+    const name = 'Crypto Dev #';
+    - Token name(number)
+    const description = "CryptoDevs is an NFT collection for Web3 Developers."
+    - NFT collection description.
+    const imageURL = 'https://n-nft-collection-ailfad3ah-nslee333.vercel.app/api/'
+    - the Image url where OpenSea will get our image from our deployed vercel application.
+
+- With this code we're defining our variables which we'll use in our API response.
+
+return res.json({
+    - Returning a reponse in the Json data format.
+    name: name + tokenId,
+    - name: name ('Crypto Dev #') + tokenId ('1') = 'Crypto Dev #1'.
+        - name: 'Crypto Dev #1'
+    description: description,
+    - description: 'CryptoDevs is an NFT collection for Web3 Developers.'
+    image: imageURL + tokenId + '.svg',
+    - image: imageURL ('VercelURL/api/') + tokenId('1') + '.svg'.
+        - image: "https://n-nft-collection-ailfad3ah-nslee333.vercel.app/api/1.svg"
+});
+
+This is our response json. When we deploy our vercel application so that OpenSea can
+    access our metadata and when we view our minted NFT we can see all the metadata displayed in OS.
+
+Another thing to note is our file name.
+
+[tokenId].js 
+
+This is a dynamic route provided by next.js.
+
+A dynamic route means that we can name the api page with an path parameter
+
+
+
+
+
+
+
+
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------------------------------------------------------------
