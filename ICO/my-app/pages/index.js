@@ -1,7 +1,6 @@
 import { BigNumber, Contract, ethers, providers, utils} from "ethers";
 import Head from "next/head";
-import { useEffect } from "react";
-import React, {useEffect, useRef, useState} from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Web3Modal from "web3modal";
 import {
     NFT_CONTRACT_ABI,
@@ -274,7 +273,7 @@ export default function Home() {
                     <div className={styles.description}>
                         You can claim or mint Crypto Dev tokens here.
                     </div>
-                    {walletConnected} (
+                    {walletConnected ? (
                         <div>
                             <div className={styles.description}>
                                 Overall {utils.formatEther(tokensMinted)}/10000 have been minted!
@@ -296,7 +295,7 @@ export default function Home() {
             </footer>
         </div>
     );
-}
+}}
 
 
 
