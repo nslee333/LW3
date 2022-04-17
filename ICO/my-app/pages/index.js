@@ -68,7 +68,7 @@ export default function Home() {
                 console.error(error)
                 setTokensToBeClaimed(zero);
             }
-
+        };
 
         const getBalanceOfCryptoDevTokens = async () => {
 
@@ -99,7 +99,7 @@ export default function Home() {
         const mintCryptoDevToken = async (amount) => {
             try {
                 
-                const signer = getProviderOrSigner(true);
+                const signer = await getProviderOrSigner(true);
 
                 const tokenContract = new Contract(
                     TOKEN_CONTRACT_ADDRESS,
@@ -130,7 +130,7 @@ export default function Home() {
     const claimCryptoDevTokens = async () => {
         try {
                 
-            const signer = getProviderOrSigner(true);
+            const signer = await getProviderOrSigner(true);
 
             const tokenContract = new Contract(
                 TOKEN_CONTRACT_ADDRESS,
@@ -153,7 +153,6 @@ export default function Home() {
         } catch (error) {
             console.error(error);
         }
-
     }
 
 
@@ -169,12 +168,12 @@ export default function Home() {
             );
 
             const _tokensMinted = await tokenContract.totalSupply();
-            setTokensMinted(_tokensMinted);a
+            setTokensMinted(_tokensMinted);
 
         } catch (error) {
             console.error(error);
         };
-    }
+    };
 
     const getProviderOrSigner = async (needSigner = false) => {
         const provider = await web3ModalRef.current.connect();
@@ -217,9 +216,8 @@ export default function Home() {
         }
     }, [walletConnected]);
 
-    const renderButton = () => {
-
-        if(loading) {
+const renderButton = () => {
+        if (loading) {
             return(
                 <div>
                     <button className={styles.button}>Loading...</button>
@@ -240,7 +238,7 @@ export default function Home() {
             );
         }
 
-        return(
+        return (
             <div style={{ display: "flex-col" }}>
                 <div>
                     <input 
@@ -255,7 +253,7 @@ export default function Home() {
                     disabled={!(tokenAmount > 0)}
                     onClick={() => mintCryptoDevToken(tokenAmount)}
                 >
-                    Mint Tokens0
+                    Mint Tokens
                 </button>
             </div>
         );
@@ -266,6 +264,7 @@ export default function Home() {
             <Head>
                 <title>Crypto Devs</title>
                 <meta name="description" content="ICO-Dapp"/>
+                <link rel="icon" href="/favicon.ico" />
             </Head>
             <div className={styles.main}>
                 <div>
@@ -276,7 +275,11 @@ export default function Home() {
                     {walletConnected ? (
                         <div>
                             <div className={styles.description}>
-                                Overall {utils.formatEther(tokensMinted)}/10000 have been minted!
+                            You have minted {utils.formatEther(tokensMinted)} Crypto
+                            Dev Tokens
+                            </div>
+                            <div className={styles.description}>
+                                Overall {utils.formatEther(balanceOfCryptoDevTokens)}/10000 have been minted!
                             </div>
                             {renderButton()}
                         </div>
@@ -291,11 +294,11 @@ export default function Home() {
                 </div>
             </div>
             <footer className={styles.footer}>
-                Made with &#100084; by Nathan Lee
+                Made with &#10084; by Nathan Lee
             </footer>
         </div>
     );
-}}
+}
 
 
 
