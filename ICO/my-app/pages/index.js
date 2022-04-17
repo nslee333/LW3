@@ -154,9 +154,127 @@ const claimCryptoDevTokens = async () => {
     } catch (error) {
         console.error(error);
     }
+
 }
 
 
+const getTotalTokensMinted = async () => {
+    try {
+        
+        const provider = await getProviderOrSigner();
+
+        const tokenContract = new Contract(
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_CONTRACT_ABI,
+            provider
+        );
+
+        const _tokensMinted = await tokenContract.totalSupply();
+        setTokensMinted(_tokensMinted);a
+
+    } catch (error) {
+        console.error(error);
+    };
+}
+
+const getProviderOrSigner = async (needSigner = false) => {
+    const provider = await web3ModalRef.current.connect();
+    const web3Provider = new providers.Web3Provider(provider);
+
+    const {chainId} = await web3Provider.getNetwork();
+    if(chainId !== 4 ) {
+        window.alert("Please change the network to Rinkeby");
+        throw new Error("Change network to Rinkeby");
+    }
+
+    if(needSigner) {
+        const signer = web3Provider.getSigner();
+        return signer;
+    }
+    return web3Provider;
+};
+
+const connectWallet = async () => {
+    try {
+        await getProviderOrSigner();
+        setWalletConnected(true);
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+useEffect(()=> {
+    if(!walletConnected) {
+        web3ModalRef.current = new Web3Modal({
+            network: "rinkeby",
+            providerOptions: {},
+            disableInjectedProvider: false,
+        });
+        connectWallet();
+        getTotalTokensMinted();
+        getBalanceOfCryptoDevTokens();
+        getTokensToBeClaimed();
+    }
+}, [walletConnected]);
+
+const renderButton = () => {
+
+    if(loading) {
+        return(
+            <div>
+                <button className={styles.button}>Loading...</button>
+            </div>
+        );
+    }
+
+    if (tokensToBeClaimed > 0) {
+        return(
+            <div>
+                <div className={styles.description}>
+                    {tokensToBeClaimed * 10} Tokens can be claimed!
+                </div>
+                <button className={styles.button} onClick={claimCryptoDevTokens}>
+                    Claim Tokens
+                </button>
+            </div>
+        );
+    }
+
+    return(
+        <div style={{ display: "flex-col" }}>
+            <div>
+                <input 
+                type="number"
+                placeholder="Amount Of Tokens"
+                onChange={(e) => setTokenAmount(BigNumber.from(e.target.value))}
+                className={styles.input}
+                />
+            </div>
+            <button
+                className={styles.button}
+                disabled={!(tokenAmount > 0)}
+                onClick={() => mintCryptoDevToken(tokenAmount)}
+            >
+                Mint Tokens0
+            </button>
+        </div>
+    );
+};
+
+return (
+    <div>
+        <Head>
+            <title>Crypto Devs</title>
+            <meta name="description" content="ICO-Dapp"/>
+        </Head>
+        <div className={styles.main}>
+            <div>
+                
+            </div>
+        </div>
+    </div>
+)
  
 
 
