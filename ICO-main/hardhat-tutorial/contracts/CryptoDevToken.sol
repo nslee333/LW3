@@ -32,6 +32,7 @@ contract CryptoDevToken is ERC20, Ownable {
             (totalSupply() + amountWithDecimals) <= maxTotalSupply,
             "Exceeds the max total supply available."
         );
+        _mint(msg.sender, amountWithDecimals);
     }
 
     function claim() public {

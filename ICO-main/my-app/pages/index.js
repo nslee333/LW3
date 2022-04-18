@@ -24,6 +24,7 @@ export default function Home() {
         // Amount of tokens that the user wants to mint.
         const [tokensMinted, setTokensMinted] = useState(zero);
         const web3ModalRef = useRef();
+        console.log(TOKEN_CONTRACT_ADDRESS);
 
         const getTokensToBeClaimed = async () => {
             try {
@@ -39,7 +40,7 @@ export default function Home() {
                 const tokenContract = new Contract(
                     TOKEN_CONTRACT_ADDRESS,
                     TOKEN_CONTRACT_ABI,
-                    provider,
+                    provider
                 );
 
                 const signer = await getProviderOrSigner(true);
@@ -83,7 +84,7 @@ export default function Home() {
 
                 const signer = await getProviderOrSigner(true);
 
-                const address = await signer.getAddress(signer);
+                const address = await signer.getAddress();
 
                 const balance = await tokenContract.balanceOf(address);
 
@@ -172,7 +173,7 @@ export default function Home() {
 
         } catch (error) {
             console.error(error);
-        };
+        }
     };
 
     const getProviderOrSigner = async (needSigner = false) => {
@@ -275,8 +276,8 @@ const renderButton = () => {
                     {walletConnected ? (
                         <div>
                             <div className={styles.description}>
-                            You have minted {utils.formatEther(balanceOfCryptoDevTokens)} Crypto
-                            Dev Tokens
+                            You have minted {utils.formatEther(balanceOfCryptoDevTokens)}{" "} 
+                            Crypto Dev Tokens
                             </div>
                             <div className={styles.description}>
                                 Overall {utils.formatEther(tokensMinted)}/10000 have been minted!
