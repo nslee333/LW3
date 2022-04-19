@@ -1,0 +1,134 @@
+---------------------------------------------------------------------------------------------------------------------------------------
+
+This is my notes for CryptoDevToken Contract for the ICO project with LW3.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./ICryptoDevs.sol";
+    
+- We're importintg ERC-20 and Ownable from OZ.
+- We're also importing the ICryptoDevs.sol interface contract for our use.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+ICryptoDevs CryptoDevsNFT; 
+- Assigning a variable name to the interface contract.
+uint256 public constant tokensPerNFT = 10 * 10**18;
+- Tokens per NFT owned.
+    - 10 (tokens) * 10**18 (this is converting from wei to ether.) 
+uint256 public constant maxTotalSupply = 10000 * 10**18;
+    - Maximum total supply.
+uint256 public constant tokenPrice = 0.001 ether;
+    - Price for the token.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+mapping(uint256 => bool) public tokenIdsClaimed;
+
+- This mapping is used to store the tokenId (nft) -> boolean ( the tokens are claimed for that nft.)
+
+constructor(address _cryptoDevsContract) ERC20("Crypto Dev Token", "CD") { // We're inputing the cryptoDevs contract for interface.
+    CryptoDevsNFT = ICryptoDevs(_cryptoDevsContract);        
+}
+
+- Constructor that is passing in the address of the NFT contract for our interface initialization.
+- We're also initializing the value of our ERC20 token contract (arguments for the token name and the symbol).
+- Also assigning the CryptoDevsNFT variable to th interface.
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+function mint(uint256 amount) public payable { 1.
+    uint256 _requiredAmount = tokenPrice * amount; 2.
+    require(msg.value >= _requiredAmount, "Ether sent is incorrect"); 3.
+    uint256 amountWithDecimals = amount * 10**18; 4.
+    require( 5
+        (totalSupply() + amountWithDecimals) <= maxTotalSupply, 5.1
+        "Exceeds the max total supply available." 5.2
+    );
+    _mint(msg.sender, amountWithDecimals); 6.
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+1. Function declaration with a parameter for 'amount', this is the amount that the user will enter in for the amount of tokens he wishes to
+    purchase.
+2. This is defining _requiredAmount, which is the price * the amount passed in by the user.
+3. Require that the value sent with the transaction is greater than or equal to the required amount, if not revert the transaction.
+4. This is converting the amount from ether to the proper wei amount required by solidity.
+5. Require that the total supply of the tokens + the amount (converted to decimals) is less than or equal to the Maximum supply, 
+    if not throw an error.
+6. call the OZ ERC20 _mint function, and pass in the address of the user and the amount to be paid.
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+
+function claim() public {
+    address sender = msg.sender; 1.
+    uint256 balance = CryptoDevsNFT.balanceOf(sender); 2. 
+    require(balance > 0, "You don't own any Crypto Dev NFT's"); 3.
+    uint256 amount = 0; 4.
+
+    for(uint256 i = 0; i < balance; i++) { 5.
+        uint256 tokenId = CryptoDevsNFT.tokenOfOwnerByIndex(sender, i); 
+        if(!tokenIdsClaimed[tokenId]) { 
+            amount += 1; 
+            tokenIdsClaimed[tokenId] = true;
+
+        }
+    }
+    require(amount > 0, "You have already claimed all of your tokens"); 6.
+
+    _mint(msg.sender, amount * tokensPerNFT ); 7
+
+}
+
+
+receive() external payable {} 8
+    
+fallback() external payable {}
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------
+
+1. Assigning a variable 'sender' to the user address.
+2. Assigning balance to NFTcontract.balanceOf(user's address);
+3. Require that the balance is greater than zero, if not revert the transaction.
+4. Initializing amount with the value of 0.
+5. For every token in index, loop through this code: (We will look through all index positions before stopping.)
+    - (While the index is less than the balance of the owner, loop through this list until i = balance, then stop.)
+    - get TokenId(uint256) from contract,
+        1. if this NFT tokens HAVEN'T been claimed yet, add 1 to amount.
+        2. Add this NFT to the list of tokens that have been claimed, 
+        (3)
+6. Require that amount ( of NFTs owned ) is greater than zero, otherwise revert the transaction.
+7. mint the tokens, amount of tokens to be claimed * the number of tokens per nft.
+8. Recieve and Fallback functions that are required for receieving ether. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
