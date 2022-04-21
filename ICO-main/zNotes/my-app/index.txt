@@ -1,0 +1,272 @@
+This file is going to be used for explaining the pages/index.js file.
+-------------------------------------------------------------------------------------
+
+export default function Home() {
+    const zero = BigNumber.from(0);
+        - We're using Big Number because JS cannot large integers like Solidity can, so he have to convert it into a big number
+            in order for it to work with JS.
+
+
+    const [walletConnected, setWalletConnected] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [tokensToBeClaimed, setTokensToBeClaimed] = useState(zero);
+    const [balanceOfCryptoDevTokens, setBalanceOfCryptoDevTokens] = useState(zero);
+    const [tokenAmount, setTokenAmount] = useState(zero);
+    const [tokensMinted, setTokensMinted] = useState(zero);
+    const web3ModalRef = useRef();
+        - We're assigning a variable to useRef which will help us sustain the data/values between renders.
+        - This will sustain our wallet connection to the user between renders.
+    console.log(TOKEN_CONTRACT_ADDRESS);
+-------------------------------------------------------------------------------------
+
+const getTokensToBeClaimed = async () => {
+    try {
+        
+        const provider = await getProviderOrSigner(); 1
+
+        const nftContract = new Contract(2
+            NFT_CONTRACT_ADDRESS,
+            NFT_CONTRACT_ABI,
+            provider
+        );
+
+        const tokenContract = new Contract(3
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_CONTRACT_ABI,
+            provider
+        );
+
+        const signer = await getProviderOrSigner(true); 4
+
+        const address = await signer.getAddress();5
+
+        const balance = await nftContract.balanceOf(address);6
+
+        if (balance === zero) {7
+            setTokensToBeClaimed(zero);
+        } else {
+            var amount = 0;
+
+            for (var i = 0; i < balance; i++) { 8
+                const tokenId = await nftContract.tokenOfOwnerByIndex(address, i);
+                const claimed = await tokenContract.tokenIdsClaimed(tokenId);
+                if(!claimed) {
+                    amount++;
+                }
+            }
+
+            setTokensToBeClaimed(BigNumber.from(amount));9
+        }
+        
+    } catch (error) { 10
+        console.error(error)
+        setTokensToBeClaimed(zero);
+    }
+};
+-------------------------------------------------------------------------------------
+
+1. Provider naming.
+2. Creating an instance of the nft contract.
+3. Creating an isntance of the token contract.
+4. Creating an instance of a signer for our use.
+5. Telling ethers to get the address of the user.
+6. Getting the balance of the address.
+7. If the balance is zero, set the amount of tokens to be claimed to zero.
+    - Else, initialize the amount to zero for our use.
+8. For as long as the 'i' (index) is less than the balance, loop through this code.
+    1. Give the nft contract the address of the signer and the index position, and assign the value returned to tokenId variable.
+    2. Read the tokenIdsClaimed mapping, input the token ID and assign the boolean value to the claimed variable.
+        if the tokenId is NOT claimed, add to the amount(nfts held by the user).
+9. Set the amount of tokens to be claimed and convert it to a big number since the contract will return a big number.
+    - A smart contract 'uint256' data type, even though it has a value of 20, will always return a big number because the uint256 data type pads the
+        number with zeros to fill 256 digits.
+10. If there is an error, set the amount of tokens to be claimed to zero.
+
+-------------------------------------------------------------------------------------
+
+const getBalanceOfCryptoDevTokens = async () => {
+
+    try {
+        const provider = await getProviderOrSigner(); 1
+
+        const tokenContract = new Contract(
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_CONTRACT_ABI,
+            provider
+        );
+
+        const signer = await getProviderOrSigner(true); 2
+
+        const address = await signer.getAddress(); 3
+
+        const balance = await tokenContract.balanceOf(address); 4
+
+        setBalanceOfCryptoDevTokens(balance); 5
+    } catch (error) {
+        console.error(error);
+        setBalanceOfCryptoDevTokens(zero);   6
+    }
+
+}
+
+-------------------------------------------------------------------------------------
+
+1. Get the provider and create an instance of the nft contract.
+2. Get the signer object.
+3. Get the address of the signer.
+4. Get the balance of the address.
+5. Call the setter function of the 'setBalanceOfCryptoDevTokens' react hook and set the value to the contract balance.
+6. If there is an error, set the balance to zero.
+
+-------------------------------------------------------------------------------------
+
+const mintCryptoDevToken = async (amount) => { 1.
+    try {
+        
+        const signer = await getProviderOrSigner(true); 2
+ 
+        const tokenContract = new Contract(
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_CONTRACT_ABI,
+            signer
+        );
+
+        const value = 0.001 * amount; 3
+        const tx = await tokenContract.mint(amount, { 4
+            value: utils.parseEther(value.toString()),
+        });
+
+        setLoading(true); 
+        await tx.wait(); 5
+        setLoading(false);
+        
+        window.alert("Successfully minted Crypto Dev Tokens"); 6
+
+        await getBalanceOfCryptoDevTokens();7
+        await getTotalTokensMinted();8
+        await getTokensToBeClaimed();9
+
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+-------------------------------------------------------------------------------------
+
+1. Function declaration, parameter for the amount of tokens the user wishes to mint.
+2. Get the signer object and create a new instance of the token contract.
+3. Creating a value, which is amount of tokens times the price of the tokens.
+    0.001(Price Per token) * amount (number of tokens to be minted).
+4. Call the contract mint function, and pass in the amount to be mined, 
+    - utils.parseEther only takes in a string so we have to convert it to a string.
+5. Wait for the transaction to process (mine).
+6. Window alert the successful transaction.
+7. Get and update the balance of tokens react hook.
+8. Get and update the total number of tokens minted react hook.
+9. Get an instance of both contracts, and search the mappings to see how many tokens can be claimed and update the balance
+    react hook.
+
+
+-------------------------------------------------------------------------------------
+
+const claimCryptoDevTokens = async () => {
+    try {
+            
+        const signer = await getProviderOrSigner(true);
+
+        const tokenContract = new Contract(
+            TOKEN_CONTRACT_ADDRESS,
+            TOKEN_CONTRACT_ABI,
+            signer
+        );
+
+        const tx = await tokenContract.claim();
+
+        setLoading(true);
+        await tx.wait();
+        setLoading(false);
+
+        window.alert("Successfully claimed Crypto Dev Tokens");
+
+        await getBalanceOfCryptoDevTokens();
+        await getTotalTokensMinted();
+        await getTokensToBeClaimed();
+        
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+-------------------------------------------------------------------------------------
+
+- This function will get an instance of the contract, call the contract's claim function wait for it to process (mine).
+- Then it will put a window alert out, then it will.
+    - update the balance hook with the value from the contract.
+    - Get the value of tokens that have been minted so far and update the tokensMinted react hook.
+    - 
+
+
+
+    Walking through the claimCryptoDevToken
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    for (var i = 0; i < balance; i++) {
+        const tokenId = await nftContract.tokenOfOwnerByIndex(address, i);
+        const claimed = await tokenContract.tokenIdsClaimed(tokenId);
+        if(!claimed) {
+            amount++;
+        }
+    }
+
+    Confused on what exactly this is doing.
