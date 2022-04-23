@@ -74,13 +74,43 @@ const getTokensToBeClaimed = async () => {
 7. If the balance is zero, set the amount of tokens to be claimed to zero.
     - Else, initialize the amount to zero for our use.
 8. For as long as the 'i' (index) is less than the balance, loop through this code.
+    - See notes at the bottom for why this for loop works the way it does. -
     1. Give the nft contract the address of the signer and the index position, and assign the value returned to tokenId variable.
     2. Read the tokenIdsClaimed mapping, input the token ID and assign the boolean value to the claimed variable.
         if the tokenId is NOT claimed, add to the amount(nfts held by the user).
 9. Set the amount of tokens to be claimed and convert it to a big number since the contract will return a big number.
-    - A smart contract 'uint256' data type, even though it has a value of 20, will always return a big number because the uint256 data type pads the
-        number with zeros to fill 256 digits.
+    - A smart contract 'uint256' data type, even though it has a value of 20, will always return a big number because the uint256 data type 
+        pads the number with zeros to fill 256 digits.
 10. If there is an error, set the amount of tokens to be claimed to zero.
+
+----------------------------------
+
+mapping(address => mapping(uint256 => uint256)) private _ownedTokens;
+
+- This nested mapping inputs: address: index: tokenId of index 1. index 2 etc.
+- Input: address and index: get the tokenId of that address: index position.
+    
+function tokenOfOwnerByIndex(address owner, uint256 index) public view virtual override returns (uint256) {
+    require(index < ERC721.balanceOf(owner), "ERC721Enumerable: owner index out of bounds");
+    return _ownedTokens[owner][index]; 
+} 
+
+
+    - This function calls the nested mapping above.
+
+
+for (var i = 0; i < balance; i++) {
+    const tokenId = await nftContract.tokenOfOwnerByIndex(address, i); 
+        - This line is getting the tokenId of the tokens owned by this address AT THIS INDEX POSITION.
+    const claimed = await tokenContract.tokenIdsClaimed(tokenId);
+    if(!claimed) {
+        amount++;
+    }
+}
+
+.
+ - For the amount of tokens owned by the address, loop through this code.
+
 
 -------------------------------------------------------------------------------------
 
@@ -204,29 +234,11 @@ const claimCryptoDevTokens = async () => {
 - Then it will put a window alert out, then it will.
     - update the balance hook with the value from the contract.
     - Get the value of tokens that have been minted so far and update the tokensMinted react hook.
-    
-    
-    Come back to this.
-
-
-    Walking through the claimCryptoDevToken
-    How does the ERC-20 _totalSupply initialize?
-
-
-
-
-    
-    for (var i = 0; i < balance; i++) {
-        const tokenId = await nftContract.tokenOfOwnerByIndex(address, i);
-        const claimed = await tokenContract.tokenIdsClaimed(tokenId);
-        if(!claimed) {
-            amount++;
-        }
-    }
-
-    Confused on what exactly this is doing.
-
-
+        - This is taking the current total of tokens minted and updating the balance hook.
+    - Then get the balance of the owner.
+        - Then loop through the nft contract mapping, check if they are claimed, if not then claim them.
+        - Then update the react hook of tokensToBeClaimed so that the webpage displays the current total.
+            - Which after this would be zero, since we just claimed it.
 
 -------------------------------------------------------------------------------------
 
@@ -338,9 +350,3 @@ const claimCryptoDevTokens = async () => {
 3. False render.
 4. This image is displayed along the side.
 5. This is the footer that is displayed.
-
-
-
-
-
-
