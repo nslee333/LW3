@@ -204,58 +204,13 @@ const claimCryptoDevTokens = async () => {
 - Then it will put a window alert out, then it will.
     - update the balance hook with the value from the contract.
     - Get the value of tokens that have been minted so far and update the tokensMinted react hook.
-    - 
-
+    
+    
+    Come back to this.
 
 
     Walking through the claimCryptoDevToken
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    How does the ERC-20 _totalSupply initialize?
 
 
 
@@ -270,3 +225,122 @@ const claimCryptoDevTokens = async () => {
     }
 
     Confused on what exactly this is doing.
+
+
+
+-------------------------------------------------------------------------------------
+
+
+    const renderButton = () => { 1
+        if (loading) {
+            return(
+                <div>
+                    <button className={styles.button}>Loading...</button>
+                </div>
+            );
+        }
+
+        if (tokensToBeClaimed > 0) { 2
+            return(
+                <div>
+                    <div className={styles.description}>
+                        {tokensToBeClaimed * 10} Tokens can be claimed!
+                    </div>
+                    <button className={styles.button} onClick={claimCryptoDevTokens}>
+                        Claim Tokens
+                    </button>
+                </div>
+            );
+        }
+
+        return (
+            <div style={{ display: "flex-col" }}> 3
+                <div>
+                    <input 
+                    type="number"
+                    placeholder="Amount Of Tokens"
+                    onChange={(e) => setTokenAmount(BigNumber.from(e.target.value))}
+                    className={styles.input}
+                    />
+                </div>
+                <button
+                    className={styles.button}
+                    disabled={!(tokenAmount > 0)}
+                    onClick={() => mintCryptoDevToken(tokenAmount)}
+                >
+                    Mint Tokens
+                </button>
+            </div>
+        );
+    };
+
+
+-------------------------------------------------------------------------------------
+
+
+1. If 'loading' react is true, display this code user until the hook value goes back to false.
+    - Display a button that does nothing that displays 'loading...'
+2. If the amount of tokens to be claimed is greater than zero, then return this code.
+    - Display tokensToBeClaimed (NFTs owned) * 10 (tokens per NFT.), and a button to claim it.
+3. If none of the above are true ( the tokens have been claimed alread (tokensToBeClaimed = 0)),
+    then display: an input field for the amount of tokens to be minted, and a mint button.
+        - disabled = false, if the amount is greater than zero, disabled = true, if the tokenAmount is equal to zero.
+
+
+
+----------------------------------------------------------------------------------
+
+
+    return ( 1
+        <div>
+            <Head>
+                <title>Crypto Devs</title>
+                <meta name="description" content="ICO-Dapp"/>
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <div className={styles.main}>
+                <div>
+                    <h1 className={styles.title}>Welcome to Crypto Devs</h1>
+                    <div className={styles.description}>
+                        You can claim or mint Crypto Dev tokens here.
+                    </div>
+                    {walletConnected ? ( 2
+                        <div>
+                            <div className={styles.description}>
+                            You have minted {utils.formatEther(balanceOfCryptoDevTokens)}{" "} 
+                            Crypto Dev Tokens
+                            </div>
+                            <div className={styles.description}>
+                                Overall {utils.formatEther(tokensMinted)}/10000 have been minted!
+                            </div>
+                            {renderButton()}
+                        </div>
+                    ) : ( 3
+                        <button onClick={connectWallet} className={styles.button}>
+                            Connect your wallet
+                        </button>
+                    )}
+                </div>
+                <div>
+                        <img className={styles.image}src="./0.svg"/> 4
+                </div>
+            </div>
+            <footer className={styles.footer}> 5
+                Made with &#10084; by Nathan Lee
+            </footer>
+        </div>
+    );
+}
+
+----------------------------------------------------------------------------------
+1. This is the main strcuture of the webpage.
+2. This is a react inline conditional rendering, it's structured like this: condition? true (Formatting displayed) : false (formatting displayed.)
+3. False render.
+4. This image is displayed along the side.
+5. This is the footer that is displayed.
+
+
+
+
+
+
