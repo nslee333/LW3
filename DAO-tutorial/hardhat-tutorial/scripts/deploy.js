@@ -21,7 +21,7 @@ async function main() {
   
   );
   await cryptoDevsDAO.deployed();
-  console.log("CryptoDevsDao deployed to ", cryptoDevsDao.address);
+  console.log("CryptoDevsDao deployed to ", cryptoDevsDAO.address);
 
 }
 // We recommend this pattern to be able to use async/await everywhere
