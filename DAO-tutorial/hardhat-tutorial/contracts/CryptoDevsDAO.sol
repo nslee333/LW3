@@ -75,12 +75,14 @@ contract CryptoDevsDao is Ownable {
         // We have to return the ID of the proposal, that's why we subtract from the number of proposals, since we added to it.
         // 32:55
         return numProposals - 1;
-    }
+    } // The only way this makes sense to me is that numProposals++ adds to the state variable, 
+    // and the return numProposals -1 is returning the index position of the proposal 
 
     enum Vote {
         YAY,
         NAY        
-    }
+    } // enums help us to predefine the only values a variable can take, 
+    // Making sure that people don't vote something else other than yes or no.
     
 
     function voteOnProposal(uint256 proposalIndex, Vote vote) external nftHolderOnly activeProposalOnly(proposalIndex) {
