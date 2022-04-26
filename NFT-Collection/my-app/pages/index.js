@@ -387,7 +387,7 @@ export default function Home() {
             {renderBody()}
         </div>  
         <div>
-          <img className={styles.image} src="https://github.com/nslee333/N-NFT-Collection/blob/main/my-app/public/CryptoDevs/0.svg"/>
+          <img className={styles.image} src="CryptoDevs/0.svg"/>
         </div>
       </div>
 

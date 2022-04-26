@@ -22,6 +22,8 @@ export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
+
+  console.log(nftBalance);
   const connectWallet = async() => {
     try {
       await getProviderOrSigner();
@@ -70,15 +72,15 @@ export default function Home() {
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
-  const createProposal = async (_tokenId) => {
+  const createProposal = async () => {
     try {
       
       const signer = await getProviderOrSigner(true);
       const contract = getDaoInstance(signer);
 
-      const proposal = await contract.createProposal(_tokenId);
+      const proposal = await contract.createProposal(fakeNftTokenId);
 
       setLoading(true);
       await proposal.wait();
@@ -86,7 +88,6 @@ export default function Home() {
       setLoading(false);
     } catch (error) {
       console.error(error);
-      window.alert(error.data.message);
     }
   };
 
@@ -113,7 +114,7 @@ export default function Home() {
 
   const fetchAllProposals = async () => { // This is looping through all of the proposals, then pushing the parsed proposals to the proposal array.
     try {
-      const proposal = []; // Array
+      const proposals = []; // Array
       for (let i = 0; i < numProposals; i++) {
         const proposal = await fetchProposalById(i);
         proposals.push(proposal);
@@ -183,11 +184,11 @@ export default function Home() {
     }
     
     if(needSigner) {
-      const signer = await getProviderOrSigner(true);
+      const signer = web3Provider.getSigner();
       return signer;
     }
     return web3Provider;
-  }
+  };
 
 
   const getDaoInstance = (providerOrSigner) => { // This is crating an instance of contracts for our use.
@@ -215,16 +216,16 @@ export default function Home() {
       });
 
       connectWallet().then(() => {
-        getDAOTreasuryBalance();
+        getTreasuryBalance();
         getUserNftBalance();
         getNumOfProposalsInDAO();
-      })
+      });
     }
   }, [walletConnected]);
 
 
   useEffect(() => {
-    if(selectedTab = "View Proposals") {
+    if(selectedTab === "View Proposals") {
       fetchAllProposals();
     }
   }, [selectedTab]);
@@ -238,7 +239,6 @@ export default function Home() {
     }
     return null;
   }
-
 
   function renderCreateProposalTab() {
     if(loading) {
@@ -291,7 +291,7 @@ export default function Home() {
             <div key={index} className={styles.proposalCard}>
               <p>Proposal ID: {p.proposalId}</p>
               <p>Fake NFT to Purchase: {p.nftTokenId}</p>
-              <p>Deadline: {p.deadline.toLocaleString()}</p>
+              <p>Deadline:  {p.deadline.toLocaleString()}</p>
               <p>Yay Votes: {p.yayVotes}</p>
               <p>Nay Votes: {p.nayVotes}</p>
               <p>Executed?: {p.executed.toString()}</p>
@@ -327,6 +327,52 @@ export default function Home() {
       );
     }
   }
+
+  return (
+    <div>
+      <Head>
+        <title>CryptoDevs DAO</title>
+        <meta name="description" content="Crypto Devs DAO" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+
+      <div className={styles.main}>
+        <div>
+          <h1 className={styles.title}>Welcome To Crypto Devs!</h1>
+          <div className={styles.description}>Welcome to the DAO!</div>
+          <div className={styles.description}>
+            Your CryptoDevs NFT Balance: {nftBalance}
+            <br />
+            Treasury Balance: {formatEther(treasuryBalance)} ETH
+            <br />
+            Total Number of Proposals: {numProposals}
+        </div>
+        <div className={styles.flex}>
+          <button
+            className={styles.button}
+            onClick={() => setSelectedTab("Create Proposal")}
+            >
+              Create Proposal
+          </button>
+          <button
+            className={styles.button}
+            onClick={() => setSelectedTab("View Proposals")}
+          >
+            View Proposals
+          </button>
+        </div>
+        {renderTabs()}
+      </div>
+      <div>
+      <img className={styles.image} src="/18.svg"/>
+      </div>
+    </div>
+   
+    <footer className={styles.footer}>
+      Made with &#10084; by Nathan Lee
+    </footer>
+  </div>
+  );
 }
 
 
