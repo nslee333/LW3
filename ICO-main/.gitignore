@@ -1,3 +1,5 @@
 node_modules
 .env
-zNotes
+\zNotes
+app-misc.txt
+Hardhat-misc.txt
