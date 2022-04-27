@@ -23,7 +23,7 @@ export default function Home() {
   const web3ModalRef = useRef();
 
 
-  console.log(nftBalance);
+
   const connectWallet = async() => {
     try {
       await getProviderOrSigner();
@@ -101,7 +101,7 @@ export default function Home() {
         proposalId: id,
         nftTokenId: proposal.nftTokenId.toString(),
         deadline: new Date(parseInt(proposal.deadline.toString()) * 1000),
-        vayVotes: proposal.yayVotes.toString(),
+        yayVotes: proposal.yayVotes.toString(),
         nayVotes: proposal.nayVotes.toString(),
         executed: proposal.executed, 
       };
@@ -171,7 +171,7 @@ export default function Home() {
       console.error(error);
       window.alert(error.data.message);
     }
-  }
+  };
  
   const getProviderOrSigner = async (needSigner = false) => {
     const provider = await web3ModalRef.current.connect();
@@ -288,6 +288,8 @@ export default function Home() {
       return(
         <div>
           {proposals.map((p, index) => (
+            console.log(p.yayVotes),
+            console.log(p.nayVotes),
             <div key={index} className={styles.proposalCard}>
               <p>Proposal ID: {p.proposalId}</p>
               <p>Fake NFT to Purchase: {p.nftTokenId}</p>
@@ -297,16 +299,16 @@ export default function Home() {
               <p>Executed?: {p.executed.toString()}</p>
               {p.deadline.getTime() > Date.now() && !p.executed ? (
                 <div className={styles.flex}>
-                <button 
-                className={styles.button2}
-                onClick={() => voteOnProposal(p.proposalId, "YAY")}>
-                Vote YAY
-                </button>
-                <button 
-                className={styles.button2}
-                onClick={() => voteOnProposal(p.proposalId, "NAY")}>
-                  Vote NAY
-                </button>
+                  <button 
+                    className={styles.button2}
+                    onClick={() => voteOnProposal(p.proposalId, "YAY")}>
+                  Vote YAY
+                  </button>
+                  <button 
+                    className={styles.button2}
+                    onClick={() => voteOnProposal(p.proposalId, "NAY")}>
+                    Vote NAY
+                  </button>
                 </div>
               ) : p.deadline.getTime() < Date.now() && !p.executed ? (
                 <div className={styles.flex}>

@@ -97,13 +97,13 @@ contract CryptoDevsDao is Ownable {
                 numVotes++;
                 proposal.voters[tokenId] = true;
             }
-            require(numVotes > 0, "ALREADY_VOTED");
+        }
+        require(numVotes > 0, "ALREADY_VOTED");
 
-            if (vote == Vote.YAY) {
-                proposal.yayVotes += numVotes;
-            } else {
-                proposal.nayVotes += numVotes;
-            }
+        if (vote == Vote.YAY) {
+            proposal.yayVotes += numVotes;
+        } else {
+            proposal.nayVotes += numVotes;
         }
     }
 
@@ -127,6 +127,7 @@ contract CryptoDevsDao is Ownable {
             if(proposal.yayVotes > proposal.nayVotes){
                 uint256 nftPrice = nftMarketplace.getPrice();
                 require(address(this).balance >= nftPrice, "NOT_ENOUGH_FUNDS");
+                nftMarketplace.purchase{value: nftPrice}(proposal.nftTokenId);
                 
             } else {
                 proposal.executed = true;
