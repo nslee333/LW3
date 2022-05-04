@@ -128,10 +128,6 @@ export default function Home() {
   }
 
 
-
-
-
-
   const voteOnProposal = async (proposalId, _vote) => {
     try {
       const signer = await getProviderOrSigner(true);
