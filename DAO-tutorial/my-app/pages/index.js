@@ -12,6 +12,7 @@ import {
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  console.log(CRYPTODEVS_DAO_CONTRACT_ADDRESS);
   const [treasuryBalance, setTreasuryBalance] = useState("0");
   const [numProposals, setNumProposals] = useState("0");
   const [proposals, setProposals] = useState([]);
