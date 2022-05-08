@@ -73,35 +73,40 @@ contract Exchange is ERC20 {
 
         uint256 inputAmountWithFee = inputAmount * 99; // Input * 99
         uint256 numerator = inputAmountWithFee * outputReserve; // numerator is the input with the fee times the output Reserve
-        uint256 denominator = (inputReserve * 1000) + inputAmountWithFee;
+        uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
         return numerator / denominator;
     } // The basic math is that we multiply * 99 and then divide by 100 to get the amount with the 1% fee subtracted.
     // This is the formula Δy = (y*Δx)/(x + Δx); 
     // x = inputReserve, y = outputReserve.
+    // The purpose of the function is to get the proper amount of tokens to be swapped, with the fee following the xy=k uniswap formula.
+    // This function takes in the amount to be purchased, and both reserve amounts, checks to see if the reserves are more than zero, then 
+    // Then subtracts the fee from the input amount, then 
 
 
     function ethToCryptoDevToken(uint _minTokens) public payable {
-        uint256 tokenReserve = getReserve();
+        uint256 tokenReserve = getReserve(); // Gets the amount of CDT tokens that this contract owns.
         uint256 tokensBought = getAmountOfTokens(
             msg.value,
             address(this).balance - msg.value,
             tokenReserve
-        );
+        ); // Get the proper amount of tokens after the fee and following the xy=k formula. If 10 will return 9.80.
 
-        require(tokensBought >= _minTokens, "Insufficient output amount");
-        ERC20(cryptoDevTokenAddress).transfer(msg.sender, tokensBought);
-    }
+        require(tokensBought >= _minTokens, "Insufficient output amount"); // Make sure that the amount to be purcahsed is bigger than the minimum amount.
+        ERC20(cryptoDevTokenAddress).transfer(msg.sender, tokensBought); 
+    } // Swap function from eth to cdt.
 
     function CryptoDevTokenToEth(uint _tokensSold, uint _minEth) public {
         uint256 tokenReserve = getReserve();
         uint256 ethBought = getAmountOfTokens(
             _tokensSold,
             tokenReserve,
-            address(this).balance;
+            address(this).balance
         );
         require(ethBought >= _minEth, "Insufficient output amount");
-        ERC20(cryptoDevTokenAddress).transfer(ethBought); 
-    }
-
-
+        ERC20(cryptoDevTokenAddress).transferFrom(
+            msg.sender,
+            address(this),
+            _tokensSold
+            ); 
+    } // Swap function, from CDT to ETH.
 }
