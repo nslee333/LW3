@@ -1,8 +1,8 @@
 const { ethers } = require("Hardhat");
 require("dotenv").config({ path: ".env"});
-const { CRYPT0_TOKEN_ADDRESS } = require("../constants");
+const { CRYPTO_TOKEN_ADDRESS } = require("../constants");
 
-const tokenAddress = CRYPT0_TOKEN_ADDRESS;
+const tokenAddress = CRYPTO_TOKEN_ADDRESS;
 
 
 async function main() {
