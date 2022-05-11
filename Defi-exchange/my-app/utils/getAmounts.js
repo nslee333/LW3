@@ -1,10 +1,10 @@
-import { Contract, CONTRACT } from "ethers";
 import {
     EXCHANGE_CONTRACT_ADDRESS,
     EXCHANGE_CONTRACT_ABI,
     TOKEN_CONTRACT_ADDRESS,
     TOKEN_CONTRACT_ABI
 } from "../constants";
+import { exchangeInstance, tokenInstance } from "./utils";
 
 export const getEtherBalance = async (
     provider,
@@ -29,11 +29,7 @@ export const getEtherBalance = async (
 export const getCDTokensBalance = async (provider, address) => {
     try {
         
-        const tokenContract = new Contract(
-            TOKEN_CONTRACT_ADDRESS,
-            TOKEN_CONTRACT_ABI,
-            provider
-        );
+        const tokenContract = tokenInstance(provider);
         const balanceOfCryptoDevTokens = await tokenContract.balanceOf(address);
         return balanceOfCryptoDevTokens;
 
@@ -44,12 +40,8 @@ export const getCDTokensBalance = async (provider, address) => {
 
 export const getLPTokensBalance = async (provider, address) => {
     try {
-        const exchangeContract = new Contract(
-            EXCHANGE_CONTRACT_ADDRESS,
-            EXCHANGE_CONTRACT_ABI,
-            provider
-        );
 
+        const exchangeContract = exchangeInstance(provider);
         const balanceOfLPTokens = await exchangeContract.getBalance(address);
         return balanceOfLPTokens;
 
@@ -60,17 +52,10 @@ export const getLPTokensBalance = async (provider, address) => {
 
 export const getReserveOfCDTokens = async (provider) => {
     try {
-        
-        const exchangeContract = new Contract(
-            EXCHANGE_CONTRACT_ADDRESS,
-            EXCHANGE_CONTRACT_ABI,
-            provider
-        );
 
-        
-
-
-
+        const exchangeContract = exchangeInstance(provider);
+        const reserve = await exchangeContract.getReserve();
+        return reserve;
 
     } catch (error) {
         console.error(err);
