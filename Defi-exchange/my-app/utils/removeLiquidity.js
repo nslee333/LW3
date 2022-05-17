@@ -6,7 +6,7 @@ export const removeLiquidity = async (signer, removeLPTokensWei) => {
     await tx.wait();
 };
 
-export const getTokensAfterRemove = async (
+export const getTokensAfterRemove = async ( // Call this function input provider, tokens, _ethBalance and CDT token reserve and get the correct amount of tokens according to the ratio.
     provider,
     removeLPTokensWei,
     _ethBalance,
