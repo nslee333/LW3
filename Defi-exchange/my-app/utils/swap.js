@@ -1,4 +1,5 @@
-import {exchangeInstance} from './utils';
+import {exchangeInstance, tokenInstance} from './utils';
+import { EXCHANGE_CONTRACT_ADDRESS } from '../constants';
 
 
 
@@ -47,14 +48,23 @@ export const swapTokens = async (
         tx = await exchangeContract.ethToCryptoDevToken(
             tokensToBeReceivedAfterSwap,
             {
-                value: swapAmountWei,
+                value: swapAmountWei, // Why is this here?
             }
         );
     } else {
+        
+        tx = await tokenContract.approve(
+            EXCHANGE_CONTRACT_ADDRESS,
+            swapAmountWei.toString()
+        );
+        
+        
+        
+        
         tx = await exchangeContract.cryptoDevTokenToEth(
             swapAmountWei,
             tokensToBeReceivedAfterSwap
         );
     }
     await tx.wait();
-}
+};
