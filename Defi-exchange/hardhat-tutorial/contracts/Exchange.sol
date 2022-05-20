@@ -64,7 +64,7 @@ contract Exchange is ERC20 {
     } 
     // This is withdrawing the liquidity from both sides - 
 
-    function getAmountOfTokens(
+    function getAmountOfTokens( // This returns the correct amount of tokens according to the xy=k ratio with the fee taken out.
         uint256 inputAmount, // Tokens that the user wants to buy, or already has bought
         uint256 inputReserve, // 
         uint256 outputReserve
@@ -83,19 +83,25 @@ contract Exchange is ERC20 {
     // Then subtracts the fee from the input amount, then 
 
 
-    function ethToCryptoDevToken(uint _minTokens) public payable {
+
+
+    function ethToCryptoDevToken(uint _minTokens) public payable { // This function checks and makes sure that the tokens to be bought are greater than the minTokens and then transfers
+    // The tokens to the address.
+    // This function swaps from eth to CDT.
         uint256 tokenReserve = getReserve(); // Gets the amount of CDT tokens that this contract owns.
-        uint256 tokensBought = getAmountOfTokens(
+        uint256 tokensBought = getAmountOfTokens( // Assign a variable to the returned value of xy=k ratio with the fee taken out.
             msg.value,
             address(this).balance - msg.value,
             tokenReserve
         ); // Get the proper amount of tokens after the fee and following the xy=k formula. If 10 will return 9.80.
 
-        require(tokensBought >= _minTokens, "Insufficient output amount"); // Make sure that the amount to be purcahsed is bigger than the minimum amount.
-        ERC20(cryptoDevTokenAddress).transfer(msg.sender, tokensBought); 
+        require(tokensBought >= _minTokens, "Insufficient output amount"); // Make sure that the amount to be purchased is bigger than the minimum amount.
+        ERC20(cryptoDevTokenAddress).transfer(msg.sender, tokensBought);  // Transfer the amount of tokens bought to the user address.
     } // Swap function from eth to cdt.
 
     function CryptoDevTokenToEth(uint _tokensSold, uint _minEth) public {
+        // This function swaps from CDT to eth. 
+        // It gets the amount of tokens according to the xy = k formula with the fee taken out, then transfers the amount of tokens to be sold from the user's wallet and
         uint256 tokenReserve = getReserve();
         uint256 ethBought = getAmountOfTokens(
             _tokensSold,

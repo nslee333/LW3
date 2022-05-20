@@ -30,7 +30,7 @@ reservedCd
         )
     }
 
-    return amountOfTokens;
+    return amountOfTokens; // Returns the correct amount of tokens according to what is selected.
 
 }
 
@@ -48,12 +48,12 @@ export const swapTokens = async ( // This function will take in a signer, the am
         tx = await exchangeContract.ethToCryptoDevToken(
             tokensToBeReceivedAfterSwap,
             {
-                value: swapAmountWei, // Why is this here? 
+                value: swapAmountWei, // Why is this here?  Maybe this passes in the value? I'd have to see.
             } 
         );
     } else {
         
-        tx = await tokenContract.approve(
+        tx = await tokenContract.approve( 
             EXCHANGE_CONTRACT_ADDRESS,
             swapAmountWei.toString()
         );
