@@ -1,9 +1,4 @@
-import {
-    EXCHANGE_CONTRACT_ADDRESS,
-    EXCHANGE_CONTRACT_ABI,
-    TOKEN_CONTRACT_ADDRESS,
-    TOKEN_CONTRACT_ABI
-} from "../constants";
+import { EXCHANGE_CONTRACT_ADDRESS } from "../constants";
 import { exchangeInstance, tokenInstance } from "./utils";
 
 export const getEtherBalance = async (
@@ -12,7 +7,7 @@ export const getEtherBalance = async (
     contract = false
 ) => {
     try {
-        if(contract) {
+        if (contract) {
             const balance = await provider.getBalance(EXCHANGE_CONTRACT_ADDRESS);
             return balance;
         } else {
@@ -21,14 +16,14 @@ export const getEtherBalance = async (
         }
     } catch (error) {
         console.error(err);
-        return 0;
+        return 0; // Why do we put a return zero value here?
     } // try catch, pass in provider, address, contract (default to false) if contract is true, return the balance of the contract, else, return the value of the address balance.
 
 }
 
 export const getCDTokensBalance = async (provider, address) => {
     try {
-        
+
         const tokenContract = tokenInstance(provider);
         const balanceOfCryptoDevTokens = await tokenContract.balanceOf(address);
         return balanceOfCryptoDevTokens;
@@ -57,7 +52,7 @@ export const getReserveOfCDTokens = async (provider) => {
         const reserve = await exchangeContract.getReserve();
         return reserve;
 
-    } catch (error) {
+    } catch (error) { // Get an instance of the exchange contract, get and return the value of the amount of CD tokens in the reserve.
         console.error(err);
     }
 }

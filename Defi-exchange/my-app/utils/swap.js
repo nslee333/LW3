@@ -34,8 +34,8 @@ reservedCd
 
 }
 
-export const swapTokens = async (
-    signer,
+export const swapTokens = async ( // This function will take in a signer, the amount to be swapped in Wei 
+    signer, 
     swapAmountWei,
     tokensToBeReceivedAfterSwap,
     ethSelected
@@ -44,12 +44,12 @@ export const swapTokens = async (
     const tokenContract = await tokenInstance(signer);
     let tx;
 
-    if (ethSelected) {
+    if (ethSelected) { // If ethSelected is true, call the contract's ethToCryptoDevToken function, with 
         tx = await exchangeContract.ethToCryptoDevToken(
             tokensToBeReceivedAfterSwap,
             {
-                value: swapAmountWei, // Why is this here?
-            }
+                value: swapAmountWei, // Why is this here? 
+            } 
         );
     } else {
         
