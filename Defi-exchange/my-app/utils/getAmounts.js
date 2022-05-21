@@ -23,9 +23,7 @@ export const getEtherBalance = async (
 
 export const getCDTokensBalance = async (provider, address) => {
     try {
-
-        const tokenContract = tokenInstance(provider);
-        const balanceOfCryptoDevTokens = await tokenContract.balanceOf(address);
+        const balanceOfCryptoDevTokens = provider.getBalance(address);
         return balanceOfCryptoDevTokens;
 
     } catch (error) {
@@ -36,8 +34,7 @@ export const getCDTokensBalance = async (provider, address) => {
 export const getLPTokensBalance = async (provider, address) => {
     try {
 
-        const exchangeContract = exchangeInstance(provider);
-        const balanceOfLPTokens = await exchangeContract.getBalance(address);
+        const balanceOfLPTokens = await provider.getBalance(address);
         return balanceOfLPTokens;
 
     } catch (error) {

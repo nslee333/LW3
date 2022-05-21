@@ -1,2 +1,22 @@
-Notes on the DEX project.
+Functions in the utils files.
 
+RemoveLiquidity.js:
+
+- removeLiquidity()
+- getTokensAfterRemove()
+
+AddLiquidity.js
+
+- addLiquidity()
+- calculateCD()
+
+Swap.js
+
+- getAmountOfTokensReceivedFromSwap()
+- swapTokens()
+
+GetAmounts.js
+
+- getEtherBalance()
+- getLPTokensBalance()
+- getReserveOfCDTokens()

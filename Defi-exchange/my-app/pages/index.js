@@ -2,6 +2,7 @@ import { BigNumber, providers, utils } from "ethers";
 import Head from "next/head";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
+import { EXCHANGE_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { addLiquidity, calculateCd} from "../utils/addLiquidity";
 import {
@@ -36,7 +37,7 @@ export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
-
+  console.log(TOKEN_CONTRACT_ADDRESS, EXCHANGE_CONTRACT_ADDRESS);
   const getAmounts = async () => { // This function gets the inputs (address and provider/signer) and gets the balances from the utility files, which then calls the contract functions
     // Which get the values, then updates the react hooks for sustaining the values.
     try {
@@ -47,7 +48,7 @@ export default function Home() {
 
       const _ethBalance = await getEtherBalance(provider, address);
       const _cdBalance = await getCDTokensBalance(provider, address);
-      const _lpBalance = await getLPBalance(provider, address);
+      const _lpBalance = await getLPTokensBalance(provider, address);
       const _reserveCD = await getReserveOfCDTokens(provider);
       const _ethBalanceContract = await getEtherBalance(provider, null, true);
 
@@ -277,6 +278,7 @@ export default function Home() {
               <button className={styles.button} onClick={_addLiquidity}>
                 Add Liquidity
               </button>
+            
             </div>
             ) : (
               <div>
