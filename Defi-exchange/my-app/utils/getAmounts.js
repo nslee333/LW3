@@ -15,7 +15,7 @@ export const getEtherBalance = async (
             return balance;
         }
     } catch (error) {
-        console.error(err);
+        console.error(error);
         return 0; // Why do we put a return zero value here?
     } // try catch, pass in provider, address, contract (default to false) if contract is true, return the balance of the contract, else, return the value of the address balance.
 
@@ -29,7 +29,7 @@ export const getCDTokensBalance = async (provider, address) => {
         return balanceOfCryptoDevTokens;
 
     } catch (error) {
-        console.error(err);
+        console.error(error);
     }
 } // Get an instance of the token contract, get and return the value of the balance of the address passed in.
 
@@ -41,7 +41,7 @@ export const getLPTokensBalance = async (provider, address) => {
         return balanceOfLPTokens;
 
     } catch (error) {
-        console.error(err);
+        console.error(error);
     }
 } // Get an instance of the exchange contract, get and return the value of the balance of the address passed in.
 
@@ -53,6 +53,6 @@ export const getReserveOfCDTokens = async (provider) => {
         return reserve;
 
     } catch (error) { // Get an instance of the exchange contract, get and return the value of the amount of CD tokens in the reserve.
-        console.error(err);
+        console.error(error);
     }
 }

@@ -2,7 +2,7 @@ import { BigNumber, providers, utils } from "ethers";
 import Head from "next/head";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
-import styles from "../styules/Home.module.css";
+import styles from "../styles/Home.module.css";
 import { addLiquidity, calculateCd} from "../utils/addLiquidity";
 import {
   getCDTokensBalance,
@@ -19,7 +19,7 @@ import { swapTokens, getAmountOfTokensReceivedFromSwap } from "../utils/swap";
 export default function Home() {
   const zero = BigNumber.from(0);
   const [loading, setLoading] = useState(false);
-  const [liquidity, setLiquidity] = useState(true);
+  const [liquidityTab, setLiquidityTab] = useState(true);
   const [ethBalance, setEthBalance] = useState(zero);
   const [reservedCD, setReservedCD] = useState(zero);
   const [etherBalanceContract, setEtherBalanceContract] = useState(zero);
@@ -240,7 +240,7 @@ export default function Home() {
       return <button className={styles.button}>Loading...</button>;
     }
 
-    if (liquidityTab) {
+    if(liquidityTab) {
       return(
         <div>
           <div className={styles.description}>
@@ -272,7 +272,7 @@ export default function Home() {
               className={styles.input}
               />
               <div className={styles.inputDiv}>
-                {'You will need ${utils.formatEther(addCDTokens)} Crypto Dev Tokens'}
+                {`You will need ${utils.formatEther(addCDTokens)} Crypto Dev Tokens`}
               </div>
               <button className={styles.button} onClick={_addLiquidity}>
                 Add Liquidity
@@ -300,7 +300,7 @@ export default function Home() {
                 className={styles.input}
                 />
                 <div className={styles.inputDiv}>
-                {'You wil need ${utils.formatEther(addCDTokens) Crypto Dev Tokens'}
+                {`You wil need ${utils.formatEther(addCDTokens)} Crypto Dev Tokens`}
                 </div>
                 <button className={styles.button} onClick={_addLiquidity}>
                   Add Liquidity
@@ -317,7 +317,7 @@ export default function Home() {
                     className={styles.input}
                   />
                   <div className={styles.inputDiv}>
-                    {'You will get ${utils.formatEther(removeCD)} Crypto Dev Tokens and ${utils.formatEther(removeEther)} Ether'}
+                    {`You will get ${utils.formatEther(removeCD)} Crypto Dev Tokens and ${utils.formatEther(removeEther)} Ether`}
                   </div>
                   <button className={styles.button} onClick={_removeLiquidity}>
                     Remove Liquidity
@@ -353,60 +353,58 @@ export default function Home() {
               </select>
               <br />
               <div className={styles.inputDiv}>
-                
+                {ethSelected 
+                  ? `You will get ${utils.formatEther(tokensToBeReceivedAfterSwap)} Crypto Dev Tokens`
+                  : `You will get ${utils.formatEther(tokensToBeReceivedAfterSwap)} Ether`}
+                    </div>
+                    <button className={styles.button} onClick={_swapTokens}>
+                      Swap Tokens
+                    </button>
               </div>
-
-
-
-          </div>
-        )
+            );
       }
+  };
 
+  return (
+    <div>
+      <Head>
+        <title>Crypto Devs</title>
+        <meta name="description" content="Whitelist-Dapp" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+    <div className={styles.main}>
+      <div>
+        <h1 className={styles.title}>Welcome to Crypto Devs Exchange!</h1>
+        <div className={styles.description}>
+          Exchange Ethereum &#60;&#62; Crypto Dev Tokens
+      </div>
+      <div>
+        <button className={styles.button}
+          onClick={() => {
+            setLiquidityTab(!liquidityTab);
+          }}
+        >
+          Liquidity
+        </button>
+        <button
+          className={styles.button}
+          onClick={() => {
+            setLiquidityTab(false);
+          }}
+        >
+          Swap
+        </button>
+      </div>
+      {renderButton()}
+    </div>
+      <div>
+            <img className={styles.image} src="./13.svg" />
+      </div>
+    </div>
 
-
-
-
-
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <footer className={styles.footer}>
+          Made with &#10084; by Nathan Lee
+    </footer>
+  </div>
+  );
 }
