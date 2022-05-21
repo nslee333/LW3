@@ -277,20 +277,90 @@ export default function Home() {
               <button className={styles.button} onClick={_addLiquidity}>
                 Add Liquidity
               </button>
+            </div>
+            ) : (
+              <div>
+              <input
+                type="number"
+                placeholder="Amount Of Ether"
+                onChange={async (e) => {
+                  setAddEther(e.target.value || "0");
+
+                  const _addCDTokens = await calculateCd(
+                    e.target.value || "0",
+                    etherBalanceContract,
+                    reservedCD
+                  );
+                  setAddCDTokens(_addCDTokens);
+                  
+                  
+                  
+                
+                }}
+                className={styles.input}
+                />
+                <div className={styles.inputDiv}>
+                {'You wil need ${utils.formatEther(addCDTokens) Crypto Dev Tokens'}
+                </div>
+                <button className={styles.button} onClick={_addLiquidity}>
+                  Add Liquidity
+                </button>
+              </div>
             )}
-          
+                <div>
+                  <input
+                    type="number"
+                    placeholder="Amount Of LP Tokens"
+                    onChange={async (e) => {
+                      setRemoveLPTokens(e.target.value || "0");
+                    }}
+                    className={styles.input}
+                  />
+                  <div className={styles.inputDiv}>
+                    {'You will get ${utils.formatEther(removeCD)} Crypto Dev Tokens and ${utils.formatEther(removeEther)} Ether'}
+                  </div>
+                  <button className={styles.button} onClick={_removeLiquidity}>
+                    Remove Liquidity
+                  </button>
+                </div>
+              </div>
+            </div>
+          );
+      } else {
+        return (
+          <div>
+            <input 
+              type="number"
+              placeholder="Amount"
+              onChange={async (e) => {
+                setSwapAmount(e.target.value || "0");
+              }}
+              className={styles.input}
+              value={swapAmount}
+              />
+            <select
+              className={styles.select}
+              name="dropdown"
+              id="dropdown"
+              onChange={async () => { 
+                setEthSelected(!ethSelected);
+                await _getAmountOfTokensReceivedFromSwap(0);
+                setSwapAmount("");
+              }}
+              >
+                <option value="eth">Ethereum</option>
+                <option value="cryptoDevToken">Crypto Dev Token</option>              
+              </select>
+              <br />
+              <div className={styles.inputDiv}>
+                
+              </div>
+
+
+
           </div>
-          
-
-
-
-
-
-
-
-        </div>
-      );
-    }
+        )
+      }
 
 
 
