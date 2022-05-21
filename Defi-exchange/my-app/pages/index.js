@@ -117,7 +117,7 @@ export default function Home() {
     }
   }
 
-  const _addLiquidity = async () => {
+  const _addLiquidity = async () => { 
     try {
       
       const addEtherWei = utils.parseEther(addEther.toString());
@@ -142,7 +142,7 @@ export default function Home() {
   }
 
 
-  const _removeLiquidity = async () => {
+  const _removeLiquidity = async () => { // Remove liquidity from the DEX, update the values of all the hooks then update the removeValue hooks.
     try {
       
       const signer = await getProviderOrSigner(true);
@@ -153,7 +153,7 @@ export default function Home() {
       // Then the contract burns the LP tokens, and then sends the ether and CDTokens to the user address.
       setLoading(false);
 
-      await getAmounts(); //
+      await getAmounts(); // Get and update the values of all the amount hooks.
       setRemoveCD(zero); // Set the amount to be removed to zero.
       setRemoveEther(zero); // Set the amount to be removed to zero.
       
@@ -165,7 +165,139 @@ export default function Home() {
     }
   }
 
+  const _getTokensAfterRemove = async (_removeLPTokens) => { // 
+    try {
 
+      const provider = await getProviderOrSigner();
+      const removeLPTokensWei = utils.parseEther(_removeLPTokens);
+      const _ethBalance = await getEtherBalance(provider, null, true);
+      const cryptoDevTokenReserve = await getReserveOfCDTokens(provider); // Calls the contract getReserve() function which goes to the CDT contract and returns the balance of the CDT tokens
+      // In the DEX's balance.
+      const { _removeEther, _removeCD } = await getTokensAfterRemove(  // Assigns two variables to getTokensAfterRemove function which inputs the values, and returns the proper  value 
+      // of how much Ether and CDT to give back to Liquidity provider.
+        provider,
+        removeLPTokensWei,
+        _ethBalance,
+        cryptoDevTokenReserve
+      ); 
+      setRemoveEther(_removeEther);
+      setRemoveCD(_removeCD); // Then we take these values and update the state hooks for sustaining those values for our use. 
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const connectWallet = async () => {
+    try {
+      await getProviderOrSigner();
+      setWalletConnected(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  const getProviderOrSigner = async (needSigner = false) => {
+    const provider = await web3ModalRef.current.connect();
+    const web3Provider = new providers.Web3Provider(provider);
+
+    const { chainId } = await web3Provider.getNetwork();
+    if (chainId !== 5) {
+      window.alert("Change the network to Goerli");
+      throw new Error("Change the network to Goerli");
+    }
+
+    if (needSigner) {
+      const signer = web3Provider.getSigner();
+      return signer;
+    }
+    return web3Provider;
+  }
+
+  useEffect(() => {
+    if (!walletConnected) {
+      web3ModalRef.current = new Web3Modal({
+        network: "goerli",
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+      connectWallet();
+      getAmounts();
+    }
+  }, [walletConnected]);
+
+  const renderButton = () => {
+    if (!walletConnected) {
+      return (
+        <button onClick={connectWallet} className={styles.button}>
+        Connect your Wallet 
+        </button>
+      );
+    }
+
+    if (loading) {
+      return <button className={styles.button}>Loading...</button>;
+    }
+
+    if (liquidityTab) {
+      return(
+        <div>
+          <div className={styles.description}>
+            You have: 
+            <br />
+            {utils.formatEther(cdBalance)} Crypto Dev Tokens
+            <br />
+            {utils.formatEther(ethBalance)} Ether
+            <br />
+            {utils.formatEther(LPBalance)} Crypto Dev LP Tokens
+          </div>  
+          <div>
+            {utils.parseEther(reservedCD.toString()).eq(zero) ? (
+              <div>
+                <input
+                  type="number"
+                  placeholder="Amount Of Ether"
+                  onChange={(e) => setAddEther(e.target.value || "0")}
+                  className={styles.input}
+                />
+              <input
+                type="number"
+                placeholder="Amount Of Crypto Dev Tokens"
+                onChange={(e) => 
+                setAddCDTokens(
+                  BigNumber.from(utils.parseEther(e.target.value || "0" ))
+                )
+              }
+              className={styles.input}
+              />
+              <div className={styles.inputDiv}>
+                {'You will need ${utils.formatEther(addCDTokens)} Crypto Dev Tokens'}
+              </div>
+              <button className={styles.button} onClick={_addLiquidity}>
+                Add Liquidity
+              </button>
+            )}
+          
+          </div>
+          
+
+
+
+
+
+
+
+        </div>
+      );
+    }
+
+
+
+
+
+
+  }
 
 
 
