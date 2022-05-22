@@ -37,7 +37,6 @@ export default function Home() {
   const [walletConnected, setWalletConnected] = useState(false);
   const web3ModalRef = useRef();
 
-  console.log(TOKEN_CONTRACT_ADDRESS, EXCHANGE_CONTRACT_ADDRESS);
   const getAmounts = async () => { // This function gets the inputs (address and provider/signer) and gets the balances from the utility files, which then calls the contract functions
     // Which get the values, then updates the react hooks for sustaining the values.
     try {
@@ -55,7 +54,6 @@ export default function Home() {
       setEtherBalanceContract(_ethBalance);
       setCDBalance(_cdBalance);
       setLPBalance(_lpBalance);
-      setReservedCD(_reserveCD);
       setReservedCD(_reserveCD);
       setEtherBalanceContract(_ethBalanceContract);
     } catch (error) {
@@ -254,7 +252,7 @@ export default function Home() {
             {utils.formatEther(LPBalance)} Crypto Dev LP Tokens
           </div>  
           <div>
-            {utils.parseEther(reservedCD.toString()).eq(zero) ? (
+           {utils.parseEther(reservedCD.toString()).eq(zero) ? (
               <div>
                 <input
                   type="number"
