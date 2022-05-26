@@ -1,5 +1,5 @@
 import { Contract } from "ethers";
-import { EXCHANGE_CONTRACT_ABI, EXCHANGE_CONTRACT_ADDRESS } from "../constants";
+import { EXCHANGE_CONTRACT_ABI, EXCHANGE_CONTRACT_ADDRESS, TOKEN_CONTRACT_ABI, TOKEN_CONTRACT_ADDRESS } from "../constants";
 import { exchangeInstance, tokenInstance } from "./utils";
 
 export const getEtherBalance = async (
@@ -24,6 +24,11 @@ export const getEtherBalance = async (
 
 export const getCDTokensBalance = async (provider, address) => {
     try {
+        const tokenContract = await tokenInstance(provider);
+        FIX THIS SHIT
+
+
+
         const balanceOfCryptoDevTokens = provider.getBalance(address);
         return balanceOfCryptoDevTokens;
 
@@ -45,13 +50,13 @@ export const getLPTokensBalance = async (provider, address) => {
 
 export const getReserveOfCDTokens = async (provider) => {
     try {
-        const exchangeContract = new Contract(
-            EXCHANGE_CONTRACT_ADDRESS,
-            EXCHANGE_CONTRACT_ABI,
+        const tokenContract = new Contract(
+            TOKEN_CONTRACT_ADDRESS,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            TOKEN_CONTRACT_ABI,
             provider
         )
         // const exchangeContract = exchangeInstance(provider);
-        const reserve = await exchangeContract.getReserve();
+        const reserve = await tokenContract.getReserve();
         return reserve;
 
     } catch (error) { // Get an instance of the exchange contract, get and return the value of the amount of CD tokens in the reserve.
