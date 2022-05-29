@@ -21,7 +21,7 @@ export default function Home() {
   const zero = BigNumber.from(0);
   const [loading, setLoading] = useState(false);
   const [liquidityTab, setLiquidityTab] = useState(true);
-  const [ethBalance, setEthBalance] = useState(zero);
+  const [ethBalance, setEtherBalance] = useState(zero);
   const [reservedCD, setReservedCD] = useState(zero);
   const [etherBalanceContract, setEtherBalanceContract] = useState(zero);
   const [cdBalance, setCDBalance] = useState(zero);
@@ -51,7 +51,7 @@ export default function Home() {
       const _reserveCD = await getReserveOfCDTokens(provider);
       const _ethBalanceContract = await getEtherBalance(provider, null, true);
 
-      setEtherBalanceContract(_ethBalance);
+      setEtherBalance(_ethBalance);
       setCDBalance(_cdBalance);
       setLPBalance(_lpBalance);
       setReservedCD(_reserveCD);

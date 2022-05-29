@@ -29,7 +29,7 @@ export const getCDTokensBalance = async (provider, address) => {
 
 
 
-        const balanceOfCryptoDevTokens = provider.getBalance(address);
+        const balanceOfCryptoDevTokens = await tokenContract.balanceOf(address);
         return balanceOfCryptoDevTokens;
 
     } catch (error) {
@@ -39,8 +39,9 @@ export const getCDTokensBalance = async (provider, address) => {
 
 export const getLPTokensBalance = async (provider, address) => {
     try {
-
-        const balanceOfLPTokens = await provider.getBalance(address);
+        
+        const exchangeContract = await exchangeInstance(provider);
+        const balanceOfLPTokens = exchangeContract.balanceOf(address);
         return balanceOfLPTokens;
 
     } catch (error) {
@@ -50,11 +51,8 @@ export const getLPTokensBalance = async (provider, address) => {
 
 export const getReserveOfCDTokens = async (provider) => {
     try {
-        const exchangeContract = new Contract(
-            EXCHANGE_CONTRACT_ADDRESS,
-            EXCHANGE_CONTRACT_ABI,
-            provider
-        );
+        const exchangeContract = await exchangeInstance(provider);
+        
         // const exchangeContract = exchangeInstance(provider);
         const reserve = await exchangeContract.getReserve();
         return reserve;
