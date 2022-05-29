@@ -1,7 +1,7 @@
 import { exchangeInstance } from "./utils";
 
 export const removeLiquidity = async (signer, removeLPTokensWei) => {
-    const exchangeContract = exchangeInstance(signer);
+    const exchangeContract = await exchangeInstance(signer);
     const tx = await exchangeContract.removeLiquidity(removeLPTokensWei);
     await tx.wait();
 };
@@ -13,7 +13,7 @@ export const getTokensAfterRemove = async ( // Call this function input provider
     cryptoDevTokenReserve
 ) => {
     try {
-        const exchangeContract = exchangeInstance(provider);
+        const exchangeContract = await exchangeInstance(provider);
 
         const _totalSupply = await exchangeContract.totalSupply();
 

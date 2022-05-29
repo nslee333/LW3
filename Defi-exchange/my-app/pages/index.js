@@ -17,6 +17,8 @@ import {
 } from "../utils/removeLiquidity";
 import { swapTokens, getAmountOfTokensReceivedFromSwap } from "../utils/swap";
 
+console.log(EXCHANGE_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS);
+
 export default function Home() {
   const zero = BigNumber.from(0);
   const [loading, setLoading] = useState(false);
@@ -92,29 +94,29 @@ export default function Home() {
   const _getAmountOfTokensReceivedFromSwap = async (_swapAmount) => {
     try {
       
-      const _swapAmountWei = utils.parseEther(_swapAmount.toString());
+      const _swapAmountWei = utils.parseEther(_swapAmount.toString()); // Convert from string to an etherAmount in wei.
 
       if(!_swapAmountWei.eq(zero)) { // If the swap amount does not equal zero, then run this code.
         const provider = await getProviderOrSigner();
-        const _ethBalance = await getEtherBalance(provider, null, true);
+        const _ethBalance = await getEtherBalance(provider, null, true); // Get the ethBalance of the Exchange Contract.
         const amountOfTokens = await getAmountOfTokensReceivedFromSwap( // This goes into the swap.js file, which then correctly inputs the arguments for the ratio depending 
         // On if EthSelected is true, then the contract calculates the amount of tokens according to xy=k formula with fee withdrawn, then returns that token amount, 10 becomes 9.8 if 
         // There is a 1 % fee, then returns it to the swap.js then returns it to this function for use.
           _swapAmountWei,
           provider,
-          ethSelected,
-          _ethBalance,
-          reservedCD
+          ethSelected, // Enters in the RH value of ethSelected which is a boolean value.
+          _ethBalance, // Enters in the RH value of ethBalance which is a BigNumber value.
+          reservedCD // Enters in the RH value of reservedCD which is a BigNumber value.
         );
         setTokensToBeReceivedAfterSwap(amountOfTokens); // set this react hook value to the amount returned from the swap.js - contract.
       } else {
-        setTokensToBeReceivedAfterSwap(zero); // Else, set the hook to zero.
+        setTokensToBeReceivedAfterSwap(zero); // Sets the RH value to zero if the _swapAmountWei is zero.
       }
 
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   const _addLiquidity = async () => { 
     try {
@@ -257,7 +259,7 @@ export default function Home() {
                 <input
                   type="number"
                   placeholder="Amount Of Ether"
-                  onChange={(e) => setAddEther(e.target.value || "0")}
+                  onChange={(e) => setAddEther(e.target.value || "0")} // Why doesn't this have BigNumber.from(...) and the one below does?
                   className={styles.input}
                 />
               <input
@@ -265,7 +267,7 @@ export default function Home() {
                 placeholder="Amount Of Crypto Dev Tokens"
                 onChange={(e) => 
                 setAddCDTokens(
-                  BigNumber.from(utils.parseEther(e.target.value || "0" ))
+                  BigNumber.from(utils.parseEther(e.target.value || "0" )) // Here.
                 )
               }
               className={styles.input}
@@ -333,7 +335,8 @@ export default function Home() {
               type="number"
               placeholder="Amount"
               onChange={async (e) => {
-                setSwapAmount(e.target.value || "0");
+                setSwapAmount(e.target.value || "0"); // IF there is a change, Set this react hook value to: entered string OR 0 if nothing is entered.
+                await _getAmountOfTokensReceivedFromSwap(e.target.value || "0");
               }}
               className={styles.input}
               value={swapAmount}
@@ -343,8 +346,8 @@ export default function Home() {
               name="dropdown"
               id="dropdown"
               onChange={async () => { 
-                setEthSelected(!ethSelected);
-                await _getAmountOfTokensReceivedFromSwap(0);
+                setEthSelected(!ethSelected); // Switches the boolean value every time the change occurs.
+                await _getAmountOfTokensReceivedFromSwap(0); // This sets it to zero when the dropdown option changes, essentially resets it.
                 setSwapAmount("");
               }}
               >

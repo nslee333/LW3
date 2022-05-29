@@ -8,9 +8,9 @@ _swapAmountWei,
 provider,
 ethSelected,
 ethBalance,
-reservedCd
+reservedCD
 ) => {
-    const exchangeContract = exchangeInstance(provider);
+    const exchangeContract = await exchangeInstance(provider);
 
     let amountOfTokens;
      
@@ -19,15 +19,15 @@ reservedCd
         amountOfTokens = await exchangeContract.getAmountOfTokens(
             _swapAmountWei,
             ethBalance,
-            reservedCd,
+            reservedCD
         );
     } else { // This is the function but flipped, the amount to be swapped, with the CD tokens to be swapped and the CD reserve, and the eth balance, with the returned amount of 
         // Eth tokens to be recieved.
         amountOfTokens = await exchangeContract.getAmountOfTokens(
             _swapAmountWei,
-            reservedCd,
-            ethBalance,
-        )
+            reservedCD,
+            ethBalance
+        );
     }
 
     return amountOfTokens; // Returns the correct amount of tokens according to what is selected.
