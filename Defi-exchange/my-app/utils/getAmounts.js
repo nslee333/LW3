@@ -25,7 +25,7 @@ export const getEtherBalance = async (
 export const getCDTokensBalance = async (provider, address) => {
     try {
         const tokenContract = await tokenInstance(provider);
-        FIX THIS SHIT
+        
 
 
 
@@ -50,13 +50,13 @@ export const getLPTokensBalance = async (provider, address) => {
 
 export const getReserveOfCDTokens = async (provider) => {
     try {
-        const tokenContract = new Contract(
-            TOKEN_CONTRACT_ADDRESS,!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            TOKEN_CONTRACT_ABI,
+        const exchangeContract = new Contract(
+            EXCHANGE_CONTRACT_ADDRESS,
+            EXCHANGE_CONTRACT_ABI,
             provider
-        )
+        );
         // const exchangeContract = exchangeInstance(provider);
-        const reserve = await tokenContract.getReserve();
+        const reserve = await exchangeContract.getReserve();
         return reserve;
 
     } catch (error) { // Get an instance of the exchange contract, get and return the value of the amount of CD tokens in the reserve.
