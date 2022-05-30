@@ -24,7 +24,7 @@ contract Exchange is ERC20 {
         uint liquidity; 
         uint ethBalance = address(this).balance;
         uint cryptoDevTokenReserve = getReserve();
-        ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress); // ERC20 is a data type, and it's creating an instance of the address? not sure.
+        ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress); // ERC20 is a data type, and it's creating an instance of the address. dataType (ERC20) value (CDTAddress).
         
         
         if(cryptoDevTokenReserve == 0) {

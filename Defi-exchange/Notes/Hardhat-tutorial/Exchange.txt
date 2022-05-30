@@ -59,8 +59,7 @@ function addLiquidity(uint _amount) public payable returns (uint) { 1
     uint liquidity; 
     uint ethBalance = address(this).balance;
     uint cryptoDevTokenReserve = getReserve();
-    ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress); // ERC20 is a data type, and it's creating an instance of the address? not sure.
-    
+    ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress); 
     
     if(cryptoDevTokenReserve == 0) {
 
@@ -68,7 +67,7 @@ function addLiquidity(uint _amount) public payable returns (uint) { 1
 
         liquidity = ethBalance;
         _mint(msg.sender, liquidity);
-    // If this is the initial adding of funds, then it transfer the funds, then it mints the amount of LP tokens that is the exact same as the amount of eth deposiited.
+    
     } else {
         uint ethReserve = ethBalance - msg.value;
 
@@ -78,9 +77,6 @@ function addLiquidity(uint _amount) public payable returns (uint) { 1
         liquidity = (totalSupply() * msg.value/ ethReserve)/ ethReserve;
         _mint(msg.sender, liquidity);
     } 
-    // Else, Check that the amount of ether sent is correct, and then transfer the ether, then mint LP tokens according to the liquidity provided.
-
-    // Summary, 
     return liquidity;
 }
 
@@ -91,8 +87,24 @@ This function is used to add liquidity to the exchange.
 It takes in a _amount as an argument, and it has a conditional that checks if there is any CDTs in exchange's reserves. 
     1. If CDT reserves are zero, then it transfers the CDTs from the liquidity provider's address to the exchange, according to the amount argument. With no requirements.
         - Then it mints the Liquidity Provider Tokens to the User. 
+        - Set the liquidity to the ethBalance.
         - This is the initialization of the exchange, the first user sets the price, all liquidity added afterwards must follow the same ratio set by the initialization.
     2. Else, Check and make sure that the ether provided is correct (according to the ratio) 
         - then transfer the CDTs from the LP's address to the exchange, along with the Ether sent to the exchange contract.
-        - Then according to the ratio 
+        - Then according to the ratio, mint the proper LP tokens to the Liquidity Provider's address.
+        - Then calculate the updated liquidity value and assign it to the liquidity.
+    3. Return the value of liquidity.
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+- The initialization of the 'ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress);'
+    - This is creating an instance of the CDT contract, and assigning it to our variable so we can use it for calling functions.
+    - ERC20 (dataType) cryptoDevToken (variable).
+
+- If the CDT reserves are zero, meaning that the exchange hasn't been intialized yet.
+    - Then Transfer the CDT tokens that the LP has to the exchange reserves.
+    - Liquidity's value is set to the Eth balance of the contract.
+    - Then mint the LP tokens to the LP address.
+        - The amount of LP tokens to be minted is equal to the Eth balance since this is the initialization of exchange.
+- ELSE
+    - 
