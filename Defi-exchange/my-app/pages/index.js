@@ -17,7 +17,6 @@ import {
 } from "../utils/removeLiquidity";
 import { swapTokens, getAmountOfTokensReceivedFromSwap } from "../utils/swap";
 
-console.log(EXCHANGE_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS);
 
 export default function Home() {
   const zero = BigNumber.from(0);
