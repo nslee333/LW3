@@ -2,7 +2,6 @@ import { BigNumber, providers, utils } from "ethers";
 import Head from "next/head";
 import React, {useEffect, useRef, useState} from "react";
 import Web3Modal from "web3modal";
-import { EXCHANGE_CONTRACT_ADDRESS, TOKEN_CONTRACT_ADDRESS } from "../constants";
 import styles from "../styles/Home.module.css";
 import { addLiquidity, calculateCd} from "../utils/addLiquidity";
 import {
@@ -314,6 +313,8 @@ export default function Home() {
                     placeholder="Amount Of LP Tokens"
                     onChange={async (e) => {
                       setRemoveLPTokens(e.target.value || "0");
+
+                      await _getTokensAfterRemove(e.target.value || "0");
                     }}
                     className={styles.input}
                   />
