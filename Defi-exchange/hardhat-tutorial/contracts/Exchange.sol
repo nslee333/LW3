@@ -40,7 +40,7 @@ contract Exchange is ERC20 {
             uint cryptoDevTokenAmount = (msg.value * cryptoDevTokenReserve)/(ethReserve); // Come back to this later. 
             require(_amount >= cryptoDevTokenAmount, "Amount Of tokens sent is less than the minimum tokens required."); 
             cryptoDevToken.transferFrom(msg.sender, address(this), cryptoDevTokenAmount);
-            liquidity = (totalSupply() * msg.value/ ethReserve)/ ethReserve;
+            liquidity = (totalSupply() * msg.value) / ethReserve;
             _mint(msg.sender, liquidity);
         } 
         // Else, Check that the amount of ether sent is correct, and then transfer the ether, then mint LP tokens according to the liquidity provided.

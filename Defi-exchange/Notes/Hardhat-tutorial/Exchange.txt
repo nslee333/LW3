@@ -48,4 +48,51 @@ contract Exchange is ERC20 {
         - The constructor is requiring that the address provided is not a null address, and throws an error if it is null.
         - It Initializes the state variable 'cryptoDevTokenAddress' with the constuctor argument passed in at deployment. 
 3. This function is used to get the Total Supply of CDT tokens that the exchange owns.
-    - Specifically it calls the CDT contract, and 
+    - Specifically it calls the CDT contract's 'balanceOf' function which is declared in the OZ ERC20 contract.
+        - balanceOf goes to the OZ ERC20 contract, then goes to an internal mapping, and grabs the balance of the address and returns it to the function that called it.
+        - Gets the balance of CDTs that exchange owns, and returns the value to the getReserve function call.
+    - The 'ERC20(cryptoDevTokenAddress)' is creating an instance of the contract for our use in our contract without creating an interface.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+function addLiquidity(uint _amount) public payable returns (uint) { 1
+    uint liquidity; 
+    uint ethBalance = address(this).balance;
+    uint cryptoDevTokenReserve = getReserve();
+    ERC20 cryptoDevToken = ERC20(cryptoDevTokenAddress); // ERC20 is a data type, and it's creating an instance of the address? not sure.
+    
+    
+    if(cryptoDevTokenReserve == 0) {
+
+        cryptoDevToken.transferFrom(msg.sender, address(this), _amount);
+
+        liquidity = ethBalance;
+        _mint(msg.sender, liquidity);
+    // If this is the initial adding of funds, then it transfer the funds, then it mints the amount of LP tokens that is the exact same as the amount of eth deposiited.
+    } else {
+        uint ethReserve = ethBalance - msg.value;
+
+        uint cryptoDevTokenAmount = (msg.value * cryptoDevTokenReserve)/(ethReserve); // Come back to this later. 
+        require(_amount >= cryptoDevTokenAmount, "Amount Of tokens sent is less than the minimum tokens required."); 
+        cryptoDevToken.transferFrom(msg.sender, address(this), cryptoDevTokenAmount);
+        liquidity = (totalSupply() * msg.value/ ethReserve)/ ethReserve;
+        _mint(msg.sender, liquidity);
+    } 
+    // Else, Check that the amount of ether sent is correct, and then transfer the ether, then mint LP tokens according to the liquidity provided.
+
+    // Summary, 
+    return liquidity;
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+This function is used to add liquidity to the exchange.
+
+It takes in a _amount as an argument, and it has a conditional that checks if there is any CDTs in exchange's reserves. 
+    1. If CDT reserves are zero, then it transfers the CDTs from the liquidity provider's address to the exchange, according to the amount argument. With no requirements.
+        - Then it mints the Liquidity Provider Tokens to the User. 
+        - This is the initialization of the exchange, the first user sets the price, all liquidity added afterwards must follow the same ratio set by the initialization.
+    2. Else, Check and make sure that the ether provided is correct (according to the ratio) 
+        - then transfer the CDTs from the LP's address to the exchange, along with the Ether sent to the exchange contract.
+        - Then according to the ratio 
+
