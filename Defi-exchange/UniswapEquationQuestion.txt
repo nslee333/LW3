@@ -1,0 +1,21 @@
+Alright this is going to be long winded but here it goes.
+
+I've been reviewing solving equations to understand implementing the Uniswap X*Y=K formula.
+
+(X + XΔ) * (Y - YΔ) = K
+
+This equation makes sense to me but I was working on converting the formula and solving for the YΔ.
+
+YΔ = (Y * XΔ) / (X + XΔ)
+
+The ' / (X + XΔ)' part makes sense to me since when we want to convert to solve for YΔ, we have to divide (X + XΔ) by both sides to eliminate (X + XΔ) 
+	from the left side of the equation like below.
+
+[(X + XΔ) *] (Y - YΔ) = K
+[ / (X + XΔ] 		    [ / (X + XΔ)]
+
+After being divided by both sides, the equation becomes this:
+
+(Y - YΔ) = ? / (X + XΔ)
+
+Then in order to isolate YΔ, we add Y to both sides.

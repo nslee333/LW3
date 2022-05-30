@@ -1,5 +1,51 @@
-
 These are my notes about the Exchange.sol contract.
 
 This exchange is a working version of the Uniswap V1 AMM model.
 
+At the core of the Uniswap V1 AMM model, there is the x*y=k formula.
+
+This formula helps calculate how much of one token will be received for another token.
+
+x*y=k
+
+Let's say that x stands for ether, and y stands for bitcoin, when both are multiplied, you get K which is a constant product.
+
+No matter how much ether and bitcoin are exchanged, the formula constant K will still equal the same amount regardless of which reserve gets depleted more.
+
+Let's put that into a formula.
+
+(X + XΔ) * (Y - YΔ) = K
+
+Where Δ stands for change in reserve amounts after a swap, the formula will always equal the contant K.
+
+If we were to create a function that would calculate the value of a bitcoin to ether swap, we would manipulate the formula a bit (solve for x) to help calculate the value automatically.
+
+YΔ = (Y * XΔ) / (X + XΔ) // Everything makes sense except for the Y * XΔ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+This will all come in handy understanding the Exchange.sol contract.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+contract Exchange is ERC20 {
+
+    
+    address public cryptoDevTokenAddress; 1.
+    
+
+    constructor(address _cryptoDevToken) ERC20 ("CryptoDev LP Token", "CDLP") { 2
+        require(_cryptoDevToken != address(0), "Token address passed is a null address");
+        cryptoDevTokenAddress = _cryptoDevToken; 
+    }
+
+    function getReserve() public view returns (uint) { 3
+        return ERC20(cryptoDevTokenAddress).balanceOf(address(this)); // Goes to the mapping in the CryptoDevToken contract, and gets how much tokens this address owns.
+    }
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+1. This is the a state variable for the Token Address that we will be our second token which we will exchange for ether.
+2. This constructor is taking in.
+    1. The address of the CDT contract, as an argument, and also initializing the ERC20 contract's constructor with The name of the token and the symbol of the token.
+        - The constructor is requiring that the address provided is not a null address, and throws an error if it is null.
+        - It Initializes the state variable 'cryptoDevTokenAddress' with the constuctor argument passed in at deployment. 
+3. This function is used to get the Total Supply of CDT tokens that the exchange owns.
+    - Specifically it calls the CDT contract, and 
