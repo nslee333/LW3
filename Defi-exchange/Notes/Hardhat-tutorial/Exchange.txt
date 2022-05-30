@@ -1,0 +1,5 @@
+
+These are my notes about the Exchange.sol contract.
+
+This exchange is a working version of the Uniswap V1 AMM model.
+
