@@ -2,7 +2,7 @@ const { ethers } = require("Hardhat");
 require("dotenv").config({ path: ".env"});
 const { CRYPTO_TOKEN_ADDRESS } = require("../constants");
 
-const tokenAddress = CRYPTO_TOKEN_ADDRESS;
+const tokenAddress = CRYPTO_TOKEN_ADDRESS; // Getting the address of the CDT contract for passing into the Exchange.sol constructor.
 
 
 async function main() {

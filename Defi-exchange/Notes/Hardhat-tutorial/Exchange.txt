@@ -74,7 +74,7 @@ function addLiquidity(uint _amount) public payable returns (uint) { 1
         uint cryptoDevTokenAmount = (msg.value * cryptoDevTokenReserve)/(ethReserve); // Come back to this later. 
         require(_amount >= cryptoDevTokenAmount, "Amount Of tokens sent is less than the minimum tokens required."); 
         cryptoDevToken.transferFrom(msg.sender, address(this), cryptoDevTokenAmount);
-        liquidity = (totalSupply() * msg.value/ ethReserve)/ ethReserve;
+        liquidity = (totalSupply() * msg.value) / ethReserve;
         _mint(msg.sender, liquidity);
     } 
     return liquidity;
@@ -107,4 +107,45 @@ It takes in a _amount as an argument, and it has a conditional that checks if th
     - Then mint the LP tokens to the LP address.
         - The amount of LP tokens to be minted is equal to the Eth balance since this is the initialization of exchange.
 - ELSE
-    - 
+    - Assign ethReserve to ethBalance - msg.value.
+        - This is because the ethBalance already has the msg.value in it, so we need to subtract it out to get a proper reserve amount.
+    - uint cryptoDevTokenAmount = ((ether sent) * cryptoDevTokenReserve)/ethReserve, this is following the x*y=k formula.
+            yDelta = (xDelta * YReserve) / XReserve.
+    - Require that the CDT tokens sent to the contract is greater than or equal to the Calculated minimum according to the ratio. 
+    - Transfer the amount from the msg.sender to the exchange address, amount is the cryptoDevTokenAmount.
+    - Liquidity = (totalSupply() * msg.value) / ethReserve, this is following the x*y=k formula.
+        yDelta = (totalSupply(LP Tokens) * xDelta)/X, this is following the x*y=k formula. 
+    - Then mint the amount of LP tokens to the LP's address with the amount being calculated right above.
+Return liquidity; 
+    - I have no idea why this is here.
+
+-----------------------------------------------------------------------------------------------
+
+function removeLiquidity(uint _amount) public returns (uint, uint) { // _amount if LP tokens.
+    require(_amount > 0, "_amount should be greater than 0");
+    uint ethReserve = address(this).balance;
+    uint _totalSupply = totalSupply();
+
+    uint ethAmount = (ethReserve * _amount)/ _totalSupply; // Total supply of ether.
+
+    uint cryptoDevTokenAmount = (getReserve() * _amount)/ _totalSupply; // What the amount is multiplied by dosen't matter, since the ratio is one to one.
+
+    _burn(msg.sender, _amount); // burn LP tokens.
+    payable(msg.sender).transfer(ethAmount); // Transfer the amount of ether to the user.
+    ERC20(cryptoDevTokenAddress).transfer(msg.sender, cryptoDevTokenAmount); // Transfer the amount of CDTs to the user.
+    return (ethAmount, cryptoDevTokenAmount); // Return the amount numbers (For display? WHY?)
+} 
+
+------------------------------------------------------------------------------------------------
+
+This function is used to remove the liquidity, 
+    - the idea is that you turn in your LP tokens and the exchange will send you your ether and CDTs back.
+    - The exchange will also burn the LP tokens that you burned.
+
+This function takes in an uint _amount (The user's LP tokens) then it will return two uints (Your Ether and CDTs).
+    - Requires that the amount is more than zero.
+    - Creating instances of ethReserve and the totalSupply (LP tokens).
+    - The uint ethAmount to be returned to the user.
+        - ethReserve * _amount(LP tokens) / totalSupply (ALL LP tokens)
+    
+
