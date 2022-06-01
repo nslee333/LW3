@@ -1,4 +1,4 @@
-import { Contract, utils } from "ethers";
+import { utils } from "ethers";
 import { EXCHANGE_CONTRACT_ADDRESS } from "../constants";
 import { tokenInstance, exchangeInstance } from "./utils";
 
