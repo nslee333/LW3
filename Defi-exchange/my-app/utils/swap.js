@@ -16,7 +16,7 @@ reservedCD
      
     if (ethSelected) { // If ethSelected is true, the amount to be swapped and the reserve are the input reserves and amounts
         // and then it will return the amount of CD tokens received from the swap.
-        amountOfTokens = await exchangeContract.getAmountOfTokens(
+        amountOfTokens = await exchangeContract.getAmountOfTokens( // If ETHSelected is true, then ETH is the _swapAmountWei, and the returned value will be the amount of CDTs.
             _swapAmountWei,
             ethBalance,
             reservedCD

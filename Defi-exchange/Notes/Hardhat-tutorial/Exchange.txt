@@ -147,5 +147,70 @@ This function takes in an uint _amount (The user's LP tokens) then it will retur
     - Creating instances of ethReserve and the totalSupply (LP tokens).
     - The uint ethAmount to be returned to the user.
         - ethReserve * _amount(LP tokens) / totalSupply (ALL LP tokens)
+    - the uint cryptoDevTokenAmount to be returned to the user.
+    - It will _burn the LP tokens sent to the function. 
+        - (sent to the address(0)).
+    - Then it will transfer the Ether, and the CDT tokens to the user.
+    - Then it will return the eth and CDT amount.
+
+-------------------------------------------------------------------------------------------------
+
+
+function getAmountOfTokens( 
+    uint256 inputAmount, 
+    uint256 inputReserve, 
+    uint256 outputReserve
+) public pure returns (uint256) {
+    require(inputReserve > 0 && outputReserve > 0, "Invalid Reserves");  // Check and make sure that there are reserves.
+
+    uint256 inputAmountWithFee = inputAmount * 99; 
+    uint256 numerator = inputAmountWithFee * outputReserve; // numerator is the input with the fee times the output Reserve
+    uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+    return numerator / denominator;
+
+---------------------------------------------------------------------------------------------------------------------------------
+
+This function is used to calculate the amount of tokens to be received from swaping two tokens.
+    - This uses the x*y=k formula, and takes out a 1% fee that is distributed to the liquidity providers.
+    - Requires that both of the reserves have tokens in them before running the function.
     
+- Since solidity doesn't have decimal functionality, so in order to take out the fee for the user, we have to multiply the input amount (x99, then divide by 100) to 
+    get the input amount with the fee. (inputAmountWithFee).
+
+- Another thing to note is this function is a part a multilayered system, and the general flow of the function is below.
+
+General Flow: || Pertaining to the [tokensToBeReceivedAfterSwap] RH /  index.js/_getAmountOfTokensToBeReceivedAfterSwap() -> utils/swap.js/getAmountOfTokensReceivedFromSwap() -> contract.getAmountOfTokens() ||
+    - How the system works is that, the user enters in the amount of which tokens that they want to swap, and the app will calculate the amount of tokens that they will
+        get in return.
+        - Then when the person hits enter, two things happen, 
+            - It updates the value entered to the react hook sustaining the value.
+            - It calls the _getAmountOfTokensToBeReceivedAfterSwap() function with the value entered as an argument.
+                - Then the _getAmountOfTokensToBeReceivedAfterSwap function takes the RH swapAmount value,
+                    Gets the reserve amounts, and gets the value returned from the utility (swap.js) function getAmountOfTokensReceivedFromSwap and sets the value to the setTokensToBeReceivedAfterSwap RH.
+                        - the Utility function takes the values and based upon if EthSelected is true, it will input the values to the contract.getAmountOfTokens function, which will calculate how much tokens
+                            - the user will receive after the swap, according to the x*y=k formula with the fee taken out. 
+                    - The tokensToBeReceivedAfterSwap RH's value is used as an argument in the _swapTokens function as well as the displaying what tokens the user will receive for their swap (before confirmation).
+
+-------------------------------------------------------------------------------------------------
+
+function ethToCryptoDevToken(uint _minTokens) public payable { 
+    
+        uint256 tokenReserve = getReserve(); 
+        uint256 tokensBought = getAmountOfTokens( // Assign a variable to the returned value of xy=k ratio with the fee taken out.
+            msg.value,
+            address(this).balance - msg.value,
+            tokenReserve
+        ); // Get the proper amount of tokens after the fee and following the xy=k formula. If 10 will return 9.80.
+
+        require(tokensBought >= _minTokens, "Insufficient output amount"); // Make sure that the amount to be purchased is bigger than the minimum amount.
+        ERC20(cryptoDevTokenAddress).transfer(msg.sender, tokensBought);  // Transfer the amount of tokens bought to the user address.
+    }
+
+
+----------------------------------------------------------------
+
+- This function is the ethToCDT swap function.
+
+It takes in the the tokenReserve, and calls the getAmountOfTokens function, which gets the correct amount of tokens 
+            
 

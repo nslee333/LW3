@@ -358,7 +358,7 @@ export default function Home() {
               <div className={styles.inputDiv}>
                 {ethSelected 
                   ? `You will get ${utils.formatEther(tokensToBeReceivedAfterSwap)} Crypto Dev Tokens`
-                  : `You will get ${utils.formatEther(tokensToBeReceivedAfterSwap)} Ether`}
+                  : `You will get ${utils.formatEther(tokensToBeReceivedAfterSwap)} Ether`} 
                     </div>
                     <button className={styles.button} onClick={_swapTokens}>
                       Swap Tokens
