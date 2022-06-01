@@ -48,12 +48,12 @@ export const swapTokens = async ( // This function will take in a signer, the am
         tx = await exchangeContract.ethToCryptoDevToken(
             tokensToBeReceivedAfterSwap,
             {
-                value: swapAmountWei, // Why is this here?  Maybe this passes in the value? I'd have to see.
+                value: swapAmountWei, // This is the 
             } 
         );
     } else {
         
-        tx = await tokenContract.approve( 
+        tx = await tokenContract.approve(  // This is the MetaMask prompt that asks for approval before sending the transaction?
             EXCHANGE_CONTRACT_ADDRESS,
             swapAmountWei.toString()
         );

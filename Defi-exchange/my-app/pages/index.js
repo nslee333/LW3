@@ -77,8 +77,8 @@ export default function Home() {
         );
         setLoading(false);
 
-        await getAmounts();
-        setSwapAmount("");
+        await getAmounts(); // Update the RH values.
+        setSwapAmount(""); // Reset the RH swap amount. 
         
       }
 

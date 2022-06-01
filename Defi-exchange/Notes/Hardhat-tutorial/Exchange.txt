@@ -211,6 +211,35 @@ function ethToCryptoDevToken(uint _minTokens) public payable {
 
 - This function is the ethToCDT swap function.
 
-It takes in the the tokenReserve, and calls the getAmountOfTokens function, which gets the correct amount of tokens 
-            
+It takes in the the tokenReserve, and calls the getAmountOfTokens function, which gets the correct amount of tokens to be transferred, 
+    - Then it checsk to make sure that the amount of tokens is greater than the minimum amount (the argument).
+    - Then it takes in the the ether from the user, and transfers the CDT tokens from the Exchange's address to the user's address.
+zzzzzz
+
+----------------------------------------------------------------
+
+
+function CryptoDevTokenToEth(uint _tokensSold, uint _minEth) public {
+    // This function swaps from CDT to eth. 
+    // It gets the amount of tokens according to the xy = k formula with the fee taken out, then transfers the amount of tokens to be sold from the user's wallet and
+    uint256 tokenReserve = getReserve();
+    uint256 ethBought = getAmountOfTokens(
+        _tokensSold,
+        tokenReserve,
+        address(this).balance
+    );
+    require(ethBought >= _minEth, "Insufficient output amount");
+    ERC20(cryptoDevTokenAddress).transferFrom(
+        msg.sender,
+        address(this),
+        _tokensSold
+        ); 
+} // Swap function, from CDT to ETH.
+}
+
+--------------------------------------------------------------------------------
+
+This function swaps from CDT to eth. 
+
+This is basically the same as the function above, the difference is that it takes two parameters.
 
