@@ -1,0 +1,96 @@
+This file is used as a middle step between the index.js file and the contract, it helps us to input the proper amounts to the contract for accurate values.
+
+------------------------------------------------------------------------------------------------
+
+import { EXCHANGE_CONTRACT_ADDRESS } from "../constants";
+import { exchangeInstance, tokenInstance } from "./utils";
+
+export const getEtherBalance = async (
+    provider,
+    address,
+    contract = false
+) => {
+    try {
+        if (contract) {
+            const balance = await provider.getBalance(EXCHANGE_CONTRACT_ADDRESS);
+            return balance;
+        } else {
+            const balance = await provider.getBalance(address);
+            return balance;
+        }
+    } catch (error) {
+        console.error(error);
+        return 0; // Why do we put a return zero value here?
+    } // try catch, pass in provider, address, contract (default to false) if contract is true, return the balance of the contract, else, return the value of the address balance.
+
+
+------------------------------------------------------------------------------------------------
+
+The function getEtherBalance is called whenever the eth reserves are needed for the calculation - it's also used to update the values of the state variables.
+
+It takes in a provider, an address and a contract boolean that defaults to false.
+
+    If the contract is true, then:
+        - Return the balance of the exchange contract to where it was called.
+    Else,
+        - Return the balance of the address given as an argument.
+
+-------------------------------------------------------------------------------------------------
+
+export const getCDTokensBalance = async (provider, address) => {
+    try {
+        
+        const tokenContract = await tokenInstance(provider);
+        
+        balanceOfCryptoDevTokens = await tokenContract.balanceOf(address);
+
+        return balanceOfCryptoDevTokens;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+This function gets the value of the CD tokens balance of the address given as an argument.
+
+--------------------------------------------------------------------------------------------------
+
+
+export const getLPTokensBalance = async (provider, address) => {
+    try {
+        
+        const exchangeContract = await exchangeInstance(provider);
+        const balanceOfLPTokens = exchangeContract.balanceOf(address);
+        return balanceOfLPTokens;
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+This function is used to get the total supply of LP tokens.
+
+-------------------------------------------------------------------------------------------------
+
+export const getReserveOfCDTokens = async (provider) => {
+    try {
+        const exchangeContract = await exchangeInstance(provider);
+        const reserve = await exchangeContract.getReserve();
+        return reserve;
+
+    } catch (error) { // Get an instance of the exchange contract, get and return the value of the amount of CD tokens in the reserve.
+        console.error(error);
+    }
+}
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+
+This is used to get the total reserves of CDT that the exchange has in its balance.
+
+
