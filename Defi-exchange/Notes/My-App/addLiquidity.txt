@@ -59,4 +59,6 @@ This follows the x*y=k formula.
 
 yDelta (CDT amount) = xDelta (ether entered) * YReserves (CDT tokens Reserve) / (divided) X (Ether Reserves).
 
-yDelta (CDT Amount) is returend the the function caller, which is used t
+yDelta (CDT Amount) is returend the the function caller, the value returned is sustained by RH holding the value returned.
+
+--------------------------------------------------------------------------------------------------

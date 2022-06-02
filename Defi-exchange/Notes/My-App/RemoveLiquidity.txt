@@ -1,0 +1,45 @@
+import { exchangeInstance } from "./utils";
+
+export const removeLiquidity = async (signer, removeLPTokensWei) => {
+    const exchangeContract = await exchangeInstance(signer);
+    const tx = await exchangeContract.removeLiquidity(removeLPTokensWei);
+    await tx.wait();
+};
+
+export const getTokensAfterRemove = async ( 
+    provider,
+    removeLPTokensWei,
+    _ethBalance,
+    cryptoDevTokenReserve
+) => {
+    try {
+        const exchangeContract = await exchangeInstance(provider);
+
+        const _totalSupply = await exchangeContract.totalSupply();
+
+        const _removeEther = _ethBalance.mul(removeLPTokensWei).div(_totalSupply);
+        const _removeCD = cryptoDevTokenReserve
+        .mul(removeLPTokensWei)
+        .div(_totalSupply);
+        return {
+            _removeEther,
+            _removeCD,
+        };
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+------------------------------------------------------------------------------------------------
+
+These utility files are intermediary files used for making calculations for proper input to the contract.
+
+
+This top function inputs the signer object and the amount of LP tokens that the user owns, then it calls the exchangeContract.removeLiqudity function.
+    - Which then burns the LP tokens returned.
+
+
+
+getTokensAfterRemove 
+    - This function is used to display how much Ether and CDT tokens will receive.
+    - It calculates the proper amount according to the x*y=k formula.
