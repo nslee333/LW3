@@ -53,7 +53,7 @@ export const swapTokens = async ( // This function will take in a signer, the am
         );
     } else {
         
-        tx = await tokenContract.approve(  // This is the MetaMask prompt that asks for approval before sending the transaction?
+        tx = await tokenContract.approve(  
             EXCHANGE_CONTRACT_ADDRESS,
             swapAmountWei.toString()
         );

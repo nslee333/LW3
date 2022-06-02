@@ -1,0 +1,62 @@
+This is my notes on the addLiquidity.js file.
+
+export const addLiquidity = async (
+    signer,
+    addCdAmountWei,
+    addEtherAmountWei
+) => {
+    try {
+        
+        const tokenContract = await tokenInstance(signer);
+        const exchangeContract = await exchangeInstance(signer); 
+
+        let tx = await tokenContract.approve( 
+            EXCHANGE_CONTRACT_ADDRESS, 
+            addCdAmountWei.toString()
+        );
+        await tx.wait();
+
+        tx = await exchangeContract.addLiquidity(addCdAmountWei, {
+            value: addEtherAmountWei,
+        });
+        await tx.wait();
+    } catch (error) {
+        console.error(err);
+    }
+
+};
+
+------------------------------------------------------------------------------------------------
+
+
+In order for the exchange contract to transfer the user's funds (that are in another contract), the exchange contract has to be approved to spend those
+    funds on behalf of the user. 
+    - This ends up adding another transaction the user has to pay for.
+    - In this case, we're calling the approve() function on the token contract, which inputs the exchange's contract as the spender, and then adds the
+        amount to a mapping of allowances (How much of user's funds can the spender spend.), so it limits how much the spender can spend.
+    - Once we get this approval, we then call the addLuquidity function and input the ether to be spent, with the cdAmountWei for the amount of CDT tokens.
+
+----------------------------------------------------------------
+
+export const calculateCd = async (
+    _addEther = "0",
+    etherBalanceContract,
+    cdTokenReserve
+) => {
+    const _addEtherAmountWei = utils.parseEther(_addEther);
+
+    const cryptoDevTokenAmount = _addEtherAmountWei
+        .mul(cdTokenReserve)
+        .div(etherBalanceContract);
+    return cryptoDevTokenAmount;
+};
+
+------------------------------------------------------------------------------------------------
+
+This function is used to calculate the proper amount of CDT tokens that would be swaped to the user.
+
+This follows the x*y=k formula. 
+
+yDelta (CDT amount) = xDelta (ether entered) * YReserves (CDT tokens Reserve) / (divided) X (Ether Reserves).
+
+yDelta (CDT Amount) is returend the the function caller, which is used t

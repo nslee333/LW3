@@ -13,8 +13,9 @@ export const addLiquidity = async (
         const tokenContract = await tokenInstance(signer);
         const exchangeContract = await exchangeInstance(signer);
 
-        let tx = await tokenContract.approve(
-            EXCHANGE_CONTRACT_ADDRESS,
+        let tx = await tokenContract.approve( // In order for a contract to remove ERC20 tokens from the user's address, we need to get approval, which essentially
+        // Is a mapping that we enter in the amount that the exchange contract can move, from the user's address 
+            EXCHANGE_CONTRACT_ADDRESS, 
             addCdAmountWei.toString()
         );
         await tx.wait();
