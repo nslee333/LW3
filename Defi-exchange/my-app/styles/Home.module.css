@@ -1,3 +1,13 @@
+.background-black {
+  background-color: #000000;
+}
+
+.background-white {
+  background-color: #ffffff;
+}
+
+
+
 .main {
   min-height: 90vh;
   display: flex;
@@ -43,9 +53,9 @@
 
 .button {
   border-radius: 4px;
-  background-color: purple;
+  background-color: #00fec5;
   border: none;
-  color: #ffffff;
+  color: #000000;
   font-size: 15px;
   padding: 5px;
   width: 100px;
