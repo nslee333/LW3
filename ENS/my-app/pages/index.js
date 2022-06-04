@@ -40,7 +40,7 @@ export default function Home() {
   const connectWallet = async () => {
     try {
 
-      await getProviderOrSigner(true);
+      await getProviderOrSigner();
       setWalletConnected(true);
 
     } catch (error) {
