@@ -39,6 +39,14 @@ contract LW3Punks is ERC721Enumerable, Ownable {
         return _baseTokenURI;
     }
 
+    function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI Query for nonexistant token");
+        string memory baseURI = _baseURI();
+
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json")) : "";
+    }
+
+
     function setPaused(bool val) public onlyOwner {
         _paused = val;
     }
