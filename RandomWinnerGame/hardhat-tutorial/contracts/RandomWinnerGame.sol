@@ -56,7 +56,7 @@ contract RandomWinnerGame is VRFConsumerBase, Ownable {
 
         gameId += 1; // Add 1 count to the gameId state variable.
 
-        emit GameStarted(gameId, maxPlayers, EntryFee); // Emit the gameStarted event.
+        emit GameStarted(gameId, maxPlayers, entryFee); // Emit the gameStarted event.
 
     }
 
