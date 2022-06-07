@@ -14,7 +14,7 @@ const {
 
 // In our fields we have to return a function [ () => ... ] because alot of these queries are using functions inside them, so this makes sure that the 
     // functions inside them are defined before use.
-    // If we don't do this, then we 
+    // If we don't do this, then the server will crash.
 
 
 const authors = [
@@ -102,12 +102,43 @@ const RootQueryType = new GraphQLObjectType({
     }) // Whenever you wrap the parentheses with squiggly brackets, it automatically returns it so we don't have to write a return statement.
 })
 
-
+const RootMutationType = new GraphQLObjectType({
+    name: 'Mutation',
+    description: 'Root Mutation',
+    fields: () => ({
+        addBook: {
+            type: BookType,
+            description: "Add a book",
+            args: {
+                name: { type: GraphQLNonNull(GraphQLString) },
+                authorId: { type: GraphQLNonNull(GraphQLInt)}
+            },
+            resolve: (parent, args ) => {
+                const book =  { id: books.length + 1, name: args.name, authorId: args.authorId }
+                books.push(book)
+                return book
+            },
+        },
+            addAuthor: {
+                type: AuthorType,
+                description: "Add an Author",
+                args: {
+                    name: { type: GraphQLNonNull(GraphQLString) }
+                },
+                resolve: (parent, args ) => {
+                    const author =  { id: authors.length + 1, name: args.name, authorId: args.authorId }
+                    authors.push(author)
+                    return author
+                }
+            }
+    })
+})  
 
 
 
 const schema = new GraphQLSchema({
     query: RootQueryType,
+    mutation: RootMutationType
 })
 
 
