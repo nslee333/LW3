@@ -15,7 +15,7 @@ const {
 // In our fields we have to return a function [ () => ... ] because alot of these queries are using functions inside them, so this makes sure that the 
     // functions inside them are defined before use.
     // If we don't do this, then the server will crash.
-
+// GH Repo for this is here: https://github.com/WebDevSimplified/Learn-GraphQL.
 
 
 
