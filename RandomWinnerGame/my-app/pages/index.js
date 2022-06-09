@@ -8,6 +8,7 @@ import { FETCH_CREATED_GAME } from "../queries";
 import styles from "../styles/Home.module.css";
 import { subgraphQuery } from "../utils";
 import { nftInstance } from "../utils/contractInstance";
+import { zeroPad } from 'ethers/lib/utils';
 
 
 export default function Home() {
@@ -103,17 +104,70 @@ export default function Home() {
 
       const _gameArray = await subgraphQuery(FETCH_CREATED_GAME());
 
-      const _game = _gameArray.games[0];
+      const _game = _gameArray.games[0]; // This sustains the Game objects in an array.
 
-      if(_gameStarted) {
+      let _logs = [];
+
+
+      if(_gameStarted) { // If the game has started. 
+        _logs = [`Game has started with ID: ${_game.id}`]; // Add this entry to the logs.
+
+        if(_game.players && _game.players.length > 0) { // If the game has players, and the amount of players is less than zero - 
+          _logs.push( 
+            `${_game.players.length} / ${_game.maxPlayers} already joined 👀` // Push this log to the array - It states x out of x players have joined.
+          );
+          _game.players.forEach((player) => { // For each player in the array - push the below log to the logs array.
+            _logs.push(`${player} joined 🏃‍♂️`);
+          });
+        }
         
-      }
+        setEntryFee(BigNumber.from(_game.entryFee)); // Set the entryFee RH to the value of _game.entryFee.
+        
+        setMaxPlayers(_game.maxPlayers); // Update the RH with the values from the game.
       
+      
+      } else if (!gameStarted && _game.winner) { // If the game has started and there is a winner, then do this. 
+        _logs = [ // Log all of these logs -
+          `Last game has ended with ID ${_game.id}`, 
+          `Winner is ${_game.winner}  🎉 `,
+          `Waiting for host to start new game...`,
+        ];
+
+        setWinner(_game.winner); // Set RH winner to the _game winner.
+      }
+
+      setLogs(_logs); // Set the RH logs to all the _logs we have pushed with this function call.
+
+      setPlayers(_game.players);  // set the amount of players.
+
+      setGameStarted(_gameStarted); // Set the gameStarted to true.
+
+      forceUpdate(); // Force React to update the web page.
+
+    
+    } catch (error) { 
+      console.error(err);
+    }
+  }
 
 
 
+  const getOwner = async () => {
+    try {
+      
+      const provider = await getProviderOrSigner();
 
+      const nftContract = await nftInstance(provider);
 
+      const _owner = await nftContract.owner();
+
+      const signer = await getProviderOrSigner(true);
+
+      const address = await signer.getAddress();
+
+      if (address.toLowerCase() === _owner.toLowerCase()) {
+        setIsOwner(true);
+      }
 
     } catch (error) {
       console.error(err);
@@ -123,8 +177,123 @@ export default function Home() {
 
 
 
+  useEffect(() => {
+    if(!walletConnected) {
+      web3ModalRef.current = new Web3Modal({
+        network: "mumbai",
+        providerOptions: {},
+        disableInjectedProvider: false,
+      });
+      connectWallet();
+      getOwner();
+      checkIfGameStarted();
+      setInterval(() => {
+        checkIfGameStarted();
+      }, 2000);
+    }
+  }, [walletConnected]);
+
+
+  const renderButton = () => {
+    if(!walletConnected) {
+      return(
+        <button onClick={connectWallet} className={styles.button}>
+          Connect your wallet
+        </button>
+      );
+    }
+
+    if(loading) {
+      return <button className={styles.button}>Loading...</button>;
+    }
+
+    if (gameStarted) {
+      if (players.length === maxPlayers) {
+        return (
+          <button className={styles.button} disabled>
+            Choosing winner...
+          </button>
+        );
+      }
+    
+    return (
+      <div>
+        <button className={styles.button} onClick={joinGame}>
+          Join Game 🚀
+        </button>
+      </div>
+    );
+  }
+    if(isOwner && !gameStarted) {
+      return (
+        <div>
+          <input
+            type="number"
+            className={styles.input}
+            onChange={(e) => {
+              setEntryFee(
+                e.target.value >= 0 ? 
+                utils.parseEther(e.target.value.toString())
+                : zero
+              );
+            }}
+        placeholder="Entry Fee (ETH)"
+        />
+        <input
+          type="number"
+          className={styles.input}
+          onChange={(e) => {
+            setMaxPlayers(e.target.value ?? 0);
+          }}
+          placeholder="Max players"
+          />
+          <button className={styles.button} onClick={startGame}>
+            Start Game 🚀
+          </button>
+        </div>
+      );
+    }
+  };
+
+  return(
+    <div>
+      <Head>
+        <title>LW3 Punks</title>
+        <meta name="description" content="LW3Punks-Dapp"/>\
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+    <div className={styles.main}>
+      <div>
+        <h1 className={styles.title}> Welcome to Random Winner Game!</h1>
+        <div className={styles.description}>
+        Its a lottery game where a winner is chosen
+      </div>
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    </div>
+  )
+
+
+
+
+
+
+
+
 
 
 
 
 }
+
+
+
+
