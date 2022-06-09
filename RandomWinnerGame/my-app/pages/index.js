@@ -5,7 +5,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import Web3Modal from 'web3modal';
 import {abi, RANDOM_GAME_NFT_CONTRACT_ADDRESS} from "../constants";
 import { FETCH_CREATED_GAME } from "../queries";
-import styles from "../styles/Home.module.css";
 import { subgraphQuery } from "../utils";
 import { nftInstance } from "../utils/contractInstance";
 import { zeroPad } from 'ethers/lib/utils';
@@ -36,7 +35,7 @@ export default function Home() {
   const web3ModalRef = useRef();
 
   // This is used to force react to re-render the page when we want to, in this case, we're doing it to show new logs.
-  const forceUpdate = React.useReducer(() => ({}), {},[1]);
+  const forceUpdate = React.useReducer(() => ({}), {})[1];
 
 
 
@@ -47,7 +46,7 @@ export default function Home() {
 
 
     } catch (error) {
-      console.error(err)
+      console.error(error)
     }
   }
 
@@ -71,7 +70,33 @@ export default function Home() {
     return web3Provider;
   };
 
+
   const startGame = async () => {
+    try {
+      
+      const signer = await getProviderOrSigner(true);
+
+      const nftContract = await nftInstance(signer);
+
+
+      setLoading(true);
+
+      const tx = await nftContract.startGame(maxPlayers, entryFee);
+
+      await tx.wait();
+
+      setLoading(false);
+
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+
+
+  const joinGame = async () => {
     try {
       
       const signer = await getProviderOrSigner(true);
@@ -88,7 +113,7 @@ export default function Home() {
       setLoading(false);
       
     } catch (error) {
-      console.error(err);
+      console.error(error);
       setLoading(false);
     }
   };
@@ -146,7 +171,7 @@ export default function Home() {
 
     
     } catch (error) { 
-      console.error(err);
+      console.error(error);
     }
   }
 
@@ -170,7 +195,7 @@ export default function Home() {
       }
 
     } catch (error) {
-      console.error(err);
+      console.error(error);
     }
   }
 
@@ -255,45 +280,36 @@ export default function Home() {
     }
   };
 
-  return(
-    <div>
-      <Head>
-        <title>LW3 Punks</title>
-        <meta name="description" content="LW3Punks-Dapp"/>\
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-    <div className={styles.main}>
+  return (
       <div>
-        <h1 className={styles.title}> Welcome to Random Winner Game!</h1>
-        <div className={styles.description}>
-        Its a lottery game where a winner is chosen
+        <Head>
+          <title>LW3 Punks</title>
+          <meta name="description" content="LW3Punks-Dapp"/>\
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+      <div className={styles.main}>
+        <div>
+          <h1 className={styles.title}> Welcome to Random Winner Game!</h1>
+          <div className={styles.description}>
+          Its a lottery game where a winner is chosen at random and wins the entire lottery pool
+        </div>
+        {renderButton()}
+        {logs && 
+          logs.map((log, index) => (
+            <div className={styles.log} key = {index}>
+              {log}
+            </div>
+        ))}
       </div>
+        <div>
+          <img className={styles.image} src="./randomWinner.png" />
+        </div>
+      </div>
+
+      <footer className={styles.footer}>
+        Made with &#10084; by Nathan Lee
+      </footer>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    </div>
-  )
-
-
-
-
-
-
-
-
-
-
-
-
+  );
 }
-
-
-
 
