@@ -2,12 +2,12 @@ import { Contract } from "ethers";
 import {RANDOM_GAME_NFT_CONTRACT_ADDRESS, abi } from "../constants";
 
 export const nftInstance = async (providerOrSigner) => {
-    const nftContract = new Contract(
+    const _nftContract = new Contract(
         RANDOM_GAME_NFT_CONTRACT_ADDRESS,
         abi,
         providerOrSigner
     );
-    return nftContract;
+    return _nftContract;
 };
 
-module.exports = {nftInstance};
+module.export = { nftInstance };

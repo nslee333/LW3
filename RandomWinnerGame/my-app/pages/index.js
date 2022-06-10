@@ -39,7 +39,8 @@ export default function Home() {
 
 
 
-  const connectWallet = async () => {
+
+  const connectWallet = async () => { // Wallet connection
     try {
       await getProviderOrSigner();
       setWalletConnected(true);
