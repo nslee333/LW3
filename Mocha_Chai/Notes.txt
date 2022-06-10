@@ -1,0 +1,20 @@
+This file was created while following a tutorial on how to use the Mocha/Chai testing frameworks.
+
+You can follow this article here.
+
+https://medium.com/spidernitt/testing-with-mocha-and-chai-b8da8d2e10f2
+
+A few thing to note:
+
+- I changed the name of the test from the tutorial from 'appTest.js' to just 'test.js'.
+    - The reason for this is that my appTest.js file wasn't being read by Mocha, and was throwing an error, so I renamed it to 'test.js' for it to work properly.
+
+- I also ran 'npm init' in the root directory - so I'm not sure if I needed to do that or not
+
+- Installation:
+    - npm install --save-dev mocha 
+    - npm install --save-dev chai
+- Cmds:
+    - 'npm run test' for running the test.js script. 
+
+
