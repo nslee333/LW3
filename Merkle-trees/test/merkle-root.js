@@ -33,8 +33,8 @@ describe("Check if Merkle Root is working", function () {
 
   const merkleTree = new MerkleTree(list, keccak256, { // Creating a new Merkle Tree - passing in the list of ABI encoded leafs (addresses) and the hash algorithm to use.
     // Hash leaves and sort pairs are configurations for the merkle tree?
-    hashLeaves: true,
-    sortPairs: true,
+    hashLeaves: true, // If true, the leaves will be hashed using using the set hasing algorithms.
+    sortPairs: true, // If true, the hasing pairs will be sorted.
   });
 
   const root = merkleTree.getHexRoot(); // A method to get the root of the merkle tree that we just created above.
@@ -47,12 +47,12 @@ describe("Check if Merkle Root is working", function () {
 
   const proof = merkleTree.getHexProof(leaf); // Get the Hex proof of the leaf that we just grabbed.
 
-  let verified = await Whitelist.checkInWhitelist(proof, 2);
-  expect(verified).to.equal(true);
+  let verified = await Whitelist.checkIfInWhitelist(proof, 2); // Pass in the proof of address[0] to the whitelist contract and call the checkInWhitelist function.
+  expect(verified).to.equal(true); // Expect the value of verified to equal true, if true - the test passed.
 
 
-  verified = await Whitelist.checkInWhitelist([], 2);
-  expect(verified).to.equal(false);
+  verified = await Whitelist.checkIfInWhitelist([], 2); // Pass in an empty array, and see if it fails?
+  expect(verified).to.equal(false); // Expect it to equal false,
 
 
   });

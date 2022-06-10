@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-constract Whitelist {
+contract Whitelist {
 
     bytes32 public merkleRoot; // State variable.
 
@@ -34,7 +34,6 @@ constract Whitelist {
 
 
 }
-
 
 
 
