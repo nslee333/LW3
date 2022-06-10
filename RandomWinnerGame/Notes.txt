@@ -12,7 +12,7 @@ We then use the graph to log all the events onto our application.
 
 We then created a subgraph for our random winner game. 
 
-On our application side of the game, we use AXIOS (promise based HTTP clinent) to which we'll query the subgraph that we created for our game.
+On our application side of the game, we use AXIOS (promise based HTTP client) to which we'll query the subgraph that we created for our game.
 
 With AXIOS we pass in our query which is written in GraphQL. 
 
