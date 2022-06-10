@@ -2,5 +2,6 @@
     "cSpell.words": [
         "keccak",
         "Merkle"
-    ]
+    ],
+    "solidity.defaultCompiler": "localNodeModule"
 }
