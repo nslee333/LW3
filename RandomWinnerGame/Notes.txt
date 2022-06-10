@@ -1,0 +1,19 @@
+This project is pretty straight forward. 
+
+This project is basically a lottery game. 
+
+Smart contract keeps track of the game, the players, etc.
+
+The smart contract will use the Chainlink VRF for executing a randomness for our lottery part of our game.
+
+The smart contract has numerous events which the Graph will use to log all the events and keep track of the game.
+
+We then use the graph to log all the events onto our application. 
+
+We then created a subgraph for our random winner game. 
+
+On our application side of the game, we use AXIOS (promise based HTTP clinent) to which we'll query the subgraph that we created for our game.
+
+With AXIOS we pass in our query which is written in GraphQL. 
+
+With our application we can start the game, and join the game, and it will log all the events to our application.
