@@ -42,23 +42,25 @@ export default function Home() {
 
   const connectWallet = async () => { // Wallet connection
     try {
-      await getProviderOrSigner();
-      setWalletConnected(true);
 
+      await getProviderOrSigner();
+
+      setWalletConnected(true);
 
     } catch (error) {
       console.error(error)
     }
   }
 
-  const getProviderOrSigner = async (needSigner = false) => {
-   
+  const getProviderOrSigner = async (needSigner = false) => { // Getting the provider or signer object for creating instances of the contract.
 
     const provider = await web3ModalRef.current.connect();
+
     const web3Provider = new providers.Web3Provider(provider);
 
 
     const { chainId } = await web3Provider.getNetwork();
+
     if (chainId !== 80001) {
       window.alert("Change the network to Mumbai");
       throw new Error("Change network to Mumbai");
@@ -68,11 +70,13 @@ export default function Home() {
       const signer = web3Provider.getSigner();
       return signer;
     }
+
     return web3Provider;
+
   };
 
 
-  const startGame = async () => {
+  const startGame = async () => { // Calling the contract to start the game. You must be the owner to reach this function.
     try {
       
       const signer = await getProviderOrSigner(true);
@@ -97,7 +101,7 @@ export default function Home() {
 
 
 
-  const joinGame = async () => {
+  const joinGame = async () => { // Calling the contract to join the game.
     try {
       
       const signer = await getProviderOrSigner(true);
@@ -119,7 +123,7 @@ export default function Home() {
     }
   };
 
-  const checkIfGameStarted = async () => {
+  const checkIfGameStarted = async () => { 
     try {
       
       const provider = await getProviderOrSigner();
@@ -128,7 +132,7 @@ export default function Home() {
 
       const _gameStarted = await nftContract.gameStarted();
 
-      const _gameArray = await subgraphQuery(FETCH_CREATED_GAME());
+      const _gameArray = await subgraphQuery(FETCH_CREATED_GAME()); // FETCH_CREATED_GAME is our written GraphQL query that is contained in queries/index.js file.
 
       const _game = _gameArray.games[0]; // This sustains the Game objects in an array.
 
@@ -178,7 +182,8 @@ export default function Home() {
 
 
 
-  const getOwner = async () => {
+  const getOwner = async () => { // Get the address of the contract owner, and the current user's address, and directly compare the two.
+    // If the current user is the contract owner - then set the isOwner RH to true.
     try {
       
       const provider = await getProviderOrSigner();
@@ -203,8 +208,9 @@ export default function Home() {
 
 
 
-  useEffect(() => {
-    if(!walletConnected) {
+  useEffect(() => { // Initial wallet connection - connect the wallet, check the user is the owner, check if the game has started, and set an interval to check if
+    // the game has started, everytime the value of walletConnected changes, then run this function again.
+    if(!walletConnected) {  
       web3ModalRef.current = new Web3Modal({
         network: "mumbai",
         providerOptions: {},
