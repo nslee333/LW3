@@ -10,5 +10,5 @@ const POOL_ADDRESS_PROVIDER = "0xa97684ead0e402dc232d5a977953df7ecbab3cdb";
 module.exports = {
     DAI,
     DAI_WHALE,
-    POOL_ADDRESS_PROVIDER
-}
+    POOL_ADDRESS_PROVIDER,
+};

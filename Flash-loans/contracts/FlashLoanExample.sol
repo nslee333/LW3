@@ -32,7 +32,7 @@ contract FlashLoanExample is FlashLoanSimpleReceiverBase {
             asset, // The contract address of the asset we wish to borrow from,
             amount, // The amount to be borrowed.
             params, // Variadic packed params to pass to the receiver as extra information.
-            referalCode // Referal code is used to register the integrator that originating the operation, (i.e. A middle man.) for potential rewards
+            referralCode // Referal code is used to register the integrator that originating the operation, (i.e. A middle man.) for potential rewards
             // Enter the code '0' if the action is directly executed by the user, and there is no middle man.
         );
     }
