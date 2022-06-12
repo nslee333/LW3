@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "./BadContract";
+import "./GoodContract.sol";
 
 contract BadContract {
     GoodContract public goodContract; // Creating an instance of the goodContract for use.
 
-    constuctor(address _goodContractAddress) { // Passing in the constructor arguments.
+    constructor(address _goodContractAddress) { // Passing in the constructor arguments.
         goodContract = GoodContract(_goodContractAddress);
     }
 

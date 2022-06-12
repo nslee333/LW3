@@ -15,9 +15,9 @@ describe("Deploy a Flash Loan", function () { // The overall function declaratio
     
     const token = await ethers.getContractAt("IERC20", DAI); // This is creating an instance of the DAI contract with the 'getContractAt' hardhat-ethers helper function.
 
-    const BALANCE_AMOUNT_DAI = ethers.utils.parseEther("0.000000000000000001"); 
+    const BALANCE_AMOUNT_DAI = ethers.utils.parseEther("1000"); 
 
-    console.log(ethers.utils.parseEther("0.000000000000000001"));
+    console.log(ethers.utils.parseEther("1000"));
 
     console.log(BALANCE_AMOUNT_DAI);
 
@@ -52,12 +52,6 @@ describe("Deploy a Flash Loan", function () { // The overall function declaratio
 
     };
       await test();
-
-
-
-
-
-
 
       // This is called on the token Contract that we just instantiated. 
 
