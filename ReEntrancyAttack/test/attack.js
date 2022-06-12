@@ -16,29 +16,26 @@ describe("Attack", function () {
 
     const [_, innocentAddress, attackerAddress ] = await ethers.getSigners(); 
 
-    let tx = await _goodContract.connect(innocentAddress).addBalance({
+    let tx = await _goodContract.connect(innocentAddress).addBalance({ // Add balance to the good contract, from the innocentAddress user.
       value: parseEther("10"),
     })
     
-    await tx.wait();
+    await tx.wait(); // wait for the transaction to complete.
 
-    console.log(_goodContract.address, _badContract.address);
-    
-    let balanceETH = await ethers.provider.getBalance(goodContract.address);
+    let balanceETH = await ethers.provider.getBalance(_goodContract.address);
+    expect(balanceETH).to.equal(parseEther('10')); // Expect the balance of the good contract to be equal to 10.
 
-    expect(balanceETH).to.equal(parseEther('10'));
-
-    tx = await _badContract.connect(attackerAddress).attack({
+    tx = await _badContract.connect(attackerAddress).attack({ // Call the attack function, 
       value: parseEther("1"),
     });
 
-    await tx.wait();
+    await tx.wait(); // Wait for the attack.
 
     balanceETH = await ethers.provider.getBalance(goodContract.address);
-    expect(balanceETH).to.equal(BigNumberFrom("0"));
+    expect(balanceETH).to.equal(BigNumber.from("0")); // Expect the goodContract balance to equal zero.
 
-    balanceETH = await ethers.provider.getBalance(goodContract.address);
-    expect(balanceETH).to.equal(parseEther("11"));
+    balanceETH = await ethers.provider.getBalance(badContract.address);
+    expect(balanceETH).to.equal(parseEther("11")); // Expect the badContract to equal to 11 ether.
 
 
 
