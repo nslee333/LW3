@@ -31,10 +31,10 @@ describe("Attack", function () {
 
     await tx.wait(); // Wait for the attack.
 
-    balanceETH = await ethers.provider.getBalance(goodContract.address);
+    balanceETH = await ethers.provider.getBalance(_goodContract.address);
     expect(balanceETH).to.equal(BigNumber.from("0")); // Expect the goodContract balance to equal zero.
 
-    balanceETH = await ethers.provider.getBalance(badContract.address);
+    balanceETH = await ethers.provider.getBalance(_badContract.address);
     expect(balanceETH).to.equal(parseEther("11")); // Expect the badContract to equal to 11 ether.
 
 
