@@ -15,8 +15,11 @@ describe("Deploy a Flash Loan", function () { // The overall function declaratio
     
     const token = await ethers.getContractAt("IERC20", DAI); // This is creating an instance of the DAI contract with the 'getContractAt' hardhat-ethers helper function.
 
-    const BALANCE_AMOUNT_DAI = ethers.utils.parseEther("2000"); 
+    const BALANCE_AMOUNT_DAI = ethers.utils.parseEther("0.000000000000000001"); 
 
+    console.log(ethers.utils.parseEther("0.000000000000000001"));
+
+    console.log(BALANCE_AMOUNT_DAI);
 
     // So since we're forking the polygon mainnet in our local testing environment, Hardhat doesn't know the private key for the DAI_WHALE address, but it will act like we do have access to the 
     // addresses funds and sign transactions.
