@@ -7,7 +7,9 @@ import "./Good.sol";
 contract Attack {
     
     address public helper;
+
     address public owner;
+    
     uint public num;
 
     Good public good;
