@@ -17,11 +17,13 @@ describe("MetaTokenTransfer", function () {
         const [_, userAddress, relayerAddress, recipientAddress ] = await ethers.getSigners(); // Get some signers.
         await ethers.getSigners();
 
-        const tenThousandTokensWiithDecimals = parseEther("10000"); // Get 10,000 ether for testing.
+        console.log(userAddress.address, relayerAddress.address, recipientAddress.address);
+
+        const tenThousandTokensWithDecimals = parseEther("10000"); // Get 10,000 ether for testing.
         const userTokenContractInstance = randomTokenContract.connect(userAddress); // This is creating an instance of random token contract that is connected to an address.
         const mintTxn = await userTokenContractInstance.freeMint( // call the freeMint function on the random token contract that is connected to an address, and 
         // Mint 10,000 ether.
-            tenThousandTokensWiithDecimals
+            tenThousandTokensWithDecimals
         );
 
         await mintTxn.wait(); // Wait for the transaction to process.
@@ -40,7 +42,7 @@ describe("MetaTokenTransfer", function () {
         const messageHash = await tokenSenderContract.getHash( // Getting the message hash for the transaction.
             userAddress.address,
             transferAmountOfTokens,
-            recipientAddress,
+            recipientAddress.address,
             randomTokenContract.address
         );
         const signature = await userAddress.signMessage(arrayify(messageHash)); // This is prompting the user to sign the message to transfer the 10 tokens.
@@ -52,7 +54,7 @@ describe("MetaTokenTransfer", function () {
         const metaTxn = await relayerSenderContractInstance.transfer( // This is the meta transaction being called on the relayerSenderContractInstance
             userAddress.address,
             transferAmountOfTokens,
-            recipientAddress,
+            recipientAddress.address,
             randomTokenContract.address,
             signature
         );
@@ -66,7 +68,7 @@ describe("MetaTokenTransfer", function () {
             recipientAddress.address
         );
 
-        expect(userBalance.lt(tenThousandTokensWiithDecimals)).to.be.true; // Expect asserts that the userBalance is less than 10,000 tokens to be true.
+        expect(userBalance.lt(tenThousandTokensWithDecimals)).to.be.true; // Expect asserts that the userBalance is less than 10,000 tokens to be true.
         expect(recipientBalance.gt(BigNumber.from(0))).to.be.true; // Expects that the recipient address's balance is greater than 0, to be true.
 
 
