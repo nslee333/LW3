@@ -8,7 +8,7 @@ async function main() {
     const fakeNFTContract = await fakeNFT.deploy();
     await fakeNFTContract.deployed();
 
-    console.log("Address of the Fake NFT Contract:", fakeNFT.address);
+    console.log("Address of the Fake NFT Contract:", fakeNFTContract.address);
 
     // This is creating an alchemy websocket provider.
 
@@ -33,15 +33,15 @@ async function main() {
     provider.on("block", async (blockNumber) => {
         console.log("Block Number:", blockNumber);
         
-        const bundleResponse = await flashBotsProvider.sendBundle(
+        const bundleResponse = await flashBotsProvider.sendBundle( // This is the sendBundle that is sent to the relayers, which then go to the miners.
             [
                 {
-                    trasnaction: {
+                    transaction: {
                         chainId: 5,
                         type: 2,
                         value: ethers.utils.parseEther("0.01"),
-                        to: fakeNFT.address,
-                        data: fakeNFT.interface.getSighash("mint()"),
+                        to: fakeNFTContract.address,
+                        data: fakeNFTContract.interface.getSighash("mint()"),
                         maxFeePerGas: BigNumber.from(10).pow(9).mul(3),
                         maxPriorityFeePerGas: BigNumber.from(10).pow(9).mul(3),
                     },
@@ -50,7 +50,7 @@ async function main() {
             ],
             blockNumber + 1
         );
-        if("Error" in bundleResponse) {
+        if("error" in bundleResponse) {
             console.log(bundleResponse.error.message);
         }
     });
