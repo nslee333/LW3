@@ -1,0 +1,67 @@
+--------------------------------------------------------------------
+
+Code Walkthrough of the deploy.js file in this NFT project.
+
+--------------------------------------------------------------------
+
+
+What we're trying to accomplish with this code:
+
+1. Tell the script we want to deploy the NateNFT.sol contract.
+2. Deploy the contract.
+3. Print the address of the deployed contract, so we can check it out on Etherscan.
+
+- Ethers.js comes built into Hardhat.
+- Ethers.js is a library for working with ethereum.
+
+const { ethers } = require("hardhat");
+
+- This is importing ethers through hardhat.
+
+async function main()
+    - Async function declaration variable named 'main'.
+
+const nftContract = await ethers.getContractFactory("NateNFT");
+    1. Tell the script that we want to deploy this contract.
+    - Using this code, Hardhat knows that you want to deploy this contract.
+    - This line is:
+        1. Assigning a variable to this async function.
+        2. Creating an instance of this smart contract.
+
+
+const deployedNFTContract = await nftContract.deploy();
+    2. Deploy the contract.
+    - This line is:
+        1. Assigning a variable 'deployedNFTContract' to this async function.
+        2. Deploying the contract.
+
+
+console.log("NFT Contract Address:", deployedNFTContract.address);
+    3. Print the address of the deployed contract, so we can inspect it on Etherscan.
+
+
+-------------------------------------------------
+
+main()
+.then(() => process.exit(0))
+.catch(error => {
+    console.error(error)
+    process.exit(1)
+});
+
+-----------------------------------------------
+
+main()
+// Calling the main function.
+    .then(() => process.exit(0))
+    // If the function completes sucessfully, then exit the process with 
+    a '0' condition code, which means that the process completed with no errors.
+    .catch(error => {
+    // If the function throws an error,
+        console.error(error)
+        // Print the error.
+        process.exit(1)
+        // Then exit the process with condition code '1' telling the OS that an 
+            error occured. 
+    });
+
