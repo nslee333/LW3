@@ -20,7 +20,7 @@ contract TokenSender {
     // We add the nonce to help keep every transaction unique, since our hasing algorithms are deterministic, we have to introduce an element of randomness to
     // make sure every transaction is unique.
     function transfer(address sender, uint amount, address recipient, address tokenContract, uint nonce, bytes memory signature) public {
-        bytes32 messageHash = getHash(sender, amount, recipient, nonce, tokenContract); // calling the GetHash function defined below.
+        bytes32 messageHash = getHash(sender, amount, recipient, tokenContract, nonce); // calling the GetHash function defined below.
         bytes32 signedMessageHash = messageHash.toEthSignedMessageHash(); // This converts to an Ethereum signed hash, this is used for interoperability with EIP191.
 
         require(!executed[signedMessageHash], "Already Executed"); // Make sure that this signature hasn't already been executed.
@@ -36,7 +36,7 @@ contract TokenSender {
     }
 
     // This function takes in the below arguments, and ABI encodePacks them and then hashes those values, this is called by the transfer function.
-    function getHash(address sender, uint amount, address recipient, unit nonce, address tokenContract) public pure returns (bytes32) { 
-        return keccak256(abi.encodePacked(sender, amount, recipient, tokenContract));
+    function getHash(address sender, uint amount, address recipient, address tokenContract, uint nonce) public pure returns (bytes32) { 
+        return keccak256(abi.encodePacked(sender, amount, recipient, tokenContract, nonce));
     }
 }
